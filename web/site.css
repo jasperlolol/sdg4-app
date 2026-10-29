@@ -608,6 +608,16 @@ main:focus{outline:none}
 .ss-row .btn-primary:disabled{background:var(--rule-2);color:var(--ink-3)}
 .ss-msg{min-height:1.5em;margin-top:10px;font-size:14.5px;color:var(--ink-2)}
 .ss-msg:focus-visible{outline:none}
+.dl-wrap{padding-top:44px}
+.dl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.dl-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:28px 26px 24px;border:1px solid var(--rule-2);border-radius:20px;background:var(--paper)}
+.dl-card .btn-primary,.dl-card .btn-outline{margin-top:auto}
+.dl-os{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--red-700)}
+.dl-name{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.15;color:var(--ink)}
+.dl-text{font-size:15px;line-height:1.6;color:var(--ink-2)}
+.dl-foot{margin-top:24px;max-width:70ch;font-size:14.5px;line-height:1.6;color:var(--ink-3)}
+.dl-foot a{color:var(--red-700)}
+@media (max-width:760px){.dl-grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:900px){.chapter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){
   .chapters-block,.board-block{margin-top:44px}
