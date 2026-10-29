@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz · Quality Education for All</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A 40-question SDG 4 quiz with three modes, streaks and sound effects.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="quiz">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Quality Education</span>
+        <span class="brand-sub">for all, by 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Main">
+      <a href="facts.html" data-nav="facts">Facts</a>
+      <a href="targets.html" data-nav="targets">Targets</a>
+      <a href="explore.html" data-nav="explore">Explore</a>
+      <a href="solutions.html" data-nav="solutions">Solutions</a>
+      <a href="action.html" data-nav="action">Take action</a>
+      <a href="quiz.html" data-nav="quiz" aria-current="page">Quiz</a>
+      <a href="timer.html" data-nav="timer">Study timer</a>
+      <a class="nav-extra" href="about.html" data-nav="about">About</a>
+      <a class="nav-extra" href="slides.html">Slides for class</a>
+    </nav>
+    <div class="sh-actions">
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Sound effects (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Sound on</span>
+      </button>
+      <a class="btn-present" href="slides.html" title="Full-screen slides for class">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Present</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled quiz-head">
+    <div class="ph-inner">
+      <p class="ph-kicker">Quiz</p>
+      <div class="ph-main">
+        <h1 class="ph-title">How well do you know SDG 4?</h1>
+        <p class="ph-lead"><span id="bankSize">40</span> questions on the goal, its targets, the latest data and the history behind it. Every answer comes with the fact behind it.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section quiz-wrap">
+    <div id="quizStart">
+      <h2 class="section-title">Pick a mode</h2>
+      <div class="mode-grid" id="modeGrid"></div>
+      <p class="mode-hint">Answer with the A to D keys, press Enter for the next question and M to turn the sound off. Your best scores are saved in this browser.</p>
+
+      <section class="chapters-block" aria-labelledby="chaptersTitle">
+        <h2 class="section-title" id="chaptersTitle">Or play by chapter</h2>
+        <p class="block-note">Each chapter is one topic from the quiz, with every question on that topic. Play them in any order.</p>
+        <div class="chapter-grid" id="chapterGrid"></div>
+      </section>
+
+      <section class="board-block" aria-labelledby="boardTitle">
+        <h2 class="section-title" id="boardTitle">Leaderboard</h2>
+        <p class="block-note">Scores are kept in this browser, so the board shows the people who played on this device.</p>
+        <div class="board-tabs" id="boardTabs"></div>
+        <ol class="board-list" id="boardList"></ol>
+        <p class="board-empty" id="boardEmpty" hidden>No scores on this board yet. Finish a quiz and save your score to see it here.</p>
+        <button class="btn-ghost board-clear" type="button" id="boardClear" hidden>Clear leaderboard</button>
+      </section>
+    </div>
+
+    <div id="quizPlay" hidden>
+      <div class="quiz-progress">
+        <div class="qp-track" aria-hidden="true"><span id="qpFill"></span></div>
+        <p class="qp-text" id="qpText">Question 1 of 10</p>
+        <div class="qp-right">
+          <span class="streak" id="streakBadge" hidden></span>
+          <p class="qp-score" id="qpScore">Score 0</p>
+        </div>
+      </div>
+      <div class="q-timer" id="qTimer" hidden>
+        <div class="qt-track" aria-hidden="true"><span id="qtFill"></span></div>
+        <p class="qt-secs" id="qtSecs" aria-hidden="true">20s</p>
+      </div>
+      <div class="q-meta">
+        <span class="q-cat" id="qCat"></span>
+        <button class="lifeline" type="button" id="lifelineBtn" hidden>Use 50:50</button>
+      </div>
+      <h2 class="quiz-q" id="quizQ" tabindex="-1"></h2>
+      <div class="quiz-options" id="quizOptions" role="group" aria-labelledby="quizQ"></div>
+      <div class="quiz-feedback" id="quizFeedback" aria-live="polite" hidden></div>
+      <div class="quiz-actions">
+        <button class="btn-ghost" type="button" id="quizQuit">Quit</button>
+        <button class="btn-primary" type="button" id="quizNext" hidden>Next question</button>
+      </div>
+    </div>
+
+    <div class="result" id="quizResult" hidden>
+      <div class="result-score" id="resultScore">
+        <svg viewBox="0 0 290 190" aria-hidden="true"><path d="M222 44 C190 14 92 12 46 50 C8 82 22 150 112 168 C196 184 268 150 262 92 C258 52 210 26 150 24"/></svg>
+        <p class="rs-num"><span id="rsScore">0</span><span class="rs-of" id="rsOf">/10</span></p>
+      </div>
+      <p class="new-best" id="newBest" hidden>New personal best</p>
+      <p class="rs-chapter" id="rsChapter" hidden></p>
+      <h2 class="rs-title" id="rsTitle" tabindex="-1"></h2>
+      <p class="rs-text" id="rsText"></p>
+      <div class="result-stats" id="resultStats"></div>
+      <p class="rs-topics" id="rsTopics"></p>
+      <form class="save-score" id="saveScore" hidden>
+        <label class="ss-label" for="ssName">Add your score to the leaderboard</label>
+        <div class="ss-row">
+          <input id="ssName" type="text" maxlength="20" autocomplete="nickname" placeholder="Your name">
+          <button class="btn-primary" type="submit" id="ssBtn">Save score</button>
+        </div>
+        <p class="ss-msg" id="ssMsg" role="status" tabindex="-1"></p>
+      </form>
+      <div class="result-actions">
+        <button class="btn-primary" type="button" id="quizRetry">Play again</button>
+        <button class="btn-outline" type="button" id="quizModes">Choose another mode</button>
+        <button class="btn-outline" type="button" id="quizReviewBtn" aria-expanded="false" aria-controls="quizReview">Review answers</button>
+      </div>
+      <ol class="review" id="quizReview" hidden></ol>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Quality Education</span>
+          <span class="brand-sub">for all, by 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">An independent school project about UN Sustainable Development Goal 4. It is not an official United Nations or UNESCO website.</p>
+      <p class="sf-count"><b data-days>1,525</b> days left until the end of 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="All pages">
+      <div class="sf-col">
+        <p class="sf-h">Learn</p>
+        <a href="facts.html">The facts</a>
+        <a href="targets.html">The 10 targets</a>
+        <a href="solutions.html">Solutions</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Play</p>
+        <a href="explore.html">Explore</a>
+        <a href="quiz.html">Quiz</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Do</p>
+        <a href="action.html">Take action</a>
+        <a href="timer.html">Study timer</a>
+        <a href="slides.html">Slides for class</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">About</p>
+        <a href="about.html">About this site</a>
+        <a href="about.html#glossary">Glossary</a>
+        <a href="about.html#sources">Sources</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Data compiled on 28 October 2026 from UN and UNESCO reports.</p>
+      <p>Press <kbd>M</kbd> to turn sound effects on or off, and <kbd>?</kbd> for all shortcuts.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Keyboard shortcuts</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Sound effects on or off, on every page</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Previous or next target, milestone or slide</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">to</span><kbd class="k">D</kbd></dt><dd>Answer a quiz question (1 to 4 also work)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Go to the next quiz question</dd>
+    <dt><kbd class="k">Space</kbd></dt><dd>Start or pause the study timer</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Reset the timer</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Skip to the next timer session</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Full screen on the slides page</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Show this list</dd>
+  </dl>
+</dialog>
+
+</div>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

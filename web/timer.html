@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Study timer · Quality Education for All</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A focus timer for studying in short blocks with breaks in between.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="timer">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Quality Education</span>
+        <span class="brand-sub">for all, by 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Main">
+      <a href="facts.html" data-nav="facts">Facts</a>
+      <a href="targets.html" data-nav="targets">Targets</a>
+      <a href="explore.html" data-nav="explore">Explore</a>
+      <a href="solutions.html" data-nav="solutions">Solutions</a>
+      <a href="action.html" data-nav="action">Take action</a>
+      <a href="quiz.html" data-nav="quiz">Quiz</a>
+      <a href="timer.html" data-nav="timer" aria-current="page">Study timer</a>
+      <a class="nav-extra" href="about.html" data-nav="about">About</a>
+      <a class="nav-extra" href="slides.html">Slides for class</a>
+    </nav>
+    <div class="sh-actions">
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Sound effects (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Sound on</span>
+      </button>
+      <a class="btn-present" href="slides.html" title="Full-screen slides for class">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Present</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled">
+    <div class="ph-inner">
+      <p class="ph-kicker">Study timer</p>
+      <div class="ph-main">
+        <h1 class="ph-title">Focus, then rest</h1>
+        <p class="ph-lead">Study in focused blocks with short breaks in between. After four focus sessions, take a longer break. Press Space to start or pause.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section">
+    <div class="timer-layout">
+      <div class="dial-panel" id="dialPanel">
+        <div class="mode-tabs" id="modeTabs" aria-label="Timer mode">
+          <button type="button" data-mode="focus" aria-pressed="true">Focus</button>
+          <button type="button" data-mode="short" aria-pressed="false">Short break</button>
+          <button type="button" data-mode="long" aria-pressed="false">Long break</button>
+        </div>
+        <div class="dial">
+          <svg class="dial-svg" viewBox="0 0 320 320" aria-hidden="true">
+            <g class="dial-ticks" id="dialTicks"></g>
+            <circle class="dial-track" cx="160" cy="160" r="128"/>
+            <circle class="dial-progress" id="dialProgress" cx="160" cy="160" r="128"/>
+          </svg>
+          <div class="dial-center">
+            <p class="dial-mode" id="dialMode">Focus</p>
+            <p class="dial-time" id="dialTime" role="timer" aria-live="off">25:00</p>
+            <p class="dial-session" id="dialSession">Session 1 of 4</p>
+          </div>
+        </div>
+        <label class="task-field" for="taskInput">
+          <span class="visually-hidden">What are you working on?</span>
+          <input id="taskInput" type="text" placeholder="What are you working on?" maxlength="80" autocomplete="off">
+        </label>
+        <div class="dial-controls">
+          <button class="icon-btn" type="button" id="tReset" aria-label="Reset timer" title="Reset (R)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5"/><path d="M4.5 4.5v4h4"/></svg>
+          </button>
+          <button class="btn-start" type="button" id="tStart">Start</button>
+          <button class="icon-btn" type="button" id="tSkip" aria-label="Skip to the next session" title="Skip (S)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l8.5 6L6 18z"/><path d="M18 6v12"/></svg>
+          </button>
+        </div>
+        <p class="visually-hidden" id="timerStatus" aria-live="polite"></p>
+      </div>
+
+      <div class="timer-side">
+        <section class="side-card">
+          <h2 class="side-title">Today</h2>
+          <div class="today-stats">
+            <div><p class="ts-num" id="tsSessions">0</p><p class="ts-label">focus sessions done</p></div>
+            <div><p class="ts-num" id="tsMinutes">0</p><p class="ts-label">minutes of focus</p></div>
+          </div>
+          <div class="cycle">
+            <div class="cycle-dots" id="cycleDots" aria-hidden="true"></div>
+            <p class="cycle-label" id="cycleLabel"></p>
+          </div>
+        </section>
+        <section class="side-card">
+          <h2 class="side-title">Settings</h2>
+          <div class="setting" data-key="focus" data-min="5" data-max="90" data-step="5" data-unit="min">
+            <span class="setting-label" id="lbl-focus">Focus length</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="Shorter focus sessions">−</button><output aria-labelledby="lbl-focus">25 min</output><button type="button" data-delta="1" aria-label="Longer focus sessions">+</button></span>
+          </div>
+          <div class="setting" data-key="short" data-min="1" data-max="30" data-step="1" data-unit="min">
+            <span class="setting-label" id="lbl-short">Short break</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="Shorter short breaks">−</button><output aria-labelledby="lbl-short">5 min</output><button type="button" data-delta="1" aria-label="Longer short breaks">+</button></span>
+          </div>
+          <div class="setting" data-key="long" data-min="5" data-max="60" data-step="5" data-unit="min">
+            <span class="setting-label" id="lbl-long">Long break</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="Shorter long breaks">−</button><output aria-labelledby="lbl-long">15 min</output><button type="button" data-delta="1" aria-label="Longer long breaks">+</button></span>
+          </div>
+          <div class="setting" data-key="every" data-min="2" data-max="8" data-step="1" data-unit="">
+            <span class="setting-label" id="lbl-every">Sessions before a long break</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="Fewer sessions before a long break">−</button><output aria-labelledby="lbl-every">4</output><button type="button" data-delta="1" aria-label="More sessions before a long break">+</button></span>
+          </div>
+          <label class="switch" for="optAuto"><input type="checkbox" id="optAuto" checked><span>Start the next timer automatically</span></label>
+          <label class="switch" for="optSound"><input type="checkbox" id="optSound" checked><span>Play a chime when time is up</span></label>
+        </section>
+        <section class="side-card">
+          <h2 class="side-title">Study tip</h2>
+          <p class="tip" id="tipText"></p>
+          <div class="tip-actions"><button class="link-btn" type="button" id="tipNext">Show another tip</button></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Quality Education</span>
+          <span class="brand-sub">for all, by 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">An independent school project about UN Sustainable Development Goal 4. It is not an official United Nations or UNESCO website.</p>
+      <p class="sf-count"><b data-days>1,525</b> days left until the end of 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="All pages">
+      <div class="sf-col">
+        <p class="sf-h">Learn</p>
+        <a href="facts.html">The facts</a>
+        <a href="targets.html">The 10 targets</a>
+        <a href="solutions.html">Solutions</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Play</p>
+        <a href="explore.html">Explore</a>
+        <a href="quiz.html">Quiz</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Do</p>
+        <a href="action.html">Take action</a>
+        <a href="timer.html">Study timer</a>
+        <a href="slides.html">Slides for class</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">About</p>
+        <a href="about.html">About this site</a>
+        <a href="about.html#glossary">Glossary</a>
+        <a href="about.html#sources">Sources</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Data compiled on 28 October 2026 from UN and UNESCO reports.</p>
+      <p>Press <kbd>M</kbd> to turn sound effects on or off, and <kbd>?</kbd> for all shortcuts.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Keyboard shortcuts</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Sound effects on or off, on every page</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Previous or next target, milestone or slide</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">to</span><kbd class="k">D</kbd></dt><dd>Answer a quiz question (1 to 4 also work)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Go to the next quiz question</dd>
+    <dt><kbd class="k">Space</kbd></dt><dd>Start or pause the study timer</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Reset the timer</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Skip to the next timer session</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Full screen on the slides page</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Show this list</dd>
+  </dl>
+</dialog>
+
+</div>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

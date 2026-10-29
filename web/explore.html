@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Explore · Quality Education for All</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Follow 100 children through school, travel from 1948 to 2030 and pull facts from the fact machine.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="explore">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Quality Education</span>
+        <span class="brand-sub">for all, by 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Main">
+      <a href="facts.html" data-nav="facts">Facts</a>
+      <a href="targets.html" data-nav="targets">Targets</a>
+      <a href="explore.html" data-nav="explore" aria-current="page">Explore</a>
+      <a href="solutions.html" data-nav="solutions">Solutions</a>
+      <a href="action.html" data-nav="action">Take action</a>
+      <a href="quiz.html" data-nav="quiz">Quiz</a>
+      <a href="timer.html" data-nav="timer">Study timer</a>
+      <a class="nav-extra" href="about.html" data-nav="about">About</a>
+      <a class="nav-extra" href="slides.html">Slides for class</a>
+    </nav>
+    <div class="sh-actions">
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Sound effects (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Sound on</span>
+      </button>
+      <a class="btn-present" href="slides.html" title="Full-screen slides for class">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Present</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled">
+    <div class="ph-inner">
+      <p class="ph-kicker">Explore</p>
+      <div class="ph-main">
+        <h1 class="ph-title">Explore the numbers</h1>
+        <p class="ph-lead">Follow 100 children through school, travel the road from 1948 to 2030, and pull a fresh fact whenever your argument needs one.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section">
+
+    <section class="live-band" aria-labelledby="liveTitle">
+      <p class="live-num" id="liveCount">0</p>
+      <div>
+        <h2 class="live-title" id="liveTitle">more children have needed a place in school since you opened this page</h2>
+        <p class="live-text">To stay on track for 2030, one more child needs to enter school every two seconds. Source: UNESCO GEM Report 2026.</p>
+      </div>
+    </section>
+
+    <section class="explore-block" aria-labelledby="journeyTitle">
+      <h2 class="block-title" id="journeyTitle">Follow 100 children through school</h2>
+      <p class="block-sub">Pick two places and step through each level of school. Each dot is one child out of 100, based on 2024 completion rates.</p>
+      <div class="journey-controls">
+        <label class="select-field" for="placeA"><span>First place</span><select id="placeA"></select></label>
+        <label class="select-field" for="placeB"><span>Compare with</span><select id="placeB"></select></label>
+      </div>
+      <div class="stage-bar" id="stageBar" aria-label="School stage">
+        <button class="stage-btn" type="button" data-stage="0" aria-pressed="true">100 children</button>
+        <button class="stage-btn" type="button" data-stage="1" aria-pressed="false">Finish primary</button>
+        <button class="stage-btn" type="button" data-stage="2" aria-pressed="false">Finish lower secondary</button>
+        <button class="stage-btn" type="button" data-stage="3" aria-pressed="false">Finish upper secondary</button>
+        <button class="btn-primary btn-play" type="button" id="journeyPlay">Play the journey</button>
+      </div>
+      <div class="journey-grids">
+        <figure class="journey" id="journeyA">
+          <div class="dots" aria-hidden="true"></div>
+          <figcaption><p class="j-place"></p><p class="j-num"><b>100</b><small>of 100</small></p><p class="j-stage"></p></figcaption>
+        </figure>
+        <figure class="journey" id="journeyB">
+          <div class="dots" aria-hidden="true"></div>
+          <figcaption><p class="j-place"></p><p class="j-num"><b>100</b><small>of 100</small></p><p class="j-stage"></p></figcaption>
+        </figure>
+      </div>
+      <p class="visually-hidden" id="journeyStatus" aria-live="polite"></p>
+      <p class="fig-foot">Completion rates for 2024: regions from the UN SDG Report 2026, low-income countries from the UNESCO GEM Report 2026. Oceania excludes Australia and New Zealand.</p>
+    </section>
+
+    <section class="explore-block" aria-labelledby="tlTitle">
+      <h2 class="block-title" id="tlTitle">The road to 2030</h2>
+      <p class="block-sub">Promises about education go back almost 80 years. Pick a year, or use the arrow keys to walk through them.</p>
+      <div class="timeline-wrap">
+        <ol class="timeline" id="timeline" aria-label="Milestones"></ol>
+      </div>
+      <article class="tl-card" id="tlCard" aria-live="polite"></article>
+    </section>
+
+    <section class="explore-block fact-machine" aria-labelledby="fmTitle">
+      <div>
+        <h2 class="block-title" id="fmTitle">Fact machine</h2>
+        <p class="block-sub">Need a surprising number for your talk, or something to start a debate? Pull a fact. Every one comes with its source.</p>
+        <div class="fm-actions">
+          <button class="btn-primary" type="button" id="factBtn">Give me another fact</button>
+          <span class="fm-count" id="factCount"></span>
+        </div>
+      </div>
+      <figure class="fact-card" id="factCard" aria-live="polite">
+        <p class="fc-num"></p>
+        <p class="fc-text"></p>
+        <p class="fc-src"></p>
+      </figure>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Quality Education</span>
+          <span class="brand-sub">for all, by 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">An independent school project about UN Sustainable Development Goal 4. It is not an official United Nations or UNESCO website.</p>
+      <p class="sf-count"><b data-days>1,525</b> days left until the end of 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="All pages">
+      <div class="sf-col">
+        <p class="sf-h">Learn</p>
+        <a href="facts.html">The facts</a>
+        <a href="targets.html">The 10 targets</a>
+        <a href="solutions.html">Solutions</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Play</p>
+        <a href="explore.html">Explore</a>
+        <a href="quiz.html">Quiz</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Do</p>
+        <a href="action.html">Take action</a>
+        <a href="timer.html">Study timer</a>
+        <a href="slides.html">Slides for class</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">About</p>
+        <a href="about.html">About this site</a>
+        <a href="about.html#glossary">Glossary</a>
+        <a href="about.html#sources">Sources</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Data compiled on 28 October 2026 from UN and UNESCO reports.</p>
+      <p>Press <kbd>M</kbd> to turn sound effects on or off, and <kbd>?</kbd> for all shortcuts.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Keyboard shortcuts</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Sound effects on or off, on every page</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Previous or next target, milestone or slide</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">to</span><kbd class="k">D</kbd></dt><dd>Answer a quiz question (1 to 4 also work)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Go to the next quiz question</dd>
+    <dt><kbd class="k">Space</kbd></dt><dd>Start or pause the study timer</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Reset the timer</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Skip to the next timer session</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Full screen on the slides page</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Show this list</dd>
+  </dl>
+</dialog>
+
+</div>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

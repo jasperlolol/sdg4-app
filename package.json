@@ -1,0 +1,55 @@
+{
+  "name": "sdg4-app",
+  "productName": "SDG 4",
+  "version": "1.0.0",
+  "description": "SDG 4 (Quality Education for All): the website as a desktop app.",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:mac": "electron-builder --mac --publish never"
+  },
+  "devDependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/cli": "latest",
+    "@capacitor/core": "latest",
+    "electron": "latest",
+    "electron-builder": "latest"
+  },
+  "build": {
+    "appId": "org.sdg4.app",
+    "productName": "SDG 4",
+    "files": [
+      "main.js",
+      "web/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "SDG4-Windows.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "artifactName": "SDG4-Mac.${ext}",
+      "category": "public.app-category.education"
+    }
+  }
+}
