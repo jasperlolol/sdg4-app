@@ -1027,6 +1027,8 @@
   function renderTargetDetail() {
     const t = TARGETS[targetIndex];
     const host = $('#targetDetail');
+    const seenTargets = store.get('sdg4.seen.targets', []) || [];
+    if (seenTargets.indexOf(t.code) < 0) store.set('sdg4.seen.targets', seenTargets.concat(t.code));
     host.textContent = '';
     const body = h('div', 'td-body');
     if (!reduceMotion) body.classList.add('is-swapping');
@@ -1059,6 +1061,27 @@
     const act = h('section', 'td-section');
     act.append(h('h3', 'td-h', 'What you can do'), h('p', 'td-p', t.action));
 
+    const notes = h('section', 'td-section td-notes');
+    const noteId = 'note-' + t.code.replace('.', '-');
+    const noteLabel = h('label', 'td-h', 'Your notes on target ' + t.code);
+    noteLabel.htmlFor = noteId;
+    const area = h('textarea', 'td-note');
+    area.id = noteId;
+    area.rows = 4;
+    area.maxLength = 1000;
+    area.placeholder = 'What surprised you? What could your school or town do about it?';
+    const savedNotes = store.get('sdg4.notes', {}) || {};
+    area.value = typeof savedNotes[t.code] === 'string' ? savedNotes[t.code] : '';
+    const noteStatus = h('p', 'td-note-status', area.value ? 'Saved on this device.' : 'Only you can see these notes. They stay on this device.');
+    area.addEventListener('input', () => {
+      const all = store.get('sdg4.notes', {}) || {};
+      if (area.value.trim()) all[t.code] = area.value;
+      else delete all[t.code];
+      store.set('sdg4.notes', all);
+      noteStatus.textContent = 'Saved on this device.';
+    });
+    notes.append(noteLabel, area, noteStatus);
+
     const nav = h('div', 'td-nav');
     const vis = visibleTargets();
     const makeBtn = (label, dir) => {
@@ -1074,7 +1097,7 @@
     };
     nav.append(makeBtn('Previous target', -1), h('span', 'td-count', (vis.indexOf(targetIndex) + 1) + ' of ' + vis.length), makeBtn('Next target', 1));
 
-    body.append(head, official, grid, stats, act, nav);
+    body.append(head, official, grid, stats, act, notes, nav);
     host.appendChild(body);
   }
 
@@ -1488,6 +1511,89 @@
     renderBoard();
   }
 
+  /* Flashcards: the whole quiz bank, one card at a time. */
+  const fcState = { order: [], i: 0, open: false };
+  const fcSeen = () => store.get('sdg4.flash', []) || [];
+
+  function fcRender() {
+    const total = fcState.order.length;
+    const q = QUIZ[fcState.order[fcState.i]];
+    $('#flashCount').textContent = (fcState.i + 1) + ' of ' + total;
+    $('#flashFill').style.width = ((fcState.i + 1) / total) * 100 + '%';
+    $('#flashCat').textContent = q.cat;
+    $('#flashFront').textContent = q.q;
+    const answer = $('#flashAnswer');
+    answer.textContent = '';
+    answer.append(h('span', 'fa-answer', q.options[q.answer]), h('span', 'fa-why', q.explain + ' Source: ' + q.src + '.'));
+    $('#flashPrev').disabled = fcState.i === 0;
+    $('#flashNext').textContent = fcState.i === total - 1 ? 'Start again' : 'Next card';
+    fcShowAnswer(false);
+  }
+
+  function fcShowAnswer(show) {
+    $('#flashFront').hidden = show;
+    $('#flashAnswer').hidden = !show;
+    $('#flashCard').setAttribute('aria-expanded', String(show));
+    if (show) {
+      const idx = fcState.order[fcState.i];
+      const seen = fcSeen();
+      if (seen.indexOf(idx) < 0) store.set('sdg4.flash', seen.concat(idx));
+    }
+  }
+
+  function fcMove(dir) {
+    const total = fcState.order.length;
+    fcState.i = (fcState.i + dir + total) % total;
+    fcRender();
+  }
+
+  function fcOpen() {
+    fcState.open = true;
+    fcState.order = shuffle(QUIZ.map((q, i) => i));
+    fcState.i = 0;
+    $('#quizStart').hidden = true;
+    $('#flashPlay').hidden = false;
+    fcRender();
+    window.scrollTo(0, 0);
+    Sound.play('tap');
+    $('#flashCard').focus({ preventScroll: true });
+  }
+
+  function fcClose() {
+    fcState.open = false;
+    $('#flashPlay').hidden = true;
+    $('#quizStart').hidden = false;
+    Sound.play('tap');
+    window.scrollTo(0, 0);
+    $('#flashOpen').focus({ preventScroll: true });
+  }
+
+  function shareScore() {
+    const M = modeInfo(quiz.mode);
+    const total = quiz.order.length;
+    const label = quiz.mode === 'chapter' ? 'the ' + quiz.chapter + ' chapter' : M.name + ' mode';
+    const score = M.timed ? numberFmt.format(quiz.points) + ' points' : quiz.correct + ' of ' + total;
+    const text = 'I scored ' + score + ' on the SDG 4 quiz (' + label + ') on Quality Education for All. Can you beat it?';
+    const msg = $('#shareMsg');
+    msg.hidden = false;
+    msg.textContent = '';
+    if (navigator.share) {
+      navigator.share({ title: 'SDG 4 quiz', text }).then(
+        () => { msg.textContent = 'Shared.'; },
+        () => { msg.textContent = ''; }
+      );
+      return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        () => { msg.textContent = 'Copied. Paste it anywhere to share your score.'; },
+        () => { msg.textContent = text; }
+      );
+      return;
+    }
+    msg.textContent = text;
+  }
+
   function quitQuiz() {
     stopQTimer();
     quiz.paused = null;
@@ -1550,6 +1656,12 @@
     }
     $('#newBest').hidden = !isNew;
     setupSaveForm();
+    $('#shareMsg').hidden = true;
+    const lifetime = getStats();
+    lifetime.quizzes = (lifetime.quizzes || 0) + 1;
+    if (total && quiz.correct === total) lifetime.perfect = (lifetime.perfect || 0) + 1;
+    lifetime.bestStreak = Math.max(lifetime.bestStreak || 0, quiz.bestStreak);
+    store.set('sdg4.stats', lifetime);
 
     const ring = $('#resultScore');
     ring.classList.remove('is-drawn');
@@ -1746,6 +1858,9 @@
     s.sessions += 1;
     s.minutes += minutes;
     store.set('sdg4.timer.today', s);
+    const stats = getStats();
+    stats.focusMinutes = (stats.focusMinutes || 0) + minutes;
+    store.set('sdg4.stats', stats);
     renderToday();
   }
 
@@ -2020,6 +2135,18 @@
     $('#quizRetry').addEventListener('click', () => startQuiz(quiz.mode, quiz.chapter));
     $('#saveScore').addEventListener('submit', saveScore);
     $('#boardClear').addEventListener('click', clearBoard);
+    $('#quizShare').addEventListener('click', shareScore);
+    $('#flashOpen').addEventListener('click', fcOpen);
+    $('#flashBack').addEventListener('click', fcClose);
+    $('#flashCard').addEventListener('click', () => fcShowAnswer($('#flashAnswer').hidden));
+    $('#flashPrev').addEventListener('click', () => fcMove(-1));
+    $('#flashNext').addEventListener('click', () => fcMove(1));
+    $('#flashShuffle').addEventListener('click', () => {
+      fcState.order = shuffle(QUIZ.map((q, i) => i));
+      fcState.i = 0;
+      Sound.play('tap');
+      fcRender();
+    });
     $('#quizModes').addEventListener('click', () => {
       Sound.play('tap');
       renderModes();
@@ -2036,6 +2163,13 @@
       Sound.play('tap');
     });
     pageKeys = (e, key, onControl) => {
+      if (fcState.open) {
+        if (key === 'ArrowRight' || key === 'ArrowLeft') {
+          e.preventDefault();
+          fcMove(key === 'ArrowRight' ? 1 : -1);
+        }
+        return;
+      }
       if (quiz.state !== 'play') return;
       const letter = key.length === 1 ? 'abcd'.indexOf(key.toLowerCase()) : -1;
       const digit = ['1', '2', '3', '4'].indexOf(key);
@@ -2518,7 +2652,290 @@
   /* ------------------------------------------------------------------ */
   /* Start                                                               */
   /* ------------------------------------------------------------------ */
+  /* ------------------------------------------------------------------ */
+  /* On every page: reading progress and back to top                     */
+  /* ------------------------------------------------------------------ */
+  function initReadingBar() {
+    const bar = h('div', 'read-bar');
+    bar.setAttribute('aria-hidden', 'true');
+    const fill = h('span');
+    bar.appendChild(fill);
+    const toTop = h('button', 'to-top', 'Back to top');
+    toTop.type = 'button';
+    document.body.append(bar, toTop);
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      fill.style.transform = 'scaleX(' + pct + ')';
+      toTop.classList.toggle('is-shown', window.scrollY > 600);
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    toTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+    update();
+  }
+
+  /* Home: one question a day, from the quiz bank. The answer is kept on this device. */
+  function initQuestionOfDay() {
+    const d = new Date();
+    const day = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+    const q = QUIZ[day % QUIZ.length];
+    const opts = $('#qotdOptions');
+    $('#qotdCat').textContent = 'Topic: ' + q.cat;
+    $('#qotdQ').textContent = q.q;
+    opts.textContent = '';
+    q.options.forEach((text, i) => {
+      const b = h('button', 'qotd-opt', text);
+      b.type = 'button';
+      b.dataset.index = String(i);
+      b.addEventListener('click', () => {
+        const prev = store.get('sdg4.qotd', null);
+        if (prev && prev.day === day) return;
+        store.set('sdg4.qotd', { day, chosen: i, correct: i === q.answer });
+        Sound.play(i === q.answer ? 'correct' : 'wrong');
+        paint();
+      });
+      opts.appendChild(b);
+    });
+    function paint() {
+      const now = store.get('sdg4.qotd', null);
+      const answered = now && now.day === day ? now : null;
+      $$('.qotd-opt', opts).forEach((b) => {
+        const i = Number(b.dataset.index);
+        b.classList.toggle('is-correct', !!answered && i === q.answer);
+        b.classList.toggle('is-wrong', !!answered && answered.chosen === i && i !== q.answer);
+        b.setAttribute('aria-disabled', String(!!answered));
+      });
+      const fb = $('#qotdFeedback');
+      fb.hidden = !answered;
+      if (answered) fb.textContent = (answered.correct ? 'Correct. ' : 'Not quite. ') + q.explain + ' Source: ' + q.src + '.';
+    }
+    paint();
+  }
+
+  /* My progress: badges, a summary, and backup, restore or erase of saved data. */
+  const getStats = () => store.get('sdg4.stats', {}) || {};
+  const chapterTotal = (cat) => QUIZ.filter((q) => q.cat === cat).length;
+  const BADGES = [
+    { name: 'First quiz', text: 'Finish a quiz.', earned: () => getStats().quizzes >= 1 },
+    { name: 'Perfect round', text: 'Get every question right in one quiz.', earned: () => getStats().perfect >= 1 },
+    { name: 'On a roll', text: 'Reach a streak of five right answers.', earned: () => getStats().bestStreak >= 5 },
+    { name: 'Against the clock', text: 'Score points in Challenge mode.', earned: () => typeof (store.get('sdg4.quiz.bests', {}) || {}).challenge === 'number' },
+    {
+      name: 'Chapter champion', text: 'Get every question right in every chapter.',
+      earned: () => {
+        const bests = store.get('sdg4.quiz.bests', {}) || {};
+        return CHAPTER_ORDER.every((cat) => bests['chapter:' + cat] === chapterTotal(cat));
+      }
+    },
+    { name: 'Flashcard finisher', text: 'Turn over all 40 flashcards.', earned: () => fcSeen().length >= QUIZ.length },
+    { name: 'Target reader', text: 'Open all ten targets.', earned: () => (store.get('sdg4.seen.targets', []) || []).length >= TARGETS.length },
+    { name: 'Note taker', text: 'Write notes on three targets.', earned: () => Object.keys(store.get('sdg4.notes', {}) || {}).length >= 3 },
+    { name: 'Question of the day', text: 'Answer the question of the day.', earned: () => !!store.get('sdg4.qotd', null) },
+    { name: 'Focus hour', text: 'Study for 60 minutes in the timer.', earned: () => getStats().focusMinutes >= 60 },
+    { name: 'Make it yours', text: 'Make your own pledge on the Take action page.', earned: () => { const p = store.get('sdg4.pledge', null); return !!(p && p.made); } },
+    { name: 'Speak up', text: 'Save a score to the leaderboard.', earned: () => readBoard().length > 0 }
+  ];
+
+  function renderProgress() {
+    const stats = getStats();
+    const summary = [
+      [stats.quizzes || 0, 'quizzes finished'],
+      [stats.perfect || 0, 'perfect rounds'],
+      [stats.focusMinutes || 0, 'minutes of focus'],
+      [fcSeen().length + ' of ' + QUIZ.length, 'flashcards turned'],
+      [(store.get('sdg4.seen.targets', []) || []).length + ' of ' + TARGETS.length, 'targets read'],
+      [Object.keys(store.get('sdg4.notes', {}) || {}).length, 'targets with notes']
+    ];
+    const sum = $('#progSummary');
+    sum.textContent = '';
+    summary.forEach(([num, label]) => {
+      const d = h('div', 'prog-stat');
+      d.append(h('b', null, String(num)), h('span', null, label));
+      sum.appendChild(d);
+    });
+    const earned = BADGES.filter((b) => b.earned()).length;
+    $('#badgeCount').textContent = earned + ' of ' + BADGES.length + ' badges earned';
+    const grid = $('#badgeGrid');
+    grid.textContent = '';
+    BADGES.forEach((b) => {
+      const got = b.earned();
+      const card = h('div', 'badge' + (got ? ' is-earned' : ''));
+      card.append(h('span', 'badge-state', got ? 'Earned' : 'Not yet'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
+      grid.appendChild(card);
+    });
+  }
+
+  const DATA_PREFIX = 'sdg4.';
+  const setDataMsg = (msg) => { $('#dataMsg').textContent = msg; };
+
+  function savedKeys() {
+    const keys = [];
+    try {
+      for (let i = 0; i < window.localStorage.length; i++) {
+        const k = window.localStorage.key(i);
+        if (k && k.indexOf(DATA_PREFIX) === 0) keys.push(k);
+      }
+    } catch (e) { /* storage unavailable */ }
+    return keys;
+  }
+
+  function exportData() {
+    const data = {};
+    savedKeys().forEach((k) => { data[k] = store.get(k, null); });
+    const text = JSON.stringify({ app: 'sdg4-website', version: 1, exported: new Date().toISOString(), data }, null, 2);
+    const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+    const a = h('a');
+    a.href = url;
+    a.download = 'sdg4-progress.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setDataMsg('Your data was saved to a file called sdg4-progress.json.');
+  }
+
+  function importData(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      let parsed = null;
+      try { parsed = JSON.parse(String(reader.result)); } catch (e) { parsed = null; }
+      const data = parsed && parsed.app === 'sdg4-website' && parsed.data && typeof parsed.data === 'object' ? parsed.data : null;
+      if (!data) {
+        setDataMsg('That file is not an SDG 4 progress file.');
+        return;
+      }
+      const keys = Object.keys(data).filter((k) => k.indexOf(DATA_PREFIX) === 0);
+      keys.forEach((k) => store.set(k, data[k]));
+      renderProgress();
+      setDataMsg('Imported ' + keys.length + ' saved items. Other pages will show them when you open them.');
+    };
+    reader.readAsText(file);
+  }
+
+  let eraseTimer = 0;
+  function eraseData() {
+    const btn = $('#dataReset');
+    if (!eraseTimer) {
+      btn.textContent = 'Tap again to erase everything';
+      btn.classList.add('is-armed');
+      eraseTimer = setTimeout(() => {
+        eraseTimer = 0;
+        btn.textContent = 'Erase my data on this device';
+        btn.classList.remove('is-armed');
+      }, 4000);
+      return;
+    }
+    clearTimeout(eraseTimer);
+    eraseTimer = 0;
+    savedKeys().forEach((k) => {
+      try { window.localStorage.removeItem(k); } catch (e) { /* storage unavailable */ }
+    });
+    btn.textContent = 'Erase my data on this device';
+    btn.classList.remove('is-armed');
+    renderProgress();
+    setDataMsg('All saved data on this device was erased.');
+  }
+
+  function initProgress() {
+    renderProgress();
+    $('#dataExport').addEventListener('click', exportData);
+    $('#importFile').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) importData(file);
+      e.target.value = '';
+    });
+    $('#dataReset').addEventListener('click', eraseData);
+  }
+
+  /* Search: pages, targets, facts and quiz questions, found as you type. Press / to open. */
+  const SEARCH_PAGES = [
+    { title: 'The facts', href: 'facts.html', text: 'Charts on who is out of school, who finishes, who learns and who is left behind' },
+    { title: 'The 10 targets', href: 'targets.html', text: 'Every SDG 4 promise in plain words, with the latest numbers' },
+    { title: 'Explore', href: 'explore.html', text: 'Follow 100 children through school, travel from 1948 to 2030, the fact machine' },
+    { title: 'Solutions', href: 'solutions.html', text: 'What has worked, from school meals to cash transfers' },
+    { title: 'Take action', href: 'action.html', text: 'Choose actions and build your own pledge' },
+    { title: 'Quiz', href: 'quiz.html', text: 'The quiz, chapters, flashcards and the leaderboard' },
+    { title: 'Study timer', href: 'timer.html', text: 'Study in focus blocks with short breaks' },
+    { title: 'About', href: 'about.html', text: 'About this school project, the glossary and every source' },
+    { title: 'Slides for class', href: 'slides.html', text: 'Full-screen slides with the key numbers' },
+    { title: 'My progress', href: 'progress.html', text: 'Badges, a summary and export, import or erase for your saved data' },
+    { title: 'Get the app', href: 'download.html', text: 'Download for Windows, Mac and Android, or add the site to your Home Screen' }
+  ];
+  let searchIndex = null;
+
+  function buildSearchIndex() {
+    const items = SEARCH_PAGES.map((p) => ({ kind: 'Page', title: p.title, text: p.text, href: p.href }));
+    TARGETS.forEach((t) => items.push({ kind: 'Target ' + t.code, title: t.title, text: t.plain + ' ' + t.action, href: 'targets.html' }));
+    FACTS.forEach((f) => items.push({ kind: 'Fact', title: f.num, text: f.text, href: 'facts.html' }));
+    QUIZ.forEach((q) => items.push({ kind: 'Quiz question', title: q.q, text: q.explain, href: 'quiz.html' }));
+    return items;
+  }
+
+  function runSearch(query) {
+    const list = $('#searchResults');
+    list.textContent = '';
+    const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    $('#searchEmpty').hidden = true;
+    if (!words.length) return;
+    if (!searchIndex) searchIndex = buildSearchIndex();
+    const hits = searchIndex.filter((it) => {
+      const hay = (it.title + ' ' + it.text).toLowerCase();
+      return words.every((w) => hay.indexOf(w) >= 0);
+    }).slice(0, 12);
+    hits.forEach((it) => {
+      const link = h('a', 'sd-hit');
+      link.href = it.href;
+      const text = it.text.length > 150 ? it.text.slice(0, 147) + '…' : it.text;
+      link.append(h('span', 'sd-kind', it.kind), h('span', 'sd-title2', it.title), h('span', 'sd-text', text));
+      const li = h('li');
+      li.appendChild(link);
+      list.appendChild(li);
+    });
+    $('#searchEmpty').hidden = hits.length > 0;
+  }
+
+  function openSearch() {
+    const dlg = $('#searchDlg');
+    if (dlg.open) return;
+    if (!searchIndex) searchIndex = buildSearchIndex();
+    dlg.showModal();
+    $('#searchInput').focus();
+    Sound.play('tap');
+  }
+
+  function initSearch() {
+    const dlg = $('#searchDlg');
+    if (!dlg || !$('#searchBtn')) return;
+    $('#searchBtn').addEventListener('click', openSearch);
+    $('#searchClose').addEventListener('click', () => dlg.close());
+    $('#searchInput').addEventListener('input', (e) => runSearch(e.target.value));
+    dlg.addEventListener('click', (e) => {
+      const r = dlg.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented || dlg.open) return;
+      const t = e.target;
+      const tag = t && t.tagName ? t.tagName.toLowerCase() : '';
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || (t && t.isContentEditable)) return;
+      e.preventDefault();
+      openSearch();
+    });
+  }
+
   const MODULES = {
+    home: initQuestionOfDay,
+    progress: initProgress,
     facts: initFacts,
     targets: initTargets,
     explore: initExplore,
@@ -2532,5 +2949,9 @@
   const siteNode = document.querySelector('.site[data-page]');
   const PAGE = siteNode ? siteNode.dataset.page : '';
   initChrome();
+  if (PAGE !== 'slides') {
+    initReadingBar();
+    initSearch();
+  }
   if (MODULES[PAGE]) MODULES[PAGE]();
 })();

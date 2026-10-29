@@ -6,6 +6,11 @@
 <title>Explore · Quality Education for All</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Follow 100 children through school, travel from 1948 to 2030 and pull facts from the fact machine.">
+<meta property="og:title" content="Explore · Quality Education for All">
+<meta property="og:description" content="Follow 100 children through school, travel from 1948 to 2030 and pull facts from the fact machine.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quality Education for All">
+<meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="site.css">
@@ -38,6 +43,10 @@
       <a class="nav-extra" href="slides.html">Slides for class</a>
     </nav>
     <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Search the site (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">Search the site</span>
+      </button>
       <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Sound effects (M)">
         <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
         <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
@@ -54,6 +63,19 @@
     </div>
   </div>
 </header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">Search the site</h2>
+      <button class="sd-close" type="button" id="searchClose">Close</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">Search words</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="Try: girls, teachers, reading, 2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>Nothing found. Try a different word.</p>
+  </div>
+</dialog>
 
 <main id="main" tabindex="-1">
 
@@ -163,6 +185,7 @@
         <a href="action.html">Take action</a>
         <a href="timer.html">Study timer</a>
         <a href="slides.html">Slides for class</a>
+        <a href="progress.html">My progress</a>
         <a href="download.html">Get the app</a>
       </div>
       <div class="sf-col">

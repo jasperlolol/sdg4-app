@@ -1,9 +1,9 @@
 /* Offline support for the SDG 4 site.
    Online, pages come from the network and a copy is kept. Offline, the saved copy is used.
    build.py fills in VERSION and SHELL, so each new build replaces the old copies. */
-const VERSION = '20261029181359';
+const VERSION = '20261029182743';
 const CACHE = 'sdg4-' + VERSION;
-const SHELL = ["index.html", "facts.html", "targets.html", "explore.html", "solutions.html", "action.html", "quiz.html", "timer.html", "about.html", "slides.html", "download.html", "site.css", "site.js", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
+const SHELL = ["index.html", "facts.html", "targets.html", "explore.html", "solutions.html", "action.html", "quiz.html", "timer.html", "about.html", "slides.html", "progress.html", "download.html", "site.css", "site.js", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
