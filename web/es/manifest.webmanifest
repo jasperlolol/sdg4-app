@@ -1,0 +1,31 @@
+{
+  "name": "ODS 4: Educación de Calidad para Todos",
+  "short_name": "SDG 4",
+  "description": "Los datos más recientes sobre el Objetivo de Desarrollo Sostenible 4 de la ONU, las diez metas, un test y un temporizador de estudio.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "lang": "es"
+}

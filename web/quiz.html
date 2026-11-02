@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Quiz · Quality Education for All</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A 40-question SDG 4 quiz with three modes, streaks and sound effects.">
+<meta name="description" content="A 52-question SDG 4 quiz with three modes, streaks and sound effects.">
 <meta property="og:title" content="Quiz · Quality Education for All">
-<meta property="og:description" content="A 40-question SDG 4 quiz with three modes, streaks and sound effects.">
+<meta property="og:description" content="A 52-question SDG 4 quiz with three modes, streaks and sound effects.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Quality Education for All">
 <meta name="twitter:card" content="summary">
@@ -41,6 +41,7 @@
       <a href="timer.html" data-nav="timer">Study timer</a>
       <a class="nav-extra" href="about.html" data-nav="about">About</a>
       <a class="nav-extra" href="slides.html">Slides for class</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">Language</span><select class="lang-sel" aria-label="Language"><option value="quiz.html" lang="en" selected>English</option><option value="id/quiz.html" lang="id">Bahasa Indonesia</option><option value="es/quiz.html" lang="es">Español</option><option value="fr/quiz.html" lang="fr">Français</option><option value="zh/quiz.html" lang="zh-CN">中文</option></select></div>
     </nav>
     <div class="sh-actions">
       <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Search the site (/)">
@@ -52,6 +53,7 @@
         <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
         <span class="sound-label" id="soundLabel">Sound on</span>
       </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">Language</span><select class="lang-sel" aria-label="Language"><option value="quiz.html" lang="en" selected>English</option><option value="id/quiz.html" lang="id">Bahasa Indonesia</option><option value="es/quiz.html" lang="es">Español</option><option value="fr/quiz.html" lang="fr">Français</option><option value="zh/quiz.html" lang="zh-CN">中文</option></select></span>
       <a class="btn-present" href="slides.html" title="Full-screen slides for class">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
         <span>Present</span>
@@ -84,7 +86,7 @@
       <p class="ph-kicker">Quiz</p>
       <div class="ph-main">
         <h1 class="ph-title">How well do you know SDG 4?</h1>
-        <p class="ph-lead"><span id="bankSize">40</span> questions on the goal, its targets, the latest data and the history behind it. Every answer comes with the fact behind it.</p>
+        <p class="ph-lead"><span id="bankSize">52</span> questions on the goal, its targets, the latest data and the history behind it. Every answer comes with the fact behind it.</p>
       </div>
     </div>
   </header>
@@ -103,8 +105,8 @@
 
       <section class="flash-block" aria-labelledby="flashTitle">
         <h2 class="section-title" id="flashTitle">Flashcards</h2>
-        <p class="block-note">Go through all 40 questions one card at a time. Each card shows the answer and the fact behind it.</p>
-        <button class="btn-outline flash-open" type="button" id="flashOpen">Study the 40 flashcards</button>
+        <p class="block-note">Go through all 52 questions one card at a time. Each card shows the answer and the fact behind it.</p>
+        <button class="btn-outline flash-open" type="button" id="flashOpen">Study the 52 flashcards</button>
       </section>
 
       <section class="board-block" aria-labelledby="boardTitle">
@@ -120,7 +122,7 @@
     <div id="flashPlay" hidden>
       <div class="flash-top">
         <button class="btn-ghost" type="button" id="flashBack">Back to the quiz</button>
-        <p class="flash-count" id="flashCount" aria-live="polite">1 of 40</p>
+        <p class="flash-count" id="flashCount" aria-live="polite">1 of 52</p>
         <button class="btn-ghost" type="button" id="flashShuffle">Shuffle</button>
       </div>
       <div class="flash-track" aria-hidden="true"><span id="flashFill"></span></div>
@@ -157,6 +159,7 @@
       <div class="quiz-options" id="quizOptions" role="group" aria-labelledby="quizQ"></div>
       <div class="quiz-feedback" id="quizFeedback" aria-live="polite" hidden></div>
       <div class="quiz-actions">
+        <button class="btn-ghost" type="button" id="quizSpeak">Read aloud</button>
         <button class="btn-ghost" type="button" id="quizQuit">Quit</button>
         <button class="btn-primary" type="button" id="quizNext" hidden>Next question</button>
       </div>
@@ -239,6 +242,7 @@
     <div class="sf-base-inner">
       <p>Data compiled on 28 October 2026 from UN and UNESCO reports.</p>
       <p>Press <kbd>M</kbd> to turn sound effects on or off, and <kbd>?</kbd> for all shortcuts.</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">Language</span><select class="lang-sel" aria-label="Language"><option value="quiz.html" lang="en" selected>English</option><option value="id/quiz.html" lang="id">Bahasa Indonesia</option><option value="es/quiz.html" lang="es">Español</option><option value="fr/quiz.html" lang="fr">Français</option><option value="zh/quiz.html" lang="zh-CN">中文</option></select></div>
     </div>
   </div>
 </footer>
@@ -266,6 +270,7 @@
 </dialog>
 
 </div>
+<script>window.SDG4_LOCALES = {"num": "en-US", "date": "en-GB"};</script>
 <script src="site.js"></script>
 <script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
 </body>

@@ -2,6 +2,9 @@
 (() => {
   'use strict';
 
+  // Set by build.py on every page: number and date formats for the page's language.
+  const LOCALES = window.SDG4_LOCALES || {};
+
   /* ------------------------------------------------------------------ */
   /* Helpers                                                             */
   /* ------------------------------------------------------------------ */
@@ -20,6 +23,18 @@
     if (parent) parent.appendChild(n);
     return n;
   };
+  // Fills numbered gaps in a translated sentence: fill('{0} of {1}', 3, 12) gives '3 of 12'.
+  const fill = (text, ...vals) => vals.reduce((s, v, i) => s.split('{' + i + '}').join(String(v)), text);
+  // Reads text aloud with the browser's voices, in the language of the page.
+  const speak = (text) => {
+    if (!text || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = document.documentElement.lang || 'en';
+      window.speechSynthesis.speak(u);
+    } catch (e) { /* speech is not available here */ }
+  };
   const store = {
     get(key, fallback) {
       try {
@@ -34,7 +49,7 @@
     }
   };
   const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const numberFmt = new Intl.NumberFormat('en-US');
+  const numberFmt = new Intl.NumberFormat(LOCALES.num || 'en-US');
   const BASE_TITLE = document.title;
   const smooth = reduceMotion ? 'auto' : 'smooth';
   const shuffle = (arr) => {
@@ -411,7 +426,22 @@
     // History
     { cat: 'History', mix: true, q: 'Which document, adopted in 1948, declared that “everyone has the right to education”?', options: ['The Universal Declaration of Human Rights', 'The Paris Agreement', 'The Geneva Conventions', 'The Olympic Charter'], answer: 0, explain: 'Article 26 of the Universal Declaration of Human Rights says everyone has the right to education, and that elementary education shall be free and compulsory.', src: 'UN General Assembly (1948)' },
     { cat: 'History', mix: true, q: 'Where was the 1990 World Conference on Education for All held?', options: ['Jomtien, Thailand', 'Dakar, Senegal', 'Incheon, Republic of Korea', 'New York, United States'], answer: 0, explain: 'In Jomtien, Thailand, where countries set the goal of universal access to primary education.', src: 'UNESCO' },
-    { cat: 'History', q: 'Which Millennium Development Goal aimed for every child to complete primary school by 2015?', options: ['MDG 1', 'MDG 2', 'MDG 4', 'MDG 8'], answer: 1, explain: 'MDG 2 aimed for universal primary education by 2015. SDG 4 raised the bar to secondary school by 2030.', src: 'UN Millennium Development Goals (2000)' }
+    { cat: 'History', q: 'Which Millennium Development Goal aimed for every child to complete primary school by 2015?', options: ['MDG 1', 'MDG 2', 'MDG 4', 'MDG 8'], answer: 1, explain: 'MDG 2 aimed for universal primary education by 2015. SDG 4 raised the bar to secondary school by 2030.', src: 'UN Millennium Development Goals (2000)' },
+    // Early years
+    { cat: 'Early years', q: 'During which period of life does the brain develop fastest?', options: ['The first years of life', 'The teenage years', 'Early adulthood', 'Old age'], answer: 0, explain: 'The brain grows and forms its basic connections fastest in the first years of life, which is why early care and learning matter so much.', src: 'Harvard Center on the Developing Child' },
+    { cat: 'Early years', q: 'What is pre-primary education?', options: ['Learning for young children before the first year of primary school', 'University preparation courses', 'Adult evening classes', 'Teacher training for secondary schools'], answer: 0, explain: 'Pre-primary education is organised learning for young children before they start primary school, such as kindergarten or preschool.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Early years', q: 'Why does Target 4.2 aim for pre-primary education?', options: ['So children are ready for primary school', 'So children can skip primary school', 'So parents can work full time', 'So schools can close earlier'], answer: 0, explain: 'Target 4.2 says children should be ready for primary school, so early learning sets them up to succeed later.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Early years', q: 'Which kind of care does Target 4.2 cover?', options: ['Early childhood development and care', 'Elderly care', 'Health insurance', 'Housing'], answer: 0, explain: 'Target 4.2 covers early childhood development, care and pre-primary education, so learning starts with care in the early years.', src: 'UN 2030 Agenda (2015)' },
+    // Literacy
+    { cat: 'Literacy', q: 'Which target covers literacy and numeracy?', options: ['Target 4.1', 'Target 4.6', 'Target 4.7', 'Target 4.b'], answer: 1, explain: 'Target 4.6 aims to ensure that all youth and a substantial proportion of adults, men and women, achieve literacy and numeracy by 2030.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Literacy', q: 'When is International Literacy Day celebrated?', options: ['8 March', '21 February', '8 September', '5 October'], answer: 2, explain: 'UNESCO marks International Literacy Day every year on 8 September, to highlight the importance of literacy for people and societies.', src: 'UNESCO, International Literacy Day 2026' },
+    { cat: 'Literacy', q: 'What does numeracy mean?', options: ['Reading fluently', 'Using numbers and basic maths in everyday life', 'Writing essays', 'Speaking a second language'], answer: 1, explain: 'Numeracy is the ability to use numbers and basic maths in everyday life, just as literacy is the ability to read and write.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Literacy', q: 'Who does Target 4.6 include?', options: ['Only children', 'Only teachers', 'All youth and a substantial proportion of adults, men and women', 'Only people in cities'], answer: 2, explain: 'Target 4.6 covers youth and adults, both men and women, not only children. That makes literacy a lifelong goal.', src: 'UN 2030 Agenda (2015)' },
+    // Inclusion
+    { cat: 'Inclusion', q: 'Which treaty sets out the right to inclusive education for people with disabilities?', options: ['The Paris Agreement', 'The Convention on the Rights of Persons with Disabilities', 'The Kyoto Protocol', 'The Geneva Conventions'], answer: 1, explain: 'Article 24 of the Convention on the Rights of Persons with Disabilities (2006) sets out the right to inclusive education at all levels.', src: 'UN CRPD (2006), Article 24' },
+    { cat: 'Inclusion', q: 'What is International Mother Language Day, celebrated on 21 February?', options: ['A day to stop teaching English', 'A day to promote language diversity and mother-tongue education', 'A holiday from school exams', 'A day to test teachers'], answer: 1, explain: 'UNESCO created International Mother Language Day to promote linguistic diversity and education in the languages people speak at home.', src: 'UNESCO, International Mother Language Day' },
+    { cat: 'Inclusion', q: 'Why can learning in a language children do not speak at home be a barrier?', options: ['It makes early learning harder for many children', 'It makes schools cheaper', 'It removes the need for teachers', 'It has no effect on learning'], answer: 0, explain: 'Children learn best first in a language they understand. Mother-tongue education gives them a stronger base for reading and later learning.', src: 'UNESCO, International Mother Language Day' },
+    { cat: 'Inclusion', q: 'In SDG 4, what does “inclusive” education mean?', options: ['Education only for rich families', 'Education that reaches everyone, including people with disabilities and marginalised groups', 'Education for adults only', 'Online learning only'], answer: 1, explain: 'SDG 4 asks for inclusive education: education that reaches everyone, including people with disabilities, girls and marginalised groups.', src: 'UN 2030 Agenda (2015)' }
   ];
 
   const MILESTONES = [
@@ -885,7 +915,8 @@
   function milestoneText(m) {
     if (!m.now) return m.text;
     const years = Math.round(daysToDeadline() / 365.25);
-    return '273 million children and young people are out of school, a number that has risen seven years in a row, and aid to education is falling. About ' + years + ' year' + (years === 1 ? '' : 's') + ' remain until the deadline.';
+    const yearsWord = years === 1 ? ' year' : ' years';
+    return fill('273 million children and young people are out of school, a number that has risen seven years in a row, and aid to education is falling. About {0} remain until the deadline.', years + yearsWord);
   }
 
   function renderTimeline() {
@@ -1111,7 +1142,7 @@
   };
   const CHAPTER_MODE = { name: 'Chapter', tag: 'Chapter', count: Infinity, timed: false, lifeline: false, desc: null };
   const modeInfo = (key) => (key === 'chapter' ? CHAPTER_MODE : MODES[key]);
-  const CHAPTER_ORDER = ['The goal', 'Access', 'Completion', 'Learning', 'Skills', 'Equity', 'Teachers', 'Money and schools', 'History'];
+  const CHAPTER_ORDER = ['The goal', 'Access', 'Completion', 'Learning', 'Skills', 'Equity', 'Teachers', 'Money and schools', 'History', 'Early years', 'Literacy', 'Inclusion'];
   const BOARD_KEY = 'sdg4.quiz.board';
   const BOARD_TABS = [
     { key: 'challenge', label: 'Challenge' },
@@ -1246,6 +1277,8 @@
     // quiz.view[j] is the original option shown in position j. Options with a natural order stay in it.
     const natural = q.options.map((o, i) => i);
     quiz.view = q.mix ? shuffle(natural) : natural;
+    // The text the Read aloud button speaks: the question, then the answers in the order shown.
+    quiz.spoken = [q.q].concat(quiz.view.map((orig, j) => 'ABCD'[j] + '. ' + q.options[orig])).join('. ');
     const opts = $('#quizOptions');
     opts.textContent = '';
     quiz.view.forEach((orig, j) => {
@@ -1346,7 +1379,7 @@
     }
 
     let verdict;
-    if (correct) verdict = M.timed ? 'Correct! +' + gained + ' points' + (mult > 1 ? ' with a ×' + mult + ' streak bonus' : '') : 'Correct!';
+    if (correct) verdict = M.timed ? 'Correct! +' + gained + ' points' + (mult > 1 ? fill(' with a ×{0} streak bonus', mult) : '') : 'Correct!';
     else if (timedOut) verdict = 'Time’s up. The answer is ' + q.options[q.answer] + '.';
     else verdict = 'Not quite. The answer is ' + q.options[q.answer] + '.';
 
@@ -1380,7 +1413,7 @@
   }
 
   /* Chapters and the leaderboard. Everything is kept in this browser. */
-  const dateText = (t) => new Date(t).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+  const dateText = (t) => new Date(t).toLocaleDateString(LOCALES.short, { day: 'numeric', month: 'short' });
 
   function renderChapters() {
     const grid = $('#chapterGrid');
@@ -1571,7 +1604,7 @@
   function shareScore() {
     const M = modeInfo(quiz.mode);
     const total = quiz.order.length;
-    const label = quiz.mode === 'chapter' ? 'the ' + quiz.chapter + ' chapter' : M.name + ' mode';
+    const label = quiz.mode === 'chapter' ? fill('the {0} chapter', quiz.chapter) : fill('{0} mode', M.name);
     const score = M.timed ? numberFmt.format(quiz.points) + ' points' : quiz.correct + ' of ' + total;
     const text = 'I scored ' + score + ' on the SDG 4 quiz (' + label + ') on Quality Education for All. Can you beat it?';
     const msg = $('#shareMsg');
@@ -1759,7 +1792,7 @@
       host.appendChild(dot);
     }
     const left = timer.s.every - done;
-    $('#cycleLabel').textContent = left === 0 ? 'Time for a long break' : left + ' focus session' + (left === 1 ? '' : 's') + ' until a long break';
+    $('#cycleLabel').textContent = left === 0 ? 'Time for a long break' : left + (left === 1 ? ' focus session' : ' focus sessions') + ' until a long break';
   }
 
   function renderModeUI() {
@@ -1987,6 +2020,15 @@
     window.addEventListener('resize', () => { if (window.innerWidth > 1180) setOpen(false); });
   }
 
+  // Language selectors (top bar, menu and slides) jump to the same page in the chosen language.
+  function initLang() {
+    $$('.lang-sel').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        if (sel.value) window.location.href = sel.value;
+      });
+    });
+  }
+
   function initChrome() {
     tip.node = $('#tooltip');
     renderCountdown();
@@ -2131,6 +2173,11 @@
     quizScreen('start');
     $('#quizNext').addEventListener('click', nextQuestion);
     $('#quizQuit').addEventListener('click', quitQuiz);
+    const speakBtn = $('#quizSpeak');
+    if (speakBtn) {
+      if (!('speechSynthesis' in window)) speakBtn.hidden = true;
+      speakBtn.addEventListener('click', () => speak(quiz.spoken || ''));
+    }
     $('#lifelineBtn').addEventListener('click', useLifeline);
     $('#quizRetry').addEventListener('click', () => startQuiz(quiz.mode, quiz.chapter));
     $('#saveScore').addEventListener('submit', saveScore);
@@ -2362,7 +2409,7 @@
     const niceDate = (iso) => {
       const p = String(iso).split('-').map(Number);
       const d = p.length === 3 ? new Date(p[0], p[1] - 1, p[2]) : new Date();
-      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      return d.toLocaleDateString(LOCALES.date || 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     };
     const status = (msg) => { $('#plStatus').textContent = msg; };
     const save = () => {
@@ -2737,7 +2784,7 @@
         return CHAPTER_ORDER.every((cat) => bests['chapter:' + cat] === chapterTotal(cat));
       }
     },
-    { name: 'Flashcard finisher', text: 'Turn over all 40 flashcards.', earned: () => fcSeen().length >= QUIZ.length },
+    { name: 'Flashcard finisher', text: 'Turn over all 52 flashcards.', earned: () => fcSeen().length >= QUIZ.length },
     { name: 'Target reader', text: 'Open all ten targets.', earned: () => (store.get('sdg4.seen.targets', []) || []).length >= TARGETS.length },
     { name: 'Note taker', text: 'Write notes on three targets.', earned: () => Object.keys(store.get('sdg4.notes', {}) || {}).length >= 3 },
     { name: 'Question of the day', text: 'Answer the question of the day.', earned: () => !!store.get('sdg4.qotd', null) },
@@ -2846,6 +2893,40 @@
     setDataMsg('All saved data on this device was erased.');
   }
 
+  /* Certificate: unlocks after three badges. Type a name, then print it or save it as a PDF. */
+  const CERT_MIN_BADGES = 3;
+  function initCertificate() {
+    const input = $('#certName');
+    if (!input) return;
+    input.value = store.get('sdg4.quiz.name', '') || '';
+    $('#certMake').addEventListener('click', () => {
+      const name = input.value.trim();
+      const earned = BADGES.filter((b) => b.earned()).length;
+      const cert = $('#certificate');
+      const actions = $('#certActions');
+      cert.hidden = true;
+      actions.hidden = true;
+      if (earned < CERT_MIN_BADGES) {
+        $('#certNote').textContent = fill('Earn at least {0} badges to unlock your certificate. You have {1} so far.', CERT_MIN_BADGES, earned);
+        return;
+      }
+      if (!name) {
+        $('#certNote').textContent = 'Type your name first.';
+        return;
+      }
+      store.set('sdg4.quiz.name', name);
+      const quizzes = getStats().quizzes || 0;
+      $('#certNote').textContent = '';
+      $('#certOut').textContent = name;
+      $('#certBody').textContent = fill('has learned about UN Sustainable Development Goal 4, Quality Education, and has earned {0} of {1} badges after {2} quizzes.', earned, BADGES.length, quizzes);
+      $('#certDate').textContent = new Date().toLocaleDateString(LOCALES.date || 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      cert.hidden = false;
+      actions.hidden = false;
+      cert.scrollIntoView({ behavior: smooth, block: 'center' });
+    });
+    $('#certPrint').addEventListener('click', () => window.print());
+  }
+
   function initProgress() {
     renderProgress();
     $('#dataExport').addEventListener('click', exportData);
@@ -2855,6 +2936,7 @@
       e.target.value = '';
     });
     $('#dataReset').addEventListener('click', eraseData);
+    initCertificate();
   }
 
   /* Search: pages, targets, facts and quiz questions, found as you type. Press / to open. */
@@ -2949,6 +3031,7 @@
   const siteNode = document.querySelector('.site[data-page]');
   const PAGE = siteNode ? siteNode.dataset.page : '';
   initChrome();
+  initLang();
   if (PAGE !== 'slides') {
     initReadingBar();
     initSearch();

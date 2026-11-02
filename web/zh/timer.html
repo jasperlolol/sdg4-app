@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>学习计时器 · 人人享有优质教育</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="专注计时器，帮助你以短时段学习，中间穿插休息。">
+<meta property="og:title" content="学习计时器 · 人人享有优质教育">
+<meta property="og:description" content="专注计时器，帮助你以短时段学习，中间穿插休息。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="人人享有优质教育">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="timer">
+<a class="skip" href="#main">跳到正文</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">优质教育</span>
+        <span class="brand-sub">人人享有 · 2030年前</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="主要内容">
+      <a href="facts.html" data-nav="facts">事实</a>
+      <a href="targets.html" data-nav="targets">具体目标</a>
+      <a href="explore.html" data-nav="explore">探索</a>
+      <a href="solutions.html" data-nav="solutions">解决方案</a>
+      <a href="action.html" data-nav="action">行动起来</a>
+      <a href="quiz.html" data-nav="quiz">测验</a>
+      <a href="timer.html" data-nav="timer" aria-current="page">学习计时器</a>
+      <a class="nav-extra" href="about.html" data-nav="about">关于</a>
+      <a class="nav-extra" href="slides.html">课堂幻灯片</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">语言</span><select class="lang-sel" aria-label="语言"><option value="../timer.html" lang="en">English</option><option value="../id/timer.html" lang="id">Bahasa Indonesia</option><option value="../es/timer.html" lang="es">Español</option><option value="../fr/timer.html" lang="fr">Français</option><option value="timer.html" lang="zh-CN" selected>中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="搜索本站 (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">搜索本站</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="音效 (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">声音开启</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">语言</span><select class="lang-sel" aria-label="语言"><option value="../timer.html" lang="en">English</option><option value="../id/timer.html" lang="id">Bahasa Indonesia</option><option value="../es/timer.html" lang="es">Español</option><option value="../fr/timer.html" lang="fr">Français</option><option value="timer.html" lang="zh-CN" selected>中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="课堂全屏幻灯片">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>演示</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">菜单</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">搜索本站</h2>
+      <button class="sd-close" type="button" id="searchClose">关闭</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">搜索词</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="试试：女孩、教师、阅读、2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>没有找到结果。请试试其他词语。</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled">
+    <div class="ph-inner">
+      <p class="ph-kicker">学习计时器</p>
+      <div class="ph-main">
+        <h1 class="ph-title">专注，然后休息</h1>
+        <p class="ph-lead">以专注时段学习，中间穿插短暂休息。完成四个专注时段后，休息更长时间。按空格键开始或暂停。</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section">
+    <div class="timer-layout">
+      <div class="dial-panel" id="dialPanel">
+        <div class="mode-tabs" id="modeTabs" aria-label="计时模式">
+          <button type="button" data-mode="focus" aria-pressed="true">专注</button>
+          <button type="button" data-mode="short" aria-pressed="false">短休息</button>
+          <button type="button" data-mode="long" aria-pressed="false">长休息</button>
+        </div>
+        <div class="dial">
+          <svg class="dial-svg" viewBox="0 0 320 320" aria-hidden="true">
+            <g class="dial-ticks" id="dialTicks"></g>
+            <circle class="dial-track" cx="160" cy="160" r="128"/>
+            <circle class="dial-progress" id="dialProgress" cx="160" cy="160" r="128"/>
+          </svg>
+          <div class="dial-center">
+            <p class="dial-mode" id="dialMode">专注</p>
+            <p class="dial-time" id="dialTime" role="timer" aria-live="off">25:00</p>
+            <p class="dial-session" id="dialSession">第1节，共4节</p>
+          </div>
+        </div>
+        <label class="task-field" for="taskInput">
+          <span class="visually-hidden">你在学习什么？</span>
+          <input id="taskInput" type="text" placeholder="你在学习什么？" maxlength="80" autocomplete="off">
+        </label>
+        <div class="dial-controls">
+          <button class="icon-btn" type="button" id="tReset" aria-label="重置计时器" title="重置 (R)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5"/><path d="M4.5 4.5v4h4"/></svg>
+          </button>
+          <button class="btn-start" type="button" id="tStart">开始</button>
+          <button class="icon-btn" type="button" id="tSkip" aria-label="跳到下一节" title="跳过 (S)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l8.5 6L6 18z"/><path d="M18 6v12"/></svg>
+          </button>
+        </div>
+        <p class="visually-hidden" id="timerStatus" aria-live="polite"></p>
+      </div>
+
+      <div class="timer-side">
+        <section class="side-card">
+          <h2 class="side-title">今天</h2>
+          <div class="today-stats">
+            <div><p class="ts-num" id="tsSessions">0</p><p class="ts-label">个专注时段已完成</p></div>
+            <div><p class="ts-num" id="tsMinutes">0</p><p class="ts-label">分钟专注时间</p></div>
+          </div>
+          <div class="cycle">
+            <div class="cycle-dots" id="cycleDots" aria-hidden="true"></div>
+            <p class="cycle-label" id="cycleLabel"></p>
+          </div>
+        </section>
+        <section class="side-card">
+          <h2 class="side-title">设置</h2>
+          <div class="setting" data-key="focus" data-min="5" data-max="90" data-step="5" data-unit="min">
+            <span class="setting-label" id="lbl-focus">专注时长</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="缩短专注时段">−</button><output aria-labelledby="lbl-focus">25分钟</output><button type="button" data-delta="1" aria-label="延长专注时段">+</button></span>
+          </div>
+          <div class="setting" data-key="short" data-min="1" data-max="30" data-step="1" data-unit="min">
+            <span class="setting-label" id="lbl-short">短休息</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="缩短短休息">−</button><output aria-labelledby="lbl-short">5分钟</output><button type="button" data-delta="1" aria-label="延长短休息">+</button></span>
+          </div>
+          <div class="setting" data-key="long" data-min="5" data-max="60" data-step="5" data-unit="min">
+            <span class="setting-label" id="lbl-long">长休息</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="缩短长休息">−</button><output aria-labelledby="lbl-long">15分钟</output><button type="button" data-delta="1" aria-label="延长长休息">+</button></span>
+          </div>
+          <div class="setting" data-key="every" data-min="2" data-max="8" data-step="1" data-unit="">
+            <span class="setting-label" id="lbl-every">长休息前的专注时段数</span>
+            <span class="stepper"><button type="button" data-delta="-1" aria-label="长休息前减少专注时段">−</button><output aria-labelledby="lbl-every">4</output><button type="button" data-delta="1" aria-label="长休息前增加专注时段">+</button></span>
+          </div>
+          <label class="switch" for="optAuto"><input type="checkbox" id="optAuto" checked><span>自动开始下一个计时</span></label>
+          <label class="switch" for="optSound"><input type="checkbox" id="optSound" checked><span>时间到时播放提示音</span></label>
+        </section>
+        <section class="side-card">
+          <h2 class="side-title">学习小贴士</h2>
+          <p class="tip" id="tipText"></p>
+          <div class="tip-actions"><button class="link-btn" type="button" id="tipNext">显示另一条小贴士</button></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">优质教育</span>
+          <span class="brand-sub">人人享有 · 2030年前</span>
+        </span>
+      </a>
+      <p class="sf-about">一个关于联合国可持续发展目标4的独立学校项目。它并非联合国或联合国教科文组织的官方网站。</p>
+      <p class="sf-count"><b data-days>1,525</b> 天后即2030年底</p>
+    </div>
+    <nav class="sf-cols" aria-label="全部页面">
+      <div class="sf-col">
+        <p class="sf-h">学习</p>
+        <a href="facts.html">事实数据</a>
+        <a href="targets.html">十项具体目标</a>
+        <a href="solutions.html">解决方案</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">游戏</p>
+        <a href="explore.html">探索</a>
+        <a href="quiz.html">测验</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">行动</p>
+        <a href="action.html">行动起来</a>
+        <a href="timer.html">学习计时器</a>
+        <a href="slides.html">课堂幻灯片</a>
+        <a href="progress.html">我的进度</a>
+        <a href="download.html">获取应用</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">关于</p>
+        <a href="about.html">关于本站</a>
+        <a href="about.html#glossary">术语表</a>
+        <a href="about.html#sources">资料来源</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>数据于2026年10月28日根据联合国和联合国教科文组织的报告汇编。</p>
+      <p>按 <kbd>M</kbd> 开启或关闭音效，并按 <kbd>?</kbd> 查看所有快捷键。</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">语言</span><select class="lang-sel" aria-label="语言"><option value="../timer.html" lang="en">English</option><option value="../id/timer.html" lang="id">Bahasa Indonesia</option><option value="../es/timer.html" lang="es">Español</option><option value="../fr/timer.html" lang="fr">Français</option><option value="timer.html" lang="zh-CN" selected>中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">键盘快捷键</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>开启或关闭音效，适用于每个页面</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>上一个或下一个目标、里程碑或幻灯片</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">至</span><kbd class="k">D</kbd></dt><dd>回答测验题目（数字键1至4也可以）</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>进入下一道测验题</dd>
+    <dt><kbd class="k">空格键</kbd></dt><dd>开始或暂停学习计时器</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>重置计时器</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>跳到下一个计时时段</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>幻灯片页面全屏显示</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>显示此列表</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "zh-CN", "date": "zh-CN", "short": "zh-CN"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>
