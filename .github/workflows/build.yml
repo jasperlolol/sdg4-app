@@ -97,10 +97,49 @@ jobs:
           name: ios
           path: SDG4-iOS.ipa
 
+  ios-older:
+    # Older iPads (iOS 12 to 14). Capacitor 3 still supports iOS 12, so this build is separate from the main iPad build.
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - name: Use Capacitor 3 for iOS 12
+        run: npm install --no-save @capacitor/core@3 @capacitor/cli@3 @capacitor/ios@3
+      - run: npx cap add ios
+      - run: npx cap sync ios
+      - name: Build the app without signing
+        working-directory: ios/App
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_15*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild archive \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/SDG4-older.xcarchive" \
+            IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+      - name: Package the .ipa
+        run: |
+          mkdir -p "$RUNNER_TEMP/ipa-older/Payload"
+          cp -R "$RUNNER_TEMP/SDG4-older.xcarchive/Products/Applications/App.app" "$RUNNER_TEMP/ipa-older/Payload/"
+          cd "$RUNNER_TEMP/ipa-older"
+          zip -qr SDG4-iOS-older.ipa Payload
+          cp SDG4-iOS-older.ipa "$GITHUB_WORKSPACE/SDG4-iOS-older.ipa"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-older
+          path: SDG4-iOS-older.ipa
+
   release:
     # Only a push to main publishes a release. Test runs from other branches stop after the builds.
     if: github.ref == 'refs/heads/main'
-    needs: [windows, mac, android, ios]
+    needs: [windows, mac, android, ios, ios-older]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -117,3 +156,4 @@ jobs:
             files/SDG4-Mac.dmg
             files/SDG4-Android.apk
             files/SDG4-iOS.ipa
+            files/SDG4-iOS-older.ipa
