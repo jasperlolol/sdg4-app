@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@capacitor/android": "latest",
+    "@capacitor/ios": "latest",
     "@capacitor/cli": "latest",
     "@capacitor/core": "latest",
     "electron": "latest",

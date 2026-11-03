@@ -64,8 +64,43 @@ jobs:
           name: android
           path: android/SDG4-Android.apk
 
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npx cap add ios
+      - run: npx cap sync ios
+      - name: Build the app without signing
+        working-directory: ios/App
+        run: |
+          xcodebuild archive \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/SDG4.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+      - name: Package the .ipa
+        run: |
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          cp -R "$RUNNER_TEMP/SDG4.xcarchive/Products/Applications/App.app" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          zip -qr SDG4-iOS.ipa Payload
+          cp SDG4-iOS.ipa "$GITHUB_WORKSPACE/SDG4-iOS.ipa"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios
+          path: SDG4-iOS.ipa
+
   release:
-    needs: [windows, mac, android]
+    # Only a push to main publishes a release. Test runs from other branches stop after the builds.
+    if: github.ref == 'refs/heads/main'
+    needs: [windows, mac, android, ios]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -81,3 +116,4 @@ jobs:
             files/SDG4-Windows.exe
             files/SDG4-Mac.dmg
             files/SDG4-Android.apk
+            files/SDG4-iOS.ipa
