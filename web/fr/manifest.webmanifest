@@ -1,0 +1,31 @@
+{
+  "name": "ODD 4 : Éducation de qualité pour tous",
+  "short_name": "SDG 4",
+  "description": "Les dernières données sur l’Objectif de développement durable 4 des Nations unies, les dix cibles, un quiz et un minuteur d’étude.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "lang": "fr"
+}

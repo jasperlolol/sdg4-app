@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Los datos · Educación de Calidad para Todos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Los datos más recientes de la ONU y la UNESCO sobre quién va a la escuela, quién termina, quién aprende y quién se queda atrás.">
+<meta property="og:title" content="Los datos · Educación de Calidad para Todos">
+<meta property="og:description" content="Los datos más recientes de la ONU y la UNESCO sobre quién va a la escuela, quién termina, quién aprende y quién se queda atrás.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Educación de Calidad para Todos">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="facts">
+<a class="skip" href="#main">Ir al contenido</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Educación de Calidad</span>
+        <span class="brand-sub">para todos, para 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Principal">
+      <a href="facts.html" data-nav="facts" aria-current="page">Datos</a>
+      <a href="targets.html" data-nav="targets">Metas</a>
+      <a href="explore.html" data-nav="explore">Explorar</a>
+      <a href="solutions.html" data-nav="solutions">Soluciones</a>
+      <a href="action.html" data-nav="action">Actúa</a>
+      <a href="quiz.html" data-nav="quiz">Quiz</a>
+      <a href="timer.html" data-nav="timer">Temporizador</a>
+      <a class="nav-extra" href="about.html" data-nav="about">Acerca de</a>
+      <a class="nav-extra" href="slides.html">Diapositivas para clase</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile">Mi perfil</a>
+      <a class="nav-extra" href="english.html" data-nav="english">Aprende inglés</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">Idioma</span><select class="lang-sel" aria-label="Idioma"><option value="../facts.html" lang="en">English</option><option value="../id/facts.html" lang="id">Bahasa Indonesia</option><option value="facts.html" lang="es" selected>Español</option><option value="../fr/facts.html" lang="fr">Français</option><option value="../zh/facts.html" lang="zh-CN">中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Buscar en el sitio (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">Buscar en el sitio</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Efectos de sonido (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Sonido activado</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">Idioma</span><select class="lang-sel" aria-label="Idioma"><option value="../facts.html" lang="en">English</option><option value="../id/facts.html" lang="id">Bahasa Indonesia</option><option value="facts.html" lang="es" selected>Español</option><option value="../fr/facts.html" lang="fr">Français</option><option value="../zh/facts.html" lang="zh-CN">中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="Diapositivas a pantalla completa para clase">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Presentar</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menú</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">Buscar en el sitio</h2>
+      <button class="sd-close" type="button" id="searchClose">Cerrar</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">Palabras de búsqueda</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="Prueba: niñas, maestros, lectura, 2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>No se encontró nada. Prueba con otra palabra.</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head page-head--margin ruled">
+    <div class="ph-inner">
+      <p class="ph-kicker">Los datos</p>
+      <div class="ph-main">
+        <h1 class="ph-title">Dónde está el mundo</h1>
+        <p class="ph-lead">Las cifras más recientes sobre quién va a la escuela, quién termina, quién aprende y quién se queda atrás. Pasa el cursor o toca los gráficos para ver los valores exactos.</p>
+        <nav class="jump" aria-label="En esta página">
+          <a href="#access">Acceso</a>
+          <a href="#key-figures">Cifras clave</a>
+          <a href="#completion">Finalización</a>
+          <a href="#learning">Aprendizaje</a>
+          <a href="#equity">Equidad</a>
+          <a href="#resources">Recursos</a>
+          <a href="#sources">Fuentes</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="sheet sheet--ruled">
+
+    <article class="block" id="access">
+      <div class="margin-note">
+        <p class="mn-label">Acceso</p>
+        <p class="mn-src">Fuentes <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-2" data-src="2">2</a>, <a class="src-ref" href="#src-3" data-src="3">3</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">273 millones están fuera de la escuela, y la cifra va en aumento</h2>
+        <p class="block-sub">Uno de cada seis niños, adolescentes y jóvenes en edad escolar del mundo estaba fuera de la escuela en 2024. La cifra ha aumentado durante siete años seguidos.</p>
+        <div class="access-grid">
+          <figure class="oos">
+            <figcaption>
+              <h3 class="fig-title">Quién está fuera de la escuela, por grupo de edad</h3>
+              <p class="fig-sub">Millones de niños, adolescentes y jóvenes, 2024</p>
+            </figcaption>
+            <div class="stack-labels" id="oosLabels"></div>
+            <div class="stack" id="oosStack" role="img" aria-label="Fuera de la escuela en 2024: 79 millones en edad de primaria, 64 millones en edad de secundaria básica y 130 millones en edad de secundaria superior, 273 millones en total."></div>
+            <p class="fig-note">Las tasas de exclusión escolar van del 3 % en los países de ingreso alto al 36 % en los de ingreso bajo.</p>
+          </figure>
+          <figure class="one-in-six">
+            <div class="people" aria-hidden="true"></div>
+            <figcaption>
+              <span class="ois-num">1 de cada 6</span>
+              <span class="ois-text">está fuera de la escuela. La tasa de exclusión escolar fue del 16,8 % en 2024, apenas inferior al 17,4 % de 2015.</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="key-figures">
+      <div class="margin-note">
+        <p class="mn-label">Cifras clave</p>
+        <p class="mn-src">Fuentes <a class="src-ref" href="#src-2" data-src="2">2</a>, <a class="src-ref" href="#src-4" data-src="4">4</a>, <a class="src-ref" href="#src-5" data-src="5">5</a>, <a class="src-ref" href="#src-6" data-src="6">6</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="visually-hidden">Cifras clave</h2>
+        <div class="ledger">
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-num">1.4</span><span class="kpi-unit">mil millones</span></p>
+            <p class="kpi-label">estudiantes matriculados en la escuela en todo el mundo (2024)</p>
+            <p class="kpi-detail">327 millones más en educación primaria y secundaria que en 2000.</p>
+          </div>
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-num">44</span><span class="kpi-unit">millones</span></p>
+            <p class="kpi-label">docentes más que se necesitan para 2030</p>
+            <p class="kpi-detail">Uno de cada tres de ellos, 15 millones, está en África subsahariana.</p>
+          </div>
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-num">739</span><span class="kpi-unit">millones</span></p>
+            <p class="kpi-label">jóvenes y adultos carecen de habilidades básicas de alfabetización (2024)</p>
+            <p class="kpi-detail">Alrededor de dos tercios de ellos son mujeres.</p>
+          </div>
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-pre">$</span><span class="kpi-num">97</span><span class="kpi-unit">mil millones</span></p>
+            <p class="kpi-label">de brecha de financiación para la educación cada año</p>
+            <p class="kpi-detail">Lo que les falta a los países de ingreso bajo y medio-bajo para alcanzar sus propias metas de 2030.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="completion">
+      <div class="margin-note">
+        <p class="mn-label">Finalización</p>
+        <p class="mn-src">Fuentes <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-2" data-src="2">2</a>, <a class="src-ref" href="#src-3" data-src="3">3</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Más jóvenes terminan la escuela, pero el progreso es lento</h2>
+        <p class="block-sub">Al ritmo actual, el mundo solo alcanzaría una finalización de la secundaria superior del 95 % en 2105.</p>
+        <div class="grid-2 grid-2--completion">
+          <figure class="panel">
+            <figcaption>
+              <h3 class="panel-title">Tasa de finalización en todo el mundo</h3>
+              <p class="panel-sub">Proporción de jóvenes que completan cada nivel, 2000 a 2024</p>
+            </figcaption>
+            <ul class="legend" id="slopeLegend"></ul>
+            <div class="chart" id="slopeChart" tabindex="0" role="img" aria-label="Gráfico de líneas de las tasas de finalización en el mundo. Primaria: 77 % en 2000, 85 % en 2015, 88 % en 2024. Secundaria básica: 60 %, 75 %, 78 %. Secundaria superior: 37 %, 53 %, 61 %. Usa las flechas para ver cada año."></div>
+            <button class="table-toggle" type="button" aria-expanded="false" aria-controls="slopeTable">Mostrar tabla de datos</button>
+            <div class="data-table" id="slopeTable" hidden></div>
+          </figure>
+          <figure class="panel">
+            <figcaption>
+              <h3 class="panel-title">Tasa de finalización por región, 2024</h3>
+              <p class="panel-sub">Cada fila muestra cuántos terminan la primaria, la secundaria básica y la secundaria superior</p>
+            </figcaption>
+            <ul class="legend" id="regionLegend"></ul>
+            <div class="dotplot" id="regionPlot"></div>
+            <p class="fig-foot">* Oceanía sin Australia ni Nueva Zelanda.</p>
+            <button class="table-toggle" type="button" aria-expanded="false" aria-controls="regionTable">Mostrar tabla de datos</button>
+            <div class="data-table" id="regionTable" hidden></div>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="learning">
+      <div class="margin-note">
+        <p class="mn-label">Aprendizaje</p>
+        <p class="mn-src">Fuentes <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-3" data-src="3">3</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Estar en la escuela no es lo mismo que aprender</h2>
+        <p class="block-sub">Estudiantes que alcanzan el nivel mínimo de competencia al final de la primaria. Es la estimación mundial más reciente, de 2019; no se ha actualizado desde la pandemia.</p>
+        <div class="learning">
+          <figure class="waffle-fig">
+            <div class="waffle" data-value="58" role="img" aria-label="58 de cada 100 estudiantes alcanzan el nivel mínimo en lectura"></div>
+            <figcaption><span class="wf-num">58</span><span class="wf-text">de cada 100 alcanzan el nivel mínimo en lectura</span></figcaption>
+          </figure>
+          <figure class="waffle-fig">
+            <div class="waffle" data-value="44" role="img" aria-label="44 de cada 100 estudiantes alcanzan el nivel mínimo en matemáticas"></div>
+            <figcaption><span class="wf-num">44</span><span class="wf-text">de cada 100 alcanzan el nivel mínimo en matemáticas</span></figcaption>
+          </figure>
+          <div class="learning-note">
+            <p class="ln-num">Del 59 % al 47 %</p>
+            <p class="ln-text">La proporción de estudiantes con competencias mínimas de lectura bajó entre 2012 y 2022 en 57 países, en su mayoría de ingreso medio y alto, con datos comparables. En matemáticas bajó del 41 % al 36 %.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="equity">
+      <div class="margin-note">
+        <p class="mn-label">Equidad</p>
+        <p class="mn-src">Fuentes <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-7" data-src="7">7</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Los más pobres se quedan cada vez más atrás en todos los niveles</h2>
+        <div class="grid-2 grid-2--equity">
+          <figure class="panel">
+            <figcaption>
+              <h3 class="panel-title">Del 20 % más pobre que completa la escuela, por cada 100 del 20 % más rico</h3>
+              <p class="panel-sub">Datos mundiales más recientes de 2019 a 2025. 100 significaría las mismas oportunidades.</p>
+            </figcaption>
+            <div class="parity" id="parityChart"></div>
+            <button class="table-toggle" type="button" aria-expanded="false" aria-controls="parityTable">Mostrar tabla de datos</button>
+            <div class="data-table" id="parityTable" hidden></div>
+          </figure>
+          <div class="facts">
+            <div class="fact">
+              <p class="fact-num">Casi 4 de cada 10</p>
+              <p class="fact-text">países no han alcanzado la paridad de género en la finalización de la primaria. En la secundaria superior, es casi 5 de cada 6.</p>
+            </div>
+            <div class="fact">
+              <p class="fact-num">76%</p>
+              <p class="fact-text">Los jóvenes de zonas rurales completan la secundaria superior a un ritmo del 76 % del de sus compañeros urbanos.</p>
+            </div>
+            <div class="fact">
+              <p class="fact-num">18%</p>
+              <p class="fact-text">de las niñas se casan antes de los 18 años (2025), frente al 25 % en 2000. El matrimonio infantil y el embarazo siguen apartando a muchas niñas de la escuela.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="resources">
+      <div class="margin-note">
+        <p class="mn-label">Recursos</p>
+        <p class="mn-src">Fuentes <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-3" data-src="3">3</a>, <a class="src-ref" href="#src-4" data-src="4">4</a>, <a class="src-ref" href="#src-6" data-src="6">6</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Escuelas, docentes y presupuestos están muy ajustados</h2>
+        <div class="res">
+          <section class="res-col">
+            <h3 class="res-title">Escuelas</h3>
+            <div class="res-item"><p class="res-num">Más de 1 de cada 5</p><p class="res-text">de las escuelas primarias del mundo carecen de electricidad, agua potable segura o saneamiento básico.</p></div>
+            <div class="res-item"><p class="res-num">28%</p><p class="res-text">de las escuelas de los países de ingreso bajo tienen electricidad, la misma proporción que en 2015.</p></div>
+          </section>
+          <section class="res-col">
+            <h3 class="res-title">Docentes</h3>
+            <div class="res-item"><p class="res-num">1 de cada 5</p><p class="res-text">de los docentes del mundo no cumple los requisitos mínimos de titulación de su país (2024).</p></div>
+            <div class="res-item"><p class="res-num">15 millones</p><p class="res-text">docentes más se necesitan solo en África subsahariana para 2030.</p></div>
+          </section>
+          <section class="res-col">
+            <h3 class="res-title">Financiación</h3>
+            <div class="res-item"><p class="res-num">7.5%</p><p class="res-text">de la ayuda al desarrollo se destinó a la educación en 2024, su proporción más baja en dos décadas.</p></div>
+            <div class="res-item"><p class="res-num">113</p><p class="res-text">países, hogar de 6100 millones de personas, gastan más en el pago de la deuda que en educación.</p></div>
+          </section>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="sources">
+      <div class="margin-note">
+        <p class="mn-label">Fuentes</p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">De dónde proceden las cifras</h2>
+        <p class="block-sub">Recopilado el 28 de octubre de 2026 a partir de las publicaciones más recientes de la UNESCO y de las Naciones Unidas. El año junto a una cifra es el año al que se refieren los datos.</p>
+        <ol class="sources">
+          <li id="src-1"><span class="src-num">1</span><span><cite>Informe sobre los Objetivos de Desarrollo Sostenible 2026</cite>, Objetivo 4: Educación de calidad. Naciones Unidas, Departamento de Asuntos Económicos y Sociales, julio de 2026. <a href="https://unstats.un.org/sdgs/report/2026/The-Sustainable-Development-Goals-Report-2026.pdf" target="_blank" rel="noopener">unstats.un.org/sdgs/report/2026</a></span></li>
+          <li id="src-2"><span class="src-num">2</span><span><cite>Informe de Seguimiento de la Educación en el Mundo 2026: Acceso y equidad, cuenta atrás hasta 2030</cite>. UNESCO, mensajes clave y comunicado de prensa, 25 de marzo de 2026. <a href="https://www.unesco.org/reports/gem-report/en/2026" target="_blank" rel="noopener">unesco.org/reports/gem-report/en/2026</a></span></li>
+          <li id="src-3"><span class="src-num">3</span><span><cite>Informe de Seguimiento de la Educación en el Mundo 2026, capítulo 7: Seguimiento de la educación en los ODS</cite>. UNESCO, 2026. <a href="https://www.unesco.org/reports/gem-report/en/2026-monitoring-sdg4" target="_blank" rel="noopener">unesco.org/reports/gem-report/en/2026-monitoring-sdg4</a></span></li>
+          <li id="src-4"><span class="src-num">4</span><span><cite>Informe mundial sobre los docentes: abordar la escasez de docentes y transformar la profesión</cite>. UNESCO y el Grupo de Trabajo Internacional sobre Docentes para la Educación 2030, 2024. <a href="https://unesdoc.unesco.org/ark:/48223/pf0000387001" target="_blank" rel="noopener">unesdoc.unesco.org/ark:/48223/pf0000387001</a></span></li>
+          <li id="src-5"><span class="src-num">5</span><span><cite>Día Internacional de la Alfabetización 2026</cite>. UNESCO, 8 de septiembre de 2026. Al menos 739 millones de jóvenes y adultos carecían de competencias básicas de alfabetización en 2024.</span></li>
+          <li id="src-6"><span class="src-num">6</span><span><cite>¿Pueden los países permitirse sus metas nacionales del ODS 4?</cite> Informe GEM de la UNESCO, 2023, sobre la brecha anual de 97 000 millones de dólares; hallazgos sobre ayuda y deuda publicados por la UNESCO en la Cumbre Transformar la Educación +4, julio de 2026. <a href="https://news.un.org/en/node/1135697" target="_blank" rel="noopener">news.un.org/en/node/1135697</a></span></li>
+          <li id="src-7"><span class="src-num">7</span><span><cite>Informe GEM de Género 2026</cite>. Comunicado de prensa de la UNESCO, 8 de octubre de 2026. <a href="https://www.unesco.org/en/articles/gender-gaps-education-narrow-globally-yet-early-marriage-remains-major-barrier-girls-education-new" target="_blank" rel="noopener">unesco.org/en/articles/gender-gaps-education-narrow-globally</a></span></li>
+          <li id="src-8"><span class="src-num">8</span><span><cite>Transformar nuestro mundo: la Agenda 2030 para el Desarrollo Sostenible</cite>. Resolución A/RES/70/1 de la Asamblea General de la ONU, 2015. Redacción oficial de las metas del ODS 4.</span></li>
+        </ol>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Educación de Calidad</span>
+          <span class="brand-sub">para todos, para 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">Proyecto escolar independiente sobre el Objetivo de Desarrollo Sostenible 4 de la ONU. No es un sitio web oficial de las Naciones Unidas ni de la UNESCO.</p>
+      <p class="sf-count"><b data-days>1,525</b> días restantes hasta finales de 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="Todas las páginas">
+      <div class="sf-col">
+        <p class="sf-h">Aprender</p>
+        <a href="facts.html">Los datos</a>
+        <a href="targets.html">Las 10 metas</a>
+        <a href="solutions.html">Soluciones</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Jugar</p>
+        <a href="explore.html">Explorar</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="english.html">Aprende inglés</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Actuar</p>
+        <a href="action.html">Actúa</a>
+        <a href="timer.html">Temporizador</a>
+        <a href="slides.html">Diapositivas para clase</a>
+        <a href="profile.html">Mi perfil</a>
+        <a href="progress.html">Mi progreso</a>
+        <a href="download.html">Obtén la aplicación</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Acerca de</p>
+        <a href="about.html">Acerca de este sitio</a>
+        <a href="about.html#glossary">Glosario</a>
+        <a href="about.html#sources">Fuentes</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Datos recopilados el 28 de octubre de 2026 a partir de informes de la ONU y de la UNESCO.</p>
+      <p>Pulsa <kbd>M</kbd> para activar o desactivar los efectos de sonido, y <kbd>?</kbd> para ver todos los atajos.</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">Idioma</span><select class="lang-sel" aria-label="Idioma"><option value="../facts.html" lang="en">English</option><option value="../id/facts.html" lang="id">Bahasa Indonesia</option><option value="facts.html" lang="es" selected>Español</option><option value="../fr/facts.html" lang="fr">Français</option><option value="../zh/facts.html" lang="zh-CN">中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Atajos de teclado</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Efectos de sonido activados o desactivados, en todas las páginas</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Meta, hito o diapositiva anterior o siguiente</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">a</span><kbd class="k">D</kbd></dt><dd>Responder una pregunta del test (también sirven del 1 al 4)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Ir a la siguiente pregunta del test</dd>
+    <dt><kbd class="k">Espacio</kbd></dt><dd>Iniciar o pausar el temporizador de estudio</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Reiniciar el temporizador</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Saltar a la siguiente sesión del temporizador</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Pantalla completa en la página de diapositivas</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Mostrar esta lista</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "es-ES", "date": "es-ES", "short": "es-ES"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

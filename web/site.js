@@ -2,6 +2,9 @@
 (() => {
   'use strict';
 
+  // Set by build.py on every page: number and date formats for the page's language.
+  const LOCALES = window.SDG4_LOCALES || {};
+
   /* ------------------------------------------------------------------ */
   /* Helpers                                                             */
   /* ------------------------------------------------------------------ */
@@ -14,11 +17,29 @@
     return n;
   };
   const SVGNS = 'http://www.w3.org/2000/svg';
+  // SVG attributes cannot read CSS variables, so a var(--name) colour is looked up from the page when it is drawn.
+  const cssValue = (v) => {
+    if (typeof v !== 'string' || v.indexOf('var(--') !== 0) return v;
+    const root = document.querySelector('.site') || document.documentElement;
+    return getComputedStyle(root).getPropertyValue(v.slice(4, -1)).trim() || v;
+  };
   const sv = (tag, attrs, parent) => {
     const n = document.createElementNS(SVGNS, tag);
-    if (attrs) Object.keys(attrs).forEach((k) => n.setAttribute(k, attrs[k]));
+    if (attrs) Object.keys(attrs).forEach((k) => n.setAttribute(k, cssValue(attrs[k])));
     if (parent) parent.appendChild(n);
     return n;
+  };
+  // Fills numbered gaps in a translated sentence: fill('{0} of {1}', 3, 12) gives '3 of 12'.
+  const fill = (text, ...vals) => vals.reduce((s, v, i) => s.split('{' + i + '}').join(String(v)), text);
+  // Reads text aloud with the browser's voices, in the language of the page.
+  const speak = (text) => {
+    if (!text || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = document.documentElement.lang || 'en';
+      window.speechSynthesis.speak(u);
+    } catch (e) { /* speech is not available here */ }
   };
   const store = {
     get(key, fallback) {
@@ -31,10 +52,12 @@
     },
     set(key, value) {
       try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* storage unavailable */ }
+      // Tell the badge check that something was saved.
+      window.dispatchEvent(new CustomEvent('sdg4:save', { detail: key }));
     }
   };
   const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const numberFmt = new Intl.NumberFormat('en-US');
+  const numberFmt = new Intl.NumberFormat(LOCALES.num || 'en-US');
   const BASE_TITLE = document.title;
   const smooth = reduceMotion ? 'auto' : 'smooth';
   const shuffle = (arr) => {
@@ -199,9 +222,9 @@
 
   // One red hue, three lightness steps: education levels are an ordered sequence.
   const LEVELS = [
-    { key: 'primary', name: 'Primary', color: '#7A1526' },
-    { key: 'lower', name: 'Lower secondary', color: '#B8344A' },
-    { key: 'upper', name: 'Upper secondary', color: '#E58B98' }
+    { key: 'primary', name: 'Primary', color: 'var(--chart-1)' },
+    { key: 'lower', name: 'Lower secondary', color: 'var(--chart-2)' },
+    { key: 'upper', name: 'Upper secondary', color: 'var(--chart-3)' }
   ];
 
   // Completion rate worldwide (%). 2000: UNESCO GEM Report 2026. 2015 and 2024: UN SDG Report 2026.
@@ -227,9 +250,9 @@
 
   // Out of school by age group, 2024, millions: GEM Report 2026, ch. 7.
   const OOS = [
-    { value: 79, name: 'primary-school age', color: '#7A1526' },
-    { value: 64, name: 'lower-secondary age', color: '#B8344A' },
-    { value: 130, name: 'upper-secondary age', color: '#E58B98' }
+    { value: 79, name: 'primary-school age', color: 'var(--chart-1)' },
+    { value: 64, name: 'lower-secondary age', color: 'var(--chart-2)' },
+    { value: 130, name: 'upper-secondary age', color: 'var(--chart-3)' }
   ];
 
   // Completion of the poorest 20% for every 100 of the richest 20% (parity index x 100): UN SDG Report 2026.
@@ -411,7 +434,22 @@
     // History
     { cat: 'History', mix: true, q: 'Which document, adopted in 1948, declared that “everyone has the right to education”?', options: ['The Universal Declaration of Human Rights', 'The Paris Agreement', 'The Geneva Conventions', 'The Olympic Charter'], answer: 0, explain: 'Article 26 of the Universal Declaration of Human Rights says everyone has the right to education, and that elementary education shall be free and compulsory.', src: 'UN General Assembly (1948)' },
     { cat: 'History', mix: true, q: 'Where was the 1990 World Conference on Education for All held?', options: ['Jomtien, Thailand', 'Dakar, Senegal', 'Incheon, Republic of Korea', 'New York, United States'], answer: 0, explain: 'In Jomtien, Thailand, where countries set the goal of universal access to primary education.', src: 'UNESCO' },
-    { cat: 'History', q: 'Which Millennium Development Goal aimed for every child to complete primary school by 2015?', options: ['MDG 1', 'MDG 2', 'MDG 4', 'MDG 8'], answer: 1, explain: 'MDG 2 aimed for universal primary education by 2015. SDG 4 raised the bar to secondary school by 2030.', src: 'UN Millennium Development Goals (2000)' }
+    { cat: 'History', q: 'Which Millennium Development Goal aimed for every child to complete primary school by 2015?', options: ['MDG 1', 'MDG 2', 'MDG 4', 'MDG 8'], answer: 1, explain: 'MDG 2 aimed for universal primary education by 2015. SDG 4 raised the bar to secondary school by 2030.', src: 'UN Millennium Development Goals (2000)' },
+    // Early years
+    { cat: 'Early years', q: 'During which period of life does the brain develop fastest?', options: ['The first years of life', 'The teenage years', 'Early adulthood', 'Old age'], answer: 0, explain: 'The brain grows and forms its basic connections fastest in the first years of life, which is why early care and learning matter so much.', src: 'Harvard Center on the Developing Child' },
+    { cat: 'Early years', q: 'What is pre-primary education?', options: ['Learning for young children before the first year of primary school', 'University preparation courses', 'Adult evening classes', 'Teacher training for secondary schools'], answer: 0, explain: 'Pre-primary education is organised learning for young children before they start primary school, such as kindergarten or preschool.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Early years', q: 'Why does Target 4.2 aim for pre-primary education?', options: ['So children are ready for primary school', 'So children can skip primary school', 'So parents can work full time', 'So schools can close earlier'], answer: 0, explain: 'Target 4.2 says children should be ready for primary school, so early learning sets them up to succeed later.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Early years', q: 'Which kind of care does Target 4.2 cover?', options: ['Early childhood development and care', 'Elderly care', 'Health insurance', 'Housing'], answer: 0, explain: 'Target 4.2 covers early childhood development, care and pre-primary education, so learning starts with care in the early years.', src: 'UN 2030 Agenda (2015)' },
+    // Literacy
+    { cat: 'Literacy', q: 'Which target covers literacy and numeracy?', options: ['Target 4.1', 'Target 4.6', 'Target 4.7', 'Target 4.b'], answer: 1, explain: 'Target 4.6 aims to ensure that all youth and a substantial proportion of adults, men and women, achieve literacy and numeracy by 2030.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Literacy', q: 'When is International Literacy Day celebrated?', options: ['8 March', '21 February', '8 September', '5 October'], answer: 2, explain: 'UNESCO marks International Literacy Day every year on 8 September, to highlight the importance of literacy for people and societies.', src: 'UNESCO, International Literacy Day 2026' },
+    { cat: 'Literacy', q: 'What does numeracy mean?', options: ['Reading fluently', 'Using numbers and basic maths in everyday life', 'Writing essays', 'Speaking a second language'], answer: 1, explain: 'Numeracy is the ability to use numbers and basic maths in everyday life, just as literacy is the ability to read and write.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Literacy', q: 'Who does Target 4.6 include?', options: ['Only children', 'Only teachers', 'All youth and a substantial proportion of adults, men and women', 'Only people in cities'], answer: 2, explain: 'Target 4.6 covers youth and adults, both men and women, not only children. That makes literacy a lifelong goal.', src: 'UN 2030 Agenda (2015)' },
+    // Inclusion
+    { cat: 'Inclusion', q: 'Which treaty sets out the right to inclusive education for people with disabilities?', options: ['The Paris Agreement', 'The Convention on the Rights of Persons with Disabilities', 'The Kyoto Protocol', 'The Geneva Conventions'], answer: 1, explain: 'Article 24 of the Convention on the Rights of Persons with Disabilities (2006) sets out the right to inclusive education at all levels.', src: 'UN CRPD (2006), Article 24' },
+    { cat: 'Inclusion', q: 'What is International Mother Language Day, celebrated on 21 February?', options: ['A day to stop teaching English', 'A day to promote language diversity and mother-tongue education', 'A holiday from school exams', 'A day to test teachers'], answer: 1, explain: 'UNESCO created International Mother Language Day to promote linguistic diversity and education in the languages people speak at home.', src: 'UNESCO, International Mother Language Day' },
+    { cat: 'Inclusion', q: 'Why can learning in a language children do not speak at home be a barrier?', options: ['It makes early learning harder for many children', 'It makes schools cheaper', 'It removes the need for teachers', 'It has no effect on learning'], answer: 0, explain: 'Children learn best first in a language they understand. Mother-tongue education gives them a stronger base for reading and later learning.', src: 'UNESCO, International Mother Language Day' },
+    { cat: 'Inclusion', q: 'In SDG 4, what does “inclusive” education mean?', options: ['Education only for rich families', 'Education that reaches everyone, including people with disabilities and marginalised groups', 'Education for adults only', 'Online learning only'], answer: 1, explain: 'SDG 4 asks for inclusive education: education that reaches everyone, including people with disabilities, girls and marginalised groups.', src: 'UN 2030 Agenda (2015)' }
   ];
 
   const MILESTONES = [
@@ -885,7 +923,8 @@
   function milestoneText(m) {
     if (!m.now) return m.text;
     const years = Math.round(daysToDeadline() / 365.25);
-    return '273 million children and young people are out of school, a number that has risen seven years in a row, and aid to education is falling. About ' + years + ' year' + (years === 1 ? '' : 's') + ' remain until the deadline.';
+    const yearsWord = years === 1 ? ' year' : ' years';
+    return fill('273 million children and young people are out of school, a number that has risen seven years in a row, and aid to education is falling. About {0} remain until the deadline.', years + yearsWord);
   }
 
   function renderTimeline() {
@@ -1111,7 +1150,7 @@
   };
   const CHAPTER_MODE = { name: 'Chapter', tag: 'Chapter', count: Infinity, timed: false, lifeline: false, desc: null };
   const modeInfo = (key) => (key === 'chapter' ? CHAPTER_MODE : MODES[key]);
-  const CHAPTER_ORDER = ['The goal', 'Access', 'Completion', 'Learning', 'Skills', 'Equity', 'Teachers', 'Money and schools', 'History'];
+  const CHAPTER_ORDER = ['The goal', 'Access', 'Completion', 'Learning', 'Skills', 'Equity', 'Teachers', 'Money and schools', 'History', 'Early years', 'Literacy', 'Inclusion'];
   const BOARD_KEY = 'sdg4.quiz.board';
   const BOARD_TABS = [
     { key: 'challenge', label: 'Challenge' },
@@ -1246,6 +1285,8 @@
     // quiz.view[j] is the original option shown in position j. Options with a natural order stay in it.
     const natural = q.options.map((o, i) => i);
     quiz.view = q.mix ? shuffle(natural) : natural;
+    // The text the Read aloud button speaks: the question, then the answers in the order shown.
+    quiz.spoken = [q.q].concat(quiz.view.map((orig, j) => 'ABCD'[j] + '. ' + q.options[orig])).join('. ');
     const opts = $('#quizOptions');
     opts.textContent = '';
     quiz.view.forEach((orig, j) => {
@@ -1346,7 +1387,7 @@
     }
 
     let verdict;
-    if (correct) verdict = M.timed ? 'Correct! +' + gained + ' points' + (mult > 1 ? ' with a ×' + mult + ' streak bonus' : '') : 'Correct!';
+    if (correct) verdict = M.timed ? 'Correct! +' + gained + ' points' + (mult > 1 ? fill(' with a ×{0} streak bonus', mult) : '') : 'Correct!';
     else if (timedOut) verdict = 'Time’s up. The answer is ' + q.options[q.answer] + '.';
     else verdict = 'Not quite. The answer is ' + q.options[q.answer] + '.';
 
@@ -1380,7 +1421,7 @@
   }
 
   /* Chapters and the leaderboard. Everything is kept in this browser. */
-  const dateText = (t) => new Date(t).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+  const dateText = (t) => new Date(t).toLocaleDateString(LOCALES.short, { day: 'numeric', month: 'short' });
 
   function renderChapters() {
     const grid = $('#chapterGrid');
@@ -1535,7 +1576,7 @@
     $('#flashAnswer').hidden = !show;
     $('#flashCard').setAttribute('aria-expanded', String(show));
     if (show) {
-      const idx = fcState.order[fcState.i];
+      const idx = ALL_QUIZ.indexOf(QUIZ[fcState.order[fcState.i]]); // position in the full bank, which does not change
       const seen = fcSeen();
       if (seen.indexOf(idx) < 0) store.set('sdg4.flash', seen.concat(idx));
     }
@@ -1571,7 +1612,7 @@
   function shareScore() {
     const M = modeInfo(quiz.mode);
     const total = quiz.order.length;
-    const label = quiz.mode === 'chapter' ? 'the ' + quiz.chapter + ' chapter' : M.name + ' mode';
+    const label = quiz.mode === 'chapter' ? fill('the {0} chapter', quiz.chapter) : fill('{0} mode', M.name);
     const score = M.timed ? numberFmt.format(quiz.points) + ' points' : quiz.correct + ' of ' + total;
     const text = 'I scored ' + score + ' on the SDG 4 quiz (' + label + ') on Quality Education for All. Can you beat it?';
     const msg = $('#shareMsg');
@@ -1662,6 +1703,7 @@
     if (total && quiz.correct === total) lifetime.perfect = (lifetime.perfect || 0) + 1;
     lifetime.bestStreak = Math.max(lifetime.bestStreak || 0, quiz.bestStreak);
     store.set('sdg4.stats', lifetime);
+    sendQuizScore({ pct: Math.round(ratio * 100), correct: quiz.correct, total, chapter: quiz.chapter || '', at: new Date().toISOString() });
 
     const ring = $('#resultScore');
     ring.classList.remove('is-drawn');
@@ -1759,7 +1801,7 @@
       host.appendChild(dot);
     }
     const left = timer.s.every - done;
-    $('#cycleLabel').textContent = left === 0 ? 'Time for a long break' : left + ' focus session' + (left === 1 ? '' : 's') + ' until a long break';
+    $('#cycleLabel').textContent = left === 0 ? 'Time for a long break' : left + (left === 1 ? ' focus session' : ' focus sessions') + ' until a long break';
   }
 
   function renderModeUI() {
@@ -1987,6 +2029,15 @@
     window.addEventListener('resize', () => { if (window.innerWidth > 1180) setOpen(false); });
   }
 
+  // Language selectors (top bar, menu and slides) jump to the same page in the chosen language.
+  function initLang() {
+    $$('.lang-sel').forEach((sel) => {
+      sel.addEventListener('change', () => {
+        if (sel.value) window.location.href = sel.value;
+      });
+    });
+  }
+
   function initChrome() {
     tip.node = $('#tooltip');
     renderCountdown();
@@ -2131,6 +2182,11 @@
     quizScreen('start');
     $('#quizNext').addEventListener('click', nextQuestion);
     $('#quizQuit').addEventListener('click', quitQuiz);
+    const speakBtn = $('#quizSpeak');
+    if (speakBtn) {
+      if (!('speechSynthesis' in window)) speakBtn.hidden = true;
+      speakBtn.addEventListener('click', () => speak(quiz.spoken || ''));
+    }
     $('#lifelineBtn').addEventListener('click', useLifeline);
     $('#quizRetry').addEventListener('click', () => startQuiz(quiz.mode, quiz.chapter));
     $('#saveScore').addEventListener('submit', saveScore);
@@ -2362,7 +2418,7 @@
     const niceDate = (iso) => {
       const p = String(iso).split('-').map(Number);
       const d = p.length === 3 ? new Date(p[0], p[1] - 1, p[2]) : new Date();
-      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      return d.toLocaleDateString(LOCALES.date || 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     };
     const status = (msg) => { $('#plStatus').textContent = msg; };
     const save = () => {
@@ -2662,7 +2718,8 @@
     bar.appendChild(fill);
     const toTop = h('button', 'to-top', 'Back to top');
     toTop.type = 'button';
-    document.body.append(bar, toTop);
+    // Inside the page's own .site wrapper, so the bar and button take that page's colours.
+    ($('.site') || document.body).append(bar, toTop);
     let ticking = false;
     const update = () => {
       ticking = false;
@@ -2737,7 +2794,7 @@
         return CHAPTER_ORDER.every((cat) => bests['chapter:' + cat] === chapterTotal(cat));
       }
     },
-    { name: 'Flashcard finisher', text: 'Turn over all 40 flashcards.', earned: () => fcSeen().length >= QUIZ.length },
+    { name: 'Flashcard finisher', text: 'Turn over all 52 flashcards.', earned: () => fcSeen().length >= QUIZ.length },
     { name: 'Target reader', text: 'Open all ten targets.', earned: () => (store.get('sdg4.seen.targets', []) || []).length >= TARGETS.length },
     { name: 'Note taker', text: 'Write notes on three targets.', earned: () => Object.keys(store.get('sdg4.notes', {}) || {}).length >= 3 },
     { name: 'Question of the day', text: 'Answer the question of the day.', earned: () => !!store.get('sdg4.qotd', null) },
@@ -2745,6 +2802,67 @@
     { name: 'Make it yours', text: 'Make your own pledge on the Take action page.', earned: () => { const p = store.get('sdg4.pledge', null); return !!(p && p.made); } },
     { name: 'Speak up', text: 'Save a score to the leaderboard.', earned: () => readBoard().length > 0 }
   ];
+
+  /* A pop-up when a badge is first earned. Badges already earned are remembered, so they do not pop up again. */
+  const BADGE_SEEN_KEY = 'sdg4.badges.got';
+  const badgeLine = [];
+  let badgeBusy = false;
+  let badgeToast = null;
+  let badgeHideTimer = null;
+  function buildBadgeToast() {
+    const box = h('div', 'badge-toast');
+    box.id = 'badgeToast';
+    box.setAttribute('role', 'status');
+    box.setAttribute('aria-live', 'polite');
+    box.hidden = true;
+    const icon = h('span', 'badge-toast-icon', '★');
+    icon.setAttribute('aria-hidden', 'true');
+    const body = h('div', 'badge-toast-body');
+    const see = h('a', 'badge-toast-link', 'See my badges');
+    see.href = 'progress.html';
+    body.append(h('p', 'badge-toast-kicker', 'Badge earned!'), h('p', 'badge-toast-name'), h('p', 'badge-toast-text'), see);
+    const close = h('button', 'badge-toast-close', 'Close');
+    close.type = 'button';
+    close.addEventListener('click', hideBadgeToast);
+    box.append(icon, body, close);
+    document.body.appendChild(box);
+    return box;
+  }
+  function showNextBadge() {
+    if (badgeBusy || !badgeLine.length) return;
+    badgeBusy = true;
+    const b = badgeLine.shift();
+    if (!badgeToast) badgeToast = buildBadgeToast();
+    badgeToast.querySelector('.badge-toast-name').textContent = b.name;
+    badgeToast.querySelector('.badge-toast-text').textContent = b.text;
+    badgeToast.hidden = false;
+    badgeToast.classList.remove('is-in');
+    void badgeToast.offsetWidth;
+    badgeToast.classList.add('is-in');
+    badgeHideTimer = setTimeout(hideBadgeToast, 7000);
+  }
+  function hideBadgeToast() {
+    clearTimeout(badgeHideTimer);
+    if (badgeToast) badgeToast.hidden = true;
+    badgeBusy = false;
+    showNextBadge();
+  }
+  function checkBadges() {
+    const now = BADGES.filter((b) => b.earned()).map((b) => b.name);
+    const seen = store.get(BADGE_SEEN_KEY, null);
+    // First time: remember what is already earned, without a pop-up.
+    if (!Array.isArray(seen)) {
+      store.set(BADGE_SEEN_KEY, now);
+      return;
+    }
+    const fresh = BADGES.filter((b) => now.indexOf(b.name) >= 0 && seen.indexOf(b.name) < 0);
+    if (!fresh.length) return;
+    store.set(BADGE_SEEN_KEY, seen.concat(fresh.map((b) => b.name)));
+    fresh.forEach((b) => badgeLine.push(b));
+    showNextBadge();
+  }
+  window.addEventListener('sdg4:save', (e) => { if (e.detail !== BADGE_SEEN_KEY) checkBadges(); });
+  checkBadges();
 
   function renderProgress() {
     const stats = getStats();
@@ -2840,10 +2958,45 @@
     savedKeys().forEach((k) => {
       try { window.localStorage.removeItem(k); } catch (e) { /* storage unavailable */ }
     });
+    try { window.localStorage.removeItem(CLOUD_AUTH_KEY); } catch (e) { /* storage unavailable */ }
     btn.textContent = 'Erase my data on this device';
     btn.classList.remove('is-armed');
     renderProgress();
     setDataMsg('All saved data on this device was erased.');
+  }
+
+  /* Certificate: unlocks after three badges. Type a name, then print it or save it as a PDF. */
+  const CERT_MIN_BADGES = 3;
+  function initCertificate() {
+    const input = $('#certName');
+    if (!input) return;
+    input.value = store.get('sdg4.quiz.name', '') || '';
+    $('#certMake').addEventListener('click', () => {
+      const name = input.value.trim();
+      const earned = BADGES.filter((b) => b.earned()).length;
+      const cert = $('#certificate');
+      const actions = $('#certActions');
+      cert.hidden = true;
+      actions.hidden = true;
+      if (earned < CERT_MIN_BADGES) {
+        $('#certNote').textContent = fill('Earn at least {0} badges to unlock your certificate. You have {1} so far.', CERT_MIN_BADGES, earned);
+        return;
+      }
+      if (!name) {
+        $('#certNote').textContent = 'Type your name first.';
+        return;
+      }
+      store.set('sdg4.quiz.name', name);
+      const quizzes = getStats().quizzes || 0;
+      $('#certNote').textContent = '';
+      $('#certOut').textContent = name;
+      $('#certBody').textContent = fill('has learned about UN Sustainable Development Goal 4, Quality Education, and has earned {0} of {1} badges after {2} quizzes.', earned, BADGES.length, quizzes);
+      $('#certDate').textContent = new Date().toLocaleDateString(LOCALES.date || 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      cert.hidden = false;
+      actions.hidden = false;
+      cert.scrollIntoView({ behavior: smooth, block: 'center' });
+    });
+    $('#certPrint').addEventListener('click', () => window.print());
   }
 
   function initProgress() {
@@ -2855,6 +3008,1765 @@
       e.target.value = '';
     });
     $('#dataReset').addEventListener('click', eraseData);
+    initCertificate();
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Profile, teacher mode and classrooms                                */
+  /* ------------------------------------------------------------------ */
+  /* Classrooms live in a shared Firestore database. The site talks to it with plain requests,
+     so no extra script is loaded. The keys go below: the project ID and the Web API key from
+     the Firebase project. Until they are here, profiles and teacher mode still work on this
+     device, and the classroom tools say that they are not set up yet. */
+  const CLOUD = { projectId: 'jaspers-website-4ddc6', apiKey: 'AIzaSyDbVIRD2y-pkT5Fk7ZmJUgsTchxbloOPwg' };
+  const PROFILE_KEY = 'sdg4.profile';
+  const TEACHER_PASSWORD = 'NoHesi12345';
+  const JOINED_KEY = 'sdg4.classrooms';
+  const CLOUD_AUTH_KEY = 'sdg4cloud.auth';
+  const PROFILE_EMOJI = ['🦉', '🦊', '🐼', '🐯', '🦁', '🐸', '🐙', '🌟', '🚀', '📚', '🌍', '🎨'];
+  const PROFILE_COLOURS = [
+    { name: 'Red', value: '#861A2B' },
+    { name: 'Rose', value: '#B8344A' },
+    { name: 'Green', value: '#1F6F5C' },
+    { name: 'Blue', value: '#2D5BA8' },
+    { name: 'Gold', value: '#8A5A12' },
+    { name: 'Purple', value: '#5B3F8C' }
+  ];
+  /* No I, L, O, 0 or 1, so that codes are easy to read aloud. */
+  const CODE_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const CLOUD_OFF = 'Classrooms are not set up on this website yet.';
+  const CLOUD_ERROR = 'Could not reach the classroom database. Check your internet connection and try again.';
+  const cloudReady = () => !!(CLOUD.projectId && CLOUD.apiKey);
+  /* Untouched copies of the quiz and the facts. A student's device takes turned-off items out of QUIZ and FACTS,
+     but the teacher's list always uses these full copies, and their numbers match the build order. */
+  const ALL_QUIZ = QUIZ.slice();
+  const ALL_FACTS = FACTS.slice();
+
+  const defaultProfile = () => ({ nickname: '', emoji: PROFILE_EMOJI[0], colour: PROFILE_COLOURS[0].value, bio: '', teacher: false });
+  const cleanProfile = (p) => ({
+    nickname: String(p.nickname || '').trim().replace(/\s+/g, ' ').slice(0, 20),
+    emoji: PROFILE_EMOJI.indexOf(p.emoji) >= 0 ? p.emoji : PROFILE_EMOJI[0],
+    colour: PROFILE_COLOURS.some((c) => c.value === p.colour) ? p.colour : PROFILE_COLOURS[0].value,
+    bio: String(p.bio || '').trim().slice(0, 120),
+    teacher: p.teacher === true
+  });
+  const loadProfile = () => cleanProfile(Object.assign(defaultProfile(), store.get(PROFILE_KEY, {}) || {}));
+  const loadJoined = () => {
+    const list = store.get(JOINED_KEY, []);
+    if (!Array.isArray(list)) return [];
+    return list
+      .filter((c) => c && typeof c.code === 'string' && /^[A-Z0-9]{6}$/.test(c.code))
+      .map((c) => ({ code: c.code, name: String(c.name || 'Classroom').slice(0, 60) }));
+  };
+  const saveJoined = (list) => store.set(JOINED_KEY, list);
+
+  /* Requests to the database. Firestore's REST format wraps every value in a type. */
+  async function cloudCall(url, method, body, type, token) {
+    const headers = {};
+    if (type) headers['Content-Type'] = type;
+    if (token) headers.Authorization = 'Bearer ' + token;
+    let res;
+    try {
+      res = await fetch(url, { method, headers, body });
+    } catch (e) {
+      throw new Error('offline');
+    }
+    let data = null;
+    try { data = await res.json(); } catch (e) { data = null; }
+    if (!res.ok) {
+      const err = new Error((data && data.error && data.error.message) || 'HTTP ' + res.status);
+      err.status = res.status;
+      throw err;
+    }
+    return data;
+  }
+
+  /* Each browser gets an anonymous account, so a teacher's classrooms belong to that browser.
+     The account is kept under its own key, which the progress file does not include. */
+  let signingIn = null;
+  function cloudAuth() {
+    if (!signingIn) signingIn = cloudSignIn().finally(() => { signingIn = null; });
+    return signingIn;
+  }
+  async function cloudSignIn() {
+    const key = encodeURIComponent(CLOUD.apiKey);
+    const saved = store.get(CLOUD_AUTH_KEY, null);
+    if (saved && saved.uid && saved.token && saved.until > Date.now() + 60000) return saved;
+    const keep = (uid, token, refresh, seconds) => {
+      const auth = { uid, token, refresh, until: Date.now() + Number(seconds) * 1000 };
+      store.set(CLOUD_AUTH_KEY, auth);
+      return auth;
+    };
+    if (saved && saved.refresh) {
+      try {
+        const r = await cloudCall('https://securetoken.googleapis.com/v1/token?key=' + key, 'POST',
+          'grant_type=refresh_token&refresh_token=' + encodeURIComponent(saved.refresh),
+          'application/x-www-form-urlencoded');
+        return keep(r.user_id, r.id_token, r.refresh_token, r.expires_in);
+      } catch (e) {
+        /* Only a sign-in the database no longer accepts starts a new account. A dropped connection keeps the old one. */
+        if (e.status !== 400) throw e;
+      }
+    }
+    const r = await cloudCall('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + key, 'POST',
+      JSON.stringify({ returnSecureToken: true }), 'application/json');
+    return keep(r.localId, r.idToken, r.refreshToken, r.expiresIn);
+  }
+
+  const docsUrl = () => 'https://firestore.googleapis.com/v1/projects/' + encodeURIComponent(CLOUD.projectId) + '/databases/(default)/documents';
+  function fsValue(v) {
+    if (v === null || v === undefined) return { nullValue: null };
+    if (typeof v === 'string') return { stringValue: v };
+    if (typeof v === 'boolean') return { booleanValue: v };
+    if (typeof v === 'number') return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+    if (Array.isArray(v)) return { arrayValue: { values: v.map(fsValue) } };
+    return { mapValue: { fields: fsFields(v) } };
+  }
+  function fsFields(obj) {
+    const fields = {};
+    Object.keys(obj).forEach((k) => { fields[k] = fsValue(obj[k]); });
+    return fields;
+  }
+  function fsDecode(v) {
+    if (!v) return null;
+    if ('stringValue' in v) return v.stringValue;
+    if ('integerValue' in v) return Number(v.integerValue);
+    if ('doubleValue' in v) return Number(v.doubleValue);
+    if ('booleanValue' in v) return v.booleanValue;
+    if ('arrayValue' in v) return (v.arrayValue.values || []).map(fsDecode);
+    if ('mapValue' in v) return fsRead(v.mapValue.fields);
+    return null;
+  }
+  function fsRead(fields) {
+    const out = {};
+    Object.keys(fields || {}).forEach((k) => { out[k] = fsDecode(fields[k]); });
+    return out;
+  }
+  const fsId = (doc) => String(doc.name || '').split('/').pop();
+
+  async function fsRequest(method, path, body, query) {
+    const auth = await cloudAuth();
+    return cloudCall(docsUrl() + path + (query || ''), method,
+      body === undefined ? undefined : JSON.stringify(body),
+      body === undefined ? '' : 'application/json', auth.token);
+  }
+  async function fsList(path) {
+    const docs = [];
+    let token = '';
+    for (let page = 0; page < 10; page++) {
+      const res = await fsRequest('GET', path, undefined, '?pageSize=300' + (token ? '&pageToken=' + encodeURIComponent(token) : ''));
+      (res.documents || []).forEach((d) => docs.push(d));
+      token = res.nextPageToken || '';
+      if (!token) break;
+    }
+    return docs;
+  }
+
+  function randomCode() {
+    const bytes = new Uint32Array(6);
+    window.crypto.getRandomValues(bytes);
+    let code = '';
+    bytes.forEach((b) => { code += CODE_CHARS.charAt(b % CODE_CHARS.length); });
+    return code;
+  }
+
+  async function cloudMakeClass(name) {
+    const uid = (await cloudAuth()).uid;
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const code = randomCode();
+      try {
+        await fsRequest('POST', '/classrooms', { fields: fsFields({ name, teacherUid: uid, created: new Date().toISOString() }) }, '?documentId=' + code);
+        return code;
+      } catch (e) {
+        if (e.status !== 409) throw e; /* 409: that code is already in use, so try another */
+      }
+    }
+    throw new Error('no free code');
+  }
+
+  async function cloudMyClasses() {
+    const uid = (await cloudAuth()).uid;
+    const rows = await fsRequest('POST', ':runQuery', {
+      structuredQuery: {
+        from: [{ collectionId: 'classrooms' }],
+        where: { fieldFilter: { field: { fieldPath: 'teacherUid' }, op: 'EQUAL', value: { stringValue: uid } } }
+      }
+    });
+    return (rows || []).filter((r) => r.document).map((r) => {
+      const f = fsRead(r.document.fields);
+      return { code: fsId(r.document), name: f.name || 'Classroom', created: f.created || '' };
+    }).sort((a, b) => (a.created < b.created ? 1 : -1));
+  }
+
+  async function cloudRoster(code) {
+    const [members, scores] = await Promise.all([
+      fsList('/classrooms/' + code + '/members'),
+      fsList('/classrooms/' + code + '/scores')
+    ]);
+    return {
+      members: members.map((d) => Object.assign({ uid: fsId(d) }, fsRead(d.fields))),
+      scores: scores.map((d) => Object.assign({ id: fsId(d) }, fsRead(d.fields)))
+    };
+  }
+
+  async function cloudRemoveMember(code, uid) {
+    const scores = await fsList('/classrooms/' + code + '/scores');
+    const mine = scores.filter((d) => fsRead(d.fields).uid === uid);
+    await Promise.all(mine.map((d) => fsRequest('DELETE', '/classrooms/' + code + '/scores/' + fsId(d))));
+    await fsRequest('DELETE', '/classrooms/' + code + '/members/' + uid);
+  }
+
+  /* Deleting the classroom document does not remove what is stored under it, so each part is removed first. */
+  async function cloudDeleteClass(code) {
+    const [{ members, scores }, assessments] = await Promise.all([cloudRoster(code), fsList('/classrooms/' + code + '/assessments')]);
+    await Promise.all([
+      ...scores.map((s) => fsRequest('DELETE', '/classrooms/' + code + '/scores/' + s.id)),
+      ...members.map((m) => fsRequest('DELETE', '/classrooms/' + code + '/members/' + m.uid)),
+      ...assessments.map((d) => fsRequest('DELETE', '/classrooms/' + code + '/assessments/' + fsId(d)))
+    ]);
+    await fsRequest('DELETE', '/classrooms/' + code);
+  }
+
+  async function cloudPutMember(code, p) {
+    const uid = (await cloudAuth()).uid;
+    await fsRequest('PATCH', '/classrooms/' + code + '/members/' + uid, {
+      fields: fsFields({ uid, nickname: p.nickname, emoji: p.emoji, colour: p.colour, bio: p.bio || '', updated: new Date().toISOString() })
+    });
+  }
+
+  /* Returns the classroom's name, or null when no classroom has that code. */
+  async function cloudJoin(code, p) {
+    let doc;
+    try {
+      doc = await fsRequest('GET', '/classrooms/' + code);
+    } catch (e) {
+      if (e.status === 404) return null;
+      throw e;
+    }
+    await cloudPutMember(code, p);
+    return fsRead(doc.fields).name || 'Classroom';
+  }
+
+  async function cloudLeave(code) {
+    const uid = (await cloudAuth()).uid;
+    await fsRequest('DELETE', '/classrooms/' + code + '/members/' + uid);
+  }
+
+  async function cloudPostScore(code, entry) {
+    const uid = (await cloudAuth()).uid;
+    await fsRequest('POST', '/classrooms/' + code + '/scores', { fields: fsFields(Object.assign({ uid }, entry)) });
+  }
+
+  /* Turned-off pages. Each entry is a page a teacher can switch off, with its file and its English name. */
+  const TURNABLE_PAGES = [
+    { slug: 'facts', file: 'facts.html', name: 'The facts' },
+    { slug: 'targets', file: 'targets.html', name: 'The 10 targets' },
+    { slug: 'explore', file: 'explore.html', name: 'Explore' },
+    { slug: 'solutions', file: 'solutions.html', name: 'Solutions' },
+    { slug: 'action', file: 'action.html', name: 'Take action' },
+    { slug: 'quiz', file: 'quiz.html', name: 'Quiz' },
+    { slug: 'english', file: 'english.html', name: 'Learn English' },
+    { slug: 'timer', file: 'timer.html', name: 'Study timer' },
+    { slug: 'about', file: 'about.html', name: 'About' },
+    { slug: 'slides', file: 'slides.html', name: 'Slides' }
+  ];
+  const clampList = (v, max) => (Array.isArray(v) ? v : []).slice(0, max);
+  const isIndex = (n, size) => Number.isInteger(n) && n >= 0 && n < size;
+
+  /* Classroom settings as the database returns them. Bad values are dropped, so a bad write cannot break a page. */
+  function cleanRules(f) {
+    return {
+      offPages: clampList(f.offPages, 20).filter((s) => TURNABLE_PAGES.some((p) => p.slug === s)),
+      offFacts: clampList(f.offFacts, 100).filter((n) => isIndex(n, ALL_FACTS.length)),
+      offQuiz: clampList(f.offQuiz, 100).filter((n) => isIndex(n, ALL_QUIZ.length)),
+      announcement: String(f.announcement || '').trim().slice(0, 300),
+      announcedAt: String(f.announcedAt || '')
+    };
+  }
+  async function cloudClassRules(code) {
+    const doc = await fsRequest('GET', '/classrooms/' + code);
+    const f = fsRead(doc.fields);
+    return Object.assign({ code, name: f.name || 'Classroom' }, cleanRules(f));
+  }
+  /* Writes only the fields named in changes, so the rest of the classroom is left alone. */
+  async function cloudSaveSettings(code, changes) {
+    const query = '?' + Object.keys(changes).map((n) => 'updateMask.fieldPaths=' + encodeURIComponent(n)).join('&');
+    await fsRequest('PATCH', '/classrooms/' + code, { fields: fsFields(changes) }, query);
+  }
+
+  /* Assignments. A question is kept in the same shape as a quiz question. */
+  function cleanQuestion(q) {
+    if (!q || typeof q !== 'object') return null;
+    const prompt = String(q.q || '').trim().slice(0, 300);
+    const options = clampList(q.options, 4).map((o) => String(o || '').trim().slice(0, 120));
+    const answer = Number(q.answer);
+    if (!prompt || options.length !== 4 || options.some((o) => !o) || !isIndex(answer, 4)) return null;
+    return { q: prompt, options, answer, explain: String(q.explain || '').trim().slice(0, 300) };
+  }
+  function cleanAssessment(f) {
+    return {
+      title: String(f.title || 'Assignment').slice(0, 80),
+      due: /^\d{4}-\d{2}-\d{2}$/.test(String(f.due || '')) ? String(f.due) : '',
+      mode: f.mode === 'custom' ? 'custom' : 'chapters',
+      chapters: clampList(f.chapters, 12).filter((c) => CHAPTER_ORDER.indexOf(c) >= 0),
+      count: Math.min(52, Math.max(1, Number(f.count) || 10)),
+      questions: clampList(f.questions, 60).map(cleanQuestion).filter(Boolean),
+      created: String(f.created || '')
+    };
+  }
+  async function cloudAssessments(code) {
+    const docs = await fsList('/classrooms/' + code + '/assessments');
+    return docs.map((d) => Object.assign({ id: fsId(d) }, cleanAssessment(fsRead(d.fields))))
+      .sort((a, b) => (a.created < b.created ? 1 : -1));
+  }
+  async function cloudAssessment(code, id) {
+    const doc = await fsRequest('GET', '/classrooms/' + code + '/assessments/' + id);
+    return Object.assign({ id }, cleanAssessment(fsRead(doc.fields)));
+  }
+  async function cloudMakeAssessment(code, a) {
+    const body = Object.assign({}, a, { created: new Date().toISOString() });
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const id = randomCode();
+      try {
+        await fsRequest('POST', '/classrooms/' + code + '/assessments', { fields: fsFields(body) }, '?documentId=' + id);
+        return id;
+      } catch (e) {
+        if (e.status !== 409) throw e; /* 409: that id is already in use, so try another */
+      }
+    }
+    throw new Error('no free code');
+  }
+  async function cloudDeleteAssessment(code, id) {
+    await fsRequest('DELETE', '/classrooms/' + code + '/assessments/' + id);
+  }
+  async function cloudMembers(code) {
+    const docs = await fsList('/classrooms/' + code + '/members');
+    return docs.map((d) => Object.assign({ uid: fsId(d) }, fsRead(d.fields)));
+  }
+
+  /* After a quiz, the score goes to every classroom this device has joined. */
+  function sendQuizScore(entry) {
+    const msg = $('#classSent');
+    if (!msg) return;
+    const joined = loadJoined();
+    msg.hidden = true;
+    msg.textContent = '';
+    if (!joined.length || !cloudReady() || !loadProfile().nickname) return;
+    msg.hidden = false;
+    msg.textContent = 'Sending your score to your classrooms…';
+    Promise.all(joined.map((c) => cloudPostScore(c.code, entry).then(() => 'sent', (e) => (e.status === 403 || e.status === 404 ? 'left' : 'failed'))))
+      .then((states) => {
+        const kept = joined.filter((c, i) => states[i] !== 'left');
+        if (kept.length !== joined.length) saveJoined(kept);
+        const notes = [fill('Score sent to {0} of {1} classrooms.', states.filter((s) => s === 'sent').length, joined.length)];
+        if (states.indexOf('failed') >= 0) notes.push('Some could not be sent. Check your connection and try again.');
+        if (states.indexOf('left') >= 0) notes.push('You are no longer in one of them, so it was removed from this device.');
+        msg.textContent = notes.join(' ');
+      });
+  }
+
+  /* Buttons that need a second tap: the first tap changes the label, the second does the action. */
+  function armButton(btn, idle, armed, confirm) {
+    if (btn.dataset.armed === '1') {
+      disarmButton(btn, idle);
+      confirm();
+      return;
+    }
+    btn.dataset.armed = '1';
+    btn.classList.add('is-armed');
+    btn.textContent = armed;
+    setTimeout(() => { if (btn.dataset.armed === '1') disarmButton(btn, idle); }, 4000);
+  }
+  function disarmButton(btn, idle) {
+    btn.dataset.armed = '';
+    btn.classList.remove('is-armed');
+    btn.textContent = idle;
+  }
+  function markChoice(host, active) {
+    host.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === active)));
+  }
+
+  /* Profile */
+  let pfPick = { emoji: PROFILE_EMOJI[0], colour: PROFILE_COLOURS[0].value };
+  function readProfileForm() {
+    return cleanProfile({
+      nickname: $('#pfNick').value,
+      emoji: pfPick.emoji,
+      colour: pfPick.colour,
+      bio: $('#pfBio').value,
+      teacher: loadProfile().teacher
+    });
+  }
+  function paintPreview(p) {
+    const av = $('#pfAvatar');
+    av.textContent = p.emoji;
+    av.style.setProperty('--av', p.colour);
+    $('#pfPreviewName').textContent = p.nickname || 'Your nickname';
+  }
+  function buildProfileChoices(p) {
+    const emojis = $('#pfEmojis');
+    emojis.textContent = '';
+    PROFILE_EMOJI.forEach((em, i) => {
+      const b = h('button', null, em);
+      b.type = 'button';
+      b.setAttribute('aria-label', fill('Avatar {0}', i + 1));
+      b.setAttribute('aria-pressed', String(em === p.emoji));
+      b.addEventListener('click', () => {
+        pfPick.emoji = em;
+        markChoice(emojis, b);
+        paintPreview(readProfileForm());
+      });
+      emojis.appendChild(b);
+    });
+    const colours = $('#pfColours');
+    colours.textContent = '';
+    PROFILE_COLOURS.forEach((c) => {
+      const b = h('button', 'pf-swatch');
+      b.type = 'button';
+      b.style.setProperty('--sw', c.value);
+      b.setAttribute('aria-label', c.name);
+      b.setAttribute('aria-pressed', String(c.value === p.colour));
+      b.addEventListener('click', () => {
+        pfPick.colour = c.value;
+        markChoice(colours, b);
+        paintPreview(readProfileForm());
+      });
+      colours.appendChild(b);
+    });
+  }
+  function onSaveProfile(e) {
+    e.preventDefault();
+    const msg = $('#pfMsg');
+    const p = readProfileForm();
+    if (!p.nickname) {
+      msg.classList.remove('is-ok');
+      msg.textContent = 'Type a nickname first.';
+      $('#pfNick').focus();
+      return;
+    }
+    store.set(PROFILE_KEY, p);
+    paintPreview(p);
+    msg.classList.add('is-ok');
+    msg.textContent = 'Saved.';
+    const joined = loadJoined();
+    if (!joined.length || !cloudReady()) return;
+    msg.textContent = 'Saving to your classrooms…';
+    Promise.all(joined.map((c) => cloudPutMember(c.code, p))).then(
+      () => { msg.textContent = 'Saved. Your classrooms have your new profile.'; },
+      () => {
+        msg.classList.remove('is-ok');
+        msg.textContent = 'Saved on this device, but your classrooms could not be updated.';
+      }
+    );
+  }
+
+  /* Teacher mode */
+  function showTeacher(on) {
+    $('#teacherPanel').hidden = !on;
+    $('#pfTeacher').checked = on;
+    $('#pfTeacherState').textContent = on ? 'on' : 'off';
+    if (on) renderClassList();
+  }
+  function onTeacherToggle(on) {
+    const p = loadProfile();
+    p.teacher = on;
+    store.set(PROFILE_KEY, p);
+    showTeacher(on);
+  }
+
+  let myClasses = [];
+  let openCode = '';
+  async function renderClassList() {
+    const list = $('#clsList');
+    const note = (text) => {
+      list.textContent = '';
+      list.appendChild(h('li', 'pf-empty', text));
+    };
+    if (!cloudReady()) {
+      note(CLOUD_OFF);
+      return;
+    }
+    note('Loading your classrooms…');
+    try {
+      myClasses = await cloudMyClasses();
+    } catch (e) {
+      note(CLOUD_ERROR);
+      return;
+    }
+    list.textContent = '';
+    if (!myClasses.length) {
+      note('You have not made a classroom yet.');
+      return;
+    }
+    myClasses.forEach((c) => {
+      const li = h('li');
+      const info = h('div');
+      const code = h('span', null, 'Code ');
+      code.appendChild(h('span', 'cls-code', c.code));
+      info.append(h('b', null, c.name), code);
+      const open = h('button', 'btn-outline', 'Open');
+      open.type = 'button';
+      open.dataset.open = c.code;
+      li.append(info, open);
+      list.appendChild(li);
+    });
+  }
+  async function onMakeClass(e) {
+    e.preventDefault();
+    const msg = $('#createMsg');
+    const input = $('#clsName');
+    const name = input.value.trim().replace(/\s+/g, ' ').slice(0, 60);
+    if (!cloudReady()) {
+      msg.textContent = CLOUD_OFF;
+      return;
+    }
+    if (!name) {
+      msg.textContent = 'Type a name for the classroom first.';
+      input.focus();
+      return;
+    }
+    msg.textContent = 'Making your classroom…';
+    try {
+      const code = await cloudMakeClass(name);
+      input.value = '';
+      msg.textContent = fill('Your classroom is ready. The code is {0}.', code);
+      myClasses.unshift({ code, name, created: new Date().toISOString() });
+      openClassroom(code);
+      renderClassList();
+    } catch (err) {
+      msg.textContent = CLOUD_ERROR;
+    }
+  }
+  async function openClassroom(code) {
+    const cls = myClasses.find((c) => c.code === code) || { code, name: 'Classroom' };
+    openCode = code;
+    showClassQr(false);
+    $('#clsDetail').hidden = false;
+    $('#clsDetailName').textContent = cls.name;
+    $('#clsDetailCode').textContent = code;
+    disarmButton($('#clsDelete'), 'Delete classroom');
+    $('#clsDetail').scrollIntoView({ behavior: smooth, block: 'start' });
+    asgDraft = [];
+    renderDraft();
+    await Promise.all([loadRoster(), loadClassSettings(code)]);
+  }
+  async function loadRoster() {
+    const code = openCode;
+    const msg = $('#clsDetailMsg');
+    const host = $('#clsRoster');
+    if (!code) return;
+    msg.classList.remove('is-ok');
+    msg.textContent = 'Loading scores…';
+    try {
+      const [{ members, scores }, assessments] = await Promise.all([cloudRoster(code), cloudAssessments(code)]);
+      if (code !== openCode) return;
+      rosterData = { members, scores, assessments };
+      host.textContent = '';
+      renderAssignmentList(assessments, scores);
+      renderProgressPick();
+      if (!members.length) {
+        msg.textContent = 'Nobody has joined yet. Share the code with your class.';
+        return;
+      }
+      msg.textContent = fill('{0} students and {1} quizzes so far.', members.length, scores.length);
+      const table = h('table');
+      const headRow = h('tr');
+      ['Student', 'Quizzes', 'Average', 'Best', 'Latest', ''].forEach((t) => {
+        const th = h('th', null, t);
+        th.scope = 'col';
+        headRow.appendChild(th);
+      });
+      table.appendChild(h('thead')).appendChild(headRow);
+      const tbody = h('tbody');
+      members.sort((a, b) => String(a.nickname || '').localeCompare(String(b.nickname || ''))).forEach((m) => {
+        const mine = scores.filter((s) => s.uid === m.uid).sort((a, b) => (a.at > b.at ? 1 : -1));
+        const pcts = mine.map((s) => Number(s.pct) || 0);
+        const row = h('tr');
+        const name = h('th', null, (m.emoji ? m.emoji + ' ' : '') + (m.nickname || 'Student'));
+        name.scope = 'row';
+        row.appendChild(name);
+        [
+          pcts.length ? String(pcts.length) : '–',
+          pcts.length ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) + '%' : '–',
+          pcts.length ? Math.max(...pcts) + '%' : '–',
+          pcts.length ? pcts[pcts.length - 1] + '%' : '–'
+        ].forEach((cell) => row.appendChild(h('td', null, cell)));
+        const td = h('td');
+        const remove = h('button', null, 'Remove');
+        remove.type = 'button';
+        remove.dataset.remove = m.uid;
+        td.appendChild(remove);
+        row.appendChild(td);
+        tbody.appendChild(row);
+      });
+      table.appendChild(tbody);
+      host.appendChild(table);
+    } catch (e) {
+      msg.textContent = CLOUD_ERROR;
+    }
+  }
+  function renderJoined() {
+    const list = $('#joinedList');
+    list.textContent = '';
+    const joined = loadJoined();
+    if (!joined.length) {
+      list.appendChild(h('li', 'pf-empty', 'You have not joined a classroom yet.'));
+      return;
+    }
+    joined.forEach((c) => {
+      const li = h('li');
+      const info = h('div');
+      const code = h('span', null, 'Code ');
+      code.appendChild(h('span', 'cls-code', c.code));
+      info.append(h('b', null, c.name), code);
+      const leave = h('button', 'btn-ghost', 'Leave');
+      leave.type = 'button';
+      leave.dataset.leave = c.code;
+      li.append(info, leave);
+      list.appendChild(li);
+    });
+  }
+  async function onJoin(e) {
+    e.preventDefault();
+    const input = $('#joinCode');
+    const msg = $('#joinMsg');
+    const code = input.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    input.value = code;
+    if (!/^[A-Z0-9]{6}$/.test(code)) {
+      msg.textContent = 'A classroom code has six letters or numbers.';
+      input.focus();
+      return;
+    }
+    const p = loadProfile();
+    if (!p.nickname) {
+      msg.textContent = 'Save a nickname on your profile before you join.';
+      return;
+    }
+    if (!cloudReady()) {
+      msg.textContent = CLOUD_OFF;
+      return;
+    }
+    if (loadJoined().some((c) => c.code === code)) {
+      msg.textContent = 'You have already joined this classroom.';
+      return;
+    }
+    msg.textContent = 'Joining…';
+    try {
+      const name = await cloudJoin(code, p);
+      if (name === null) {
+        msg.textContent = 'No classroom has that code. Check it with your teacher.';
+        return;
+      }
+      saveJoined(loadJoined().concat([{ code, name }]));
+      input.value = '';
+      msg.textContent = fill('You have joined {0}.', name);
+      renderJoined();
+      refreshClassLists();
+    } catch (err) {
+      msg.textContent = CLOUD_ERROR;
+    }
+  }
+
+  /* Join QR code: the teacher shows a code on screen. A student who scans it opens the profile page
+     with the classroom code filled in, and joins once a nickname is saved. */
+  const SITE_ADDRESS_KEY = 'sdg4.siteAddress';
+  const JOIN_CODE_RE = /^[A-Z0-9]{6}$/;
+  const QR_QUIET = 4; // blank border, in modules, that scanners expect around the code
+
+  function savedSiteAddress() {
+    try { return window.localStorage.getItem(SITE_ADDRESS_KEY) || ''; } catch (e) { return ''; }
+  }
+  function rememberSiteAddress(value) {
+    try { window.localStorage.setItem(SITE_ADDRESS_KEY, value); } catch (e) { /* storage unavailable */ }
+  }
+  // The profile page of this site when it is opened online. On a local copy the teacher types the address.
+  function thisPageAddress() {
+    return /^https?:$/.test(location.protocol) ? location.origin + location.pathname : '';
+  }
+  // The address students open for this classroom, built from what the teacher typed. '' if it is not a web address.
+  function joinLink(code) {
+    let raw = ($('#clsSite').value || '').trim();
+    if (!raw || /\s/.test(raw)) return '';
+    if (!/^https?:\/\//i.test(raw)) raw = 'https://' + raw;
+    let u;
+    try { u = new URL(raw); } catch (e) { return ''; }
+    if (!/^https?:$/.test(u.protocol)) return '';
+    if (u.hostname !== 'localhost' && u.hostname.indexOf('.') < 1) return '';
+    if (!/\.html$/i.test(u.pathname)) u.pathname = u.pathname.replace(/\/?$/, '/') + 'profile.html';
+    u.search = '?join=' + code;
+    u.hash = '';
+    return u.href;
+  }
+  // Draws the QR code for the open classroom, or says what is missing.
+  function drawClassQr() {
+    const link = joinLink(openCode);
+    const box = $('#clsQrBox');
+    const msg = $('#clsQrMsg');
+    box.textContent = '';
+    $('#clsLink').textContent = link;
+    $('#clsQrCopy').disabled = !link;
+    if (!link) {
+      msg.textContent = 'Type the address of your website, for example https://your-site.example';
+      return;
+    }
+    if (!window.SDG4QR) {
+      msg.textContent = 'The QR code could not load. Refresh the page and try again.';
+      return;
+    }
+    msg.textContent = '';
+    const qr = SDG4QR.encode(link);
+    const size = qr.size + QR_QUIET * 2;
+    const svg = sv('svg', { viewBox: '0 0 ' + size + ' ' + size, 'shape-rendering': 'crispEdges' }, box);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'QR code to join this classroom');
+    sv('rect', { x: 0, y: 0, width: size, height: size, fill: '#ffffff' }, svg);
+    let d = '';
+    for (let r = 0; r < qr.size; r++) {
+      for (let c = 0; c < qr.size; c++) {
+        if (qr.dark(r, c)) d += 'M' + (c + QR_QUIET) + ' ' + (r + QR_QUIET) + 'h1v1h-1z';
+      }
+    }
+    sv('path', { d: d, fill: '#111111' }, svg);
+  }
+  function showClassQr(show) {
+    const btn = $('#clsQrBtn');
+    $('#clsQr').hidden = !show;
+    btn.textContent = show ? 'Hide QR code' : 'Show QR code';
+    btn.setAttribute('aria-expanded', String(show));
+    if (show) drawClassQr();
+  }
+  function copyJoinLink() {
+    const link = joinLink(openCode);
+    const msg = $('#clsQrMsg');
+    if (!link) return;
+    try {
+      navigator.clipboard.writeText(link).then(
+        () => { msg.textContent = 'Link copied.'; },
+        () => { msg.textContent = 'Select the link and copy it.'; }
+      );
+    } catch (e) {
+      msg.textContent = 'Select the link and copy it.';
+    }
+  }
+  // A student who scans the code lands on ?join=CODE. The code is filled in and the student joins
+  // straight away if a nickname is saved; otherwise they are asked to save one first.
+  function joinFromLink() {
+    const raw = (new URLSearchParams(location.search).get('join') || '').trim().toUpperCase();
+    if (!JOIN_CODE_RE.test(raw)) return;
+    try { window.history.replaceState(null, '', location.pathname); } catch (e) { /* keep the address as it is */ }
+    $('#joinCode').value = raw;
+    $('#joinForm').scrollIntoView({ behavior: 'auto', block: 'center' });
+    if (loadProfile().nickname) {
+      $('#joinForm').dispatchEvent(new Event('submit', { cancelable: true }));
+    } else {
+      $('#joinMsg').textContent = 'Save a nickname above, then tap Join to join the classroom.';
+    }
+  }
+
+  /* Settings a student gets from their classrooms. They are saved on the device, so a page still
+     knows them when the database cannot be reached. */
+  const RULES_KEY = 'sdg4.classRules';
+  const NOTICE_KEY = 'sdg4.classNoticeSeen';
+  const ASG_KEY = 'sdg4.assignments';
+  const byName = (a, b) => String(a.nickname || '').localeCompare(String(b.nickname || ''));
+  function cachedRules() {
+    const all = store.get(RULES_KEY, {}) || {};
+    return loadJoined().map((c) => all[c.code]).filter(Boolean);
+  }
+  async function refreshClassRules() {
+    const joined = loadJoined();
+    if (!joined.length || !cloudReady()) return;
+    const found = {};
+    await Promise.all(joined.map((c) => cloudClassRules(c.code).then((r) => { found[c.code] = r; }, () => {})));
+    const all = store.get(RULES_KEY, {}) || {};
+    const kept = {};
+    joined.forEach((c) => {
+      if (found[c.code]) kept[c.code] = found[c.code];
+      else if (all[c.code]) kept[c.code] = all[c.code];
+    });
+    store.set(RULES_KEY, kept);
+  }
+  /* What the student's classrooms have turned off, joined across all of them. */
+  function turnedOff() {
+    const out = { pages: new Set(), facts: new Set(), quiz: new Set() };
+    cachedRules().forEach((r) => {
+      r.offPages.forEach((s) => out.pages.add(s));
+      r.offFacts.forEach((n) => out.facts.add(n));
+      r.offQuiz.forEach((n) => out.quiz.add(n));
+    });
+    return out;
+  }
+  /* Takes turned-off facts and quiz questions out of the lists the pages use (the copies in ALL_* stay whole),
+     hides the menu links of turned-off pages, and shows the teacher's messages above the page. */
+  function applyClassRules() {
+    const off = turnedOff();
+    if (off.facts.size) FACTS.splice(0, FACTS.length, ...ALL_FACTS.filter((f, i) => !off.facts.has(i)));
+    if (off.quiz.size) QUIZ.splice(0, QUIZ.length, ...ALL_QUIZ.filter((q, i) => !off.quiz.has(i)));
+    TURNABLE_PAGES.forEach((p) => {
+      if (off.pages.has(p.slug)) $$('a[href="' + p.file + '"]').forEach((a) => { a.hidden = true; });
+    });
+    showAnnouncements();
+  }
+  function showAnnouncements() {
+    const anchor = $('main') || $('.site');
+    if (!anchor) return;
+    const seen = store.get(NOTICE_KEY, {}) || {};
+    cachedRules().filter((r) => r.announcement).forEach((r) => {
+      const key = r.announcedAt || r.announcement;
+      if (seen[r.code] === key) return;
+      const box = h('section', 'class-note');
+      box.setAttribute('aria-label', 'Message from your teacher');
+      const close = h('button', 'btn-ghost', 'Dismiss');
+      close.type = 'button';
+      close.addEventListener('click', () => {
+        box.remove();
+        const all = store.get(NOTICE_KEY, {}) || {};
+        all[r.code] = key;
+        store.set(NOTICE_KEY, all);
+      });
+      box.append(h('p', 'class-note-title', fill('Message from your teacher in {0}', r.name)), h('p', 'class-note-text', r.announcement), close);
+      anchor.parentNode.insertBefore(box, anchor);
+    });
+  }
+  function pageIsOff() { return turnedOff().pages.has(PAGE); }
+  function showOffPage() {
+    const host = $('main') || $('.site');
+    if (!host) return;
+    host.textContent = '';
+    const back = h('a', 'btn-primary', 'Go to the home page');
+    back.href = 'index.html';
+    const box = h('section', 'off-page');
+    box.append(h('h1', 'off-page-title', 'This page is turned off'), h('p', 'block-note', 'Your teacher has turned this page off for your class.'), back);
+    host.appendChild(box);
+  }
+
+  /* Teacher: the open classroom's settings, assignments, progress and spreadsheet. */
+  let rosterData = null; // { members, scores, assessments } for the open classroom
+  let asgDraft = [];     // questions written so far for a new assignment
+  const shortText = (text, n) => (text.length > n ? text.slice(0, n - 1) + '…' : text);
+  function pickBox(kind, value, label, checked) {
+    const row = h('label', 'pick');
+    const box = h('input');
+    box.type = 'checkbox';
+    box.checked = checked;
+    box.dataset.kind = kind;
+    box.value = String(value);
+    row.append(box, h('span', null, label));
+    return row;
+  }
+  function picked(id, asNumber) {
+    return Array.from($(id).querySelectorAll('input:checked')).map((b) => (asNumber ? Number(b.value) : b.value));
+  }
+  function renderRules(r) {
+    $('#clsAnnounce').value = r.announcement;
+    const pages = $('#clsOffPages');
+    pages.textContent = '';
+    TURNABLE_PAGES.forEach((p) => pages.appendChild(pickBox('page', p.slug, p.name, r.offPages.indexOf(p.slug) >= 0)));
+    const facts = $('#clsOffFacts');
+    facts.textContent = '';
+    ALL_FACTS.forEach((f, i) => facts.appendChild(pickBox('fact', i, (i + 1) + '. ' + shortText(f.num + ': ' + f.text, 120), r.offFacts.indexOf(i) >= 0)));
+    const quiz = $('#clsOffQuiz');
+    quiz.textContent = '';
+    ALL_QUIZ.forEach((q, i) => quiz.appendChild(pickBox('quiz', i, (i + 1) + '. ' + q.cat + ': ' + shortText(q.q, 110), r.offQuiz.indexOf(i) >= 0)));
+  }
+  async function loadClassSettings(code) {
+    try {
+      const r = await cloudClassRules(code);
+      if (code === openCode) renderRules(r);
+    } catch (e) {
+      if (code === openCode) $('#clsRulesMsg').textContent = CLOUD_ERROR;
+    }
+  }
+  function saveRules() {
+    const msg = $('#clsRulesMsg');
+    if (!openCode || !cloudReady()) return;
+    const code = openCode;
+    const changes = { offPages: picked('#clsOffPages', false), offFacts: picked('#clsOffFacts', true), offQuiz: picked('#clsOffQuiz', true) };
+    msg.classList.remove('is-ok');
+    msg.textContent = 'Saving…';
+    cloudSaveSettings(code, changes).then(() => {
+      msg.classList.add('is-ok');
+      msg.textContent = 'Saved. Students see the change the next time they open the site.';
+    }, () => {
+      msg.classList.remove('is-ok');
+      msg.textContent = CLOUD_ERROR;
+    });
+  }
+  function postAnnouncement(text) {
+    const msg = $('#clsRulesMsg');
+    if (!openCode || !cloudReady()) return;
+    const code = openCode;
+    const changes = text ? { announcement: text, announcedAt: new Date().toISOString() } : { announcement: '', announcedAt: '' };
+    msg.classList.remove('is-ok');
+    msg.textContent = text ? 'Posting…' : 'Removing…';
+    cloudSaveSettings(code, changes).then(() => {
+      msg.classList.add('is-ok');
+      msg.textContent = text ? 'Posted. Students see it at the top of their pages.' : 'Removed.';
+    }, () => {
+      msg.classList.remove('is-ok');
+      msg.textContent = CLOUD_ERROR;
+    });
+  }
+
+  function showAsgMode() {
+    const custom = document.querySelector('input[name="asgMode"]:checked').value === 'custom';
+    $('#asgChapterPart').hidden = custom;
+    $('#asgCustomPart').hidden = !custom;
+  }
+  function renderDraft() {
+    const list = $('#asgQList');
+    list.textContent = '';
+    asgDraft.forEach((q, i) => {
+      const li = h('li');
+      const rm = h('button', 'btn-ghost', 'Remove');
+      rm.type = 'button';
+      rm.dataset.index = String(i);
+      li.append(h('span', null, (i + 1) + '. ' + q.q), rm);
+      list.appendChild(li);
+    });
+  }
+  function addDraftQuestion() {
+    const msg = $('#asgMsg');
+    const q = cleanQuestion({ q: $('#asgQText').value, options: [0, 1, 2, 3].map((i) => $('#asgOpt' + i).value), answer: Number($('#asgCorrect').value), explain: $('#asgExplain').value });
+    if (!q) {
+      msg.classList.remove('is-ok');
+      msg.textContent = 'Type the question and all four answers first.';
+      $('#asgQText').focus();
+      return;
+    }
+    asgDraft.push(q);
+    ['#asgQText', '#asgExplain', '#asgOpt0', '#asgOpt1', '#asgOpt2', '#asgOpt3'].forEach((s) => { $(s).value = ''; });
+    $('#asgCorrect').value = '0';
+    renderDraft();
+    msg.classList.add('is-ok');
+    msg.textContent = fill('Question {0} added.', asgDraft.length);
+    $('#asgQText').focus();
+  }
+  function resetAsgForm() {
+    $('#asgTitle').value = '';
+    $('#asgDue').value = '';
+    $('#asgCount').value = '10';
+    $('#asgChapters').querySelectorAll('input').forEach((b) => { b.checked = false; });
+    document.querySelector('input[name="asgMode"][value="chapters"]').checked = true;
+    asgDraft = [];
+    renderDraft();
+    showAsgMode();
+  }
+  async function onSaveAssignment(e) {
+    e.preventDefault();
+    const msg = $('#asgMsg');
+    msg.classList.remove('is-ok');
+    if (!openCode || !cloudReady()) {
+      msg.textContent = CLOUD_OFF;
+      return;
+    }
+    const title = $('#asgTitle').value.trim().replace(/\s+/g, ' ').slice(0, 80);
+    const due = $('#asgDue').value;
+    const mode = document.querySelector('input[name="asgMode"]:checked').value;
+    if (!title) {
+      msg.textContent = 'Type a title first.';
+      $('#asgTitle').focus();
+      return;
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(due)) {
+      msg.textContent = 'Choose a due date.';
+      $('#asgDue').focus();
+      return;
+    }
+    const a = { title, due, mode, chapters: [], count: 10, questions: [] };
+    if (mode === 'custom') {
+      if (!asgDraft.length) {
+        msg.textContent = 'Add at least one question first.';
+        return;
+      }
+      a.questions = asgDraft.slice();
+    } else {
+      a.chapters = picked('#asgChapters', false);
+      if (!a.chapters.length) {
+        msg.textContent = 'Tick at least one chapter.';
+        return;
+      }
+      const count = Math.round(Number($('#asgCount').value));
+      if (!(count >= 1 && count <= 52)) {
+        msg.textContent = 'Choose between 1 and 52 questions.';
+        $('#asgCount').focus();
+        return;
+      }
+      a.count = count;
+    }
+    const code = openCode;
+    msg.textContent = 'Setting the assignment…';
+    $('#asgSave').disabled = true;
+    try {
+      await cloudMakeAssessment(code, a);
+      resetAsgForm();
+      msg.classList.add('is-ok');
+      msg.textContent = 'The assignment is set. Students see it on their profile page.';
+      if (code === openCode) loadRoster();
+    } catch (err) {
+      msg.textContent = CLOUD_ERROR;
+    } finally {
+      $('#asgSave').disabled = false;
+    }
+  }
+  function renderAssignmentList(assessments, scores) {
+    const list = $('#asgList');
+    list.textContent = '';
+    if (!assessments.length) {
+      list.appendChild(h('li', 'pf-empty', 'No assignments yet.'));
+      return;
+    }
+    assessments.forEach((a) => {
+      const pcts = scores.filter((s) => s.assessment === a.id).map((s) => Number(s.pct) || 0);
+      const avg = pcts.length ? Math.round(pcts.reduce((x, y) => x + y, 0) / pcts.length) + '%' : '–';
+      const scope = a.mode === 'custom' ? fill('{0} questions you wrote', a.questions.length) : fill('{0} questions from {1} chapters', a.count, a.chapters.length);
+      const info = h('div');
+      info.append(h('b', null, a.title), h('span', null, fill('Due {0} · {1}', a.due || 'no date', scope)), h('span', null, fill('{0} students done · average {1}', pcts.length, avg)));
+      const del = h('button', 'btn-ghost', 'Delete');
+      del.type = 'button';
+      del.dataset.asg = a.id;
+      const li = h('li');
+      li.append(info, del);
+      list.appendChild(li);
+    });
+  }
+  function renderProgressPick() {
+    const sel = $('#clsProgPick');
+    const members = rosterData ? rosterData.members.slice().sort(byName) : [];
+    const before = sel.value;
+    sel.textContent = '';
+    members.forEach((m) => {
+      const o = h('option', null, m.nickname || 'Student');
+      o.value = m.uid;
+      sel.appendChild(o);
+    });
+    if (members.some((m) => m.uid === before)) sel.value = before;
+    renderProgressOut();
+  }
+  function renderProgressOut() {
+    const out = $('#clsProgOut');
+    out.textContent = '';
+    if (!rosterData || !rosterData.members.length) {
+      out.appendChild(h('li', 'pf-empty', 'Nobody has joined yet.'));
+      return;
+    }
+    const uid = $('#clsProgPick').value;
+    const mine = rosterData.scores.filter((s) => s.uid === uid && s.chapter && !s.assessment);
+    CHAPTER_ORDER.forEach((c) => {
+      const tries = mine.filter((s) => s.chapter === c);
+      const li = h('li');
+      const detail = tries.length
+        ? fill('Best {0}% · attempts: {1}', Math.max(...tries.map((s) => Number(s.pct) || 0)), tries.length)
+        : 'Not tried yet';
+      li.append(h('b', null, c), h('span', null, detail));
+      out.appendChild(li);
+    });
+  }
+  function csvCell(v) {
+    let s = String(v === null || v === undefined ? '' : v);
+    // A cell that starts with = + - or @ would run as a formula in a spreadsheet, so it is shown as text instead.
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  function downloadScores() {
+    const msg = $('#clsDetailMsg');
+    if (!rosterData) {
+      msg.classList.remove('is-ok');
+      msg.textContent = 'Load the scores first.';
+      return;
+    }
+    const { members, scores, assessments } = rosterData;
+    const rows = [['Student', 'Quizzes', 'Average %', 'Best %', 'Latest %'].concat(assessments.map((a) => a.title + ' %'))];
+    members.slice().sort(byName).forEach((m) => {
+      const mine = scores.filter((s) => s.uid === m.uid).sort((a, b) => (a.at > b.at ? 1 : -1));
+      const pcts = mine.map((s) => Number(s.pct) || 0);
+      const row = [m.nickname || 'Student', pcts.length, pcts.length ? Math.round(pcts.reduce((x, y) => x + y, 0) / pcts.length) : '',
+        pcts.length ? Math.max(...pcts) : '', pcts.length ? pcts[pcts.length - 1] : ''];
+      assessments.forEach((a) => {
+        const s = mine.find((x) => x.assessment === a.id);
+        row.push(s ? Number(s.pct) || 0 : '');
+      });
+      rows.push(row);
+    });
+    // The byte order mark lets spreadsheets read names with accents and other letters correctly.
+    const text = '﻿' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+    const link = h('a');
+    link.href = url;
+    link.download = 'sdg4-scores-' + openCode + '.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    msg.classList.add('is-ok');
+    msg.textContent = 'The scores were downloaded as a spreadsheet file.';
+  }
+
+  /* Student: classmates and assignments on the profile page. */
+  async function renderClassmates() {
+    const block = $('#mateBlock');
+    if (!block) return;
+    const joined = loadJoined();
+    block.hidden = !joined.length || !cloudReady();
+    if (block.hidden) return;
+    const host = $('#classmates');
+    host.textContent = 'Loading classmates…';
+    let me = '';
+    try { me = (await cloudAuth()).uid; } catch (e) { /* show the list without the "you" mark */ }
+    const groups = await Promise.all(joined.map((c) => cloudMembers(c.code).then((members) => ({ c, members }), () => ({ c, members: null }))));
+    host.textContent = '';
+    groups.forEach(({ c, members }) => {
+      const sec = h('div', 'mate-group');
+      sec.appendChild(h('h3', 'mate-name', c.name));
+      if (!members) {
+        sec.appendChild(h('p', 'block-note', CLOUD_ERROR));
+      } else if (!members.length) {
+        sec.appendChild(h('p', 'block-note', 'Nobody else has joined yet.'));
+      } else {
+        const ul = h('ul', 'mate-list');
+        members.sort(byName).forEach((m) => {
+          const av = h('span', 'mate-av', m.emoji || PROFILE_EMOJI[0]);
+          av.style.setProperty('--av', m.colour || PROFILE_COLOURS[0].value);
+          const text = h('div');
+          text.appendChild(h('b', null, (m.nickname || 'Student') + (m.uid === me ? ' (you)' : '')));
+          if (m.bio) text.appendChild(h('span', 'mate-bio', m.bio));
+          const li = h('li', 'mate');
+          li.append(av, text);
+          ul.appendChild(li);
+        });
+        sec.appendChild(ul);
+      }
+      host.appendChild(sec);
+    });
+  }
+  const asgRecord = (code, id) => (store.get(ASG_KEY, {}) || {})[code + '/' + id] || null;
+  function saveAsgRecord(code, id, rec) {
+    const all = store.get(ASG_KEY, {}) || {};
+    all[code + '/' + id] = rec;
+    store.set(ASG_KEY, all);
+  }
+  /* Today as YYYY-MM-DD, with leading zeros, so it compares with a due date. */
+  function isoToday() {
+    const d = new Date();
+    const two = (n) => (n < 10 ? '0' : '') + n;
+    return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate());
+  }
+  async function renderStudentAssignments() {
+    const block = $('#asgBlock');
+    if (!block) return;
+    const joined = loadJoined();
+    block.hidden = !joined.length || !cloudReady();
+    if (block.hidden) return;
+    const list = $('#asgStudent');
+    list.textContent = '';
+    list.appendChild(h('li', 'pf-empty', 'Loading assignments…'));
+    const groups = await Promise.all(joined.map((c) => cloudAssessments(c.code).then((items) => items.map((a) => ({ c, a })), () => null)));
+    const failed = groups.some((g) => g === null);
+    const items = [].concat(...groups.filter(Boolean));
+    // Earliest due date first; assignments with no date go last ('~' sorts after the digits of a date).
+    items.sort((x, y) => {
+      const dx = x.a.due || '~';
+      const dy = y.a.due || '~';
+      return dx < dy ? -1 : (dx > dy ? 1 : 0);
+    });
+    list.textContent = '';
+    if (!items.length) {
+      list.appendChild(h('li', 'pf-empty', failed ? CLOUD_ERROR : 'No assignments yet.'));
+      return;
+    }
+    items.forEach(({ c, a }) => {
+      const rec = asgRecord(c.code, a.id);
+      const info = h('div');
+      info.append(h('b', null, a.title), h('span', null, c.name + ' · ' + (a.due ? fill('Due {0}', a.due) : 'No due date')));
+      let action;
+      if (rec && rec.finished) action = h('span', 'asg-status', fill('Done · {0}%', rec.pct));
+      else if (rec && rec.started) action = h('span', 'asg-status', 'Started');
+      else if (a.due && isoToday() > a.due) action = h('span', 'asg-status', 'Closed');
+      else {
+        action = h('a', 'btn-primary', 'Start');
+        action.href = 'assignment.html?class=' + c.code + '&id=' + a.id;
+      }
+      const li = h('li');
+      li.append(info, action);
+      list.appendChild(li);
+    });
+  }
+  function refreshClassLists() {
+    renderClassmates();
+    renderStudentAssignments();
+  }
+
+  /* Assignment page: one attempt per student. The questions come from the chapters the teacher chose,
+     with turned-off questions left out, or are the questions the teacher wrote. */
+  function assignmentQuestions(a) {
+    if (a.mode === 'custom') return a.questions.slice();
+    const off = turnedOff().quiz;
+    const pool = ALL_QUIZ.filter((q, i) => a.chapters.indexOf(q.cat) >= 0 && !off.has(i));
+    return shuffle(pool).slice(0, Math.min(a.count, pool.length))
+      .map((q) => ({ q: q.q, options: q.options, answer: q.answer, explain: q.explain }));
+  }
+  function resultCard(done, title) {
+    const box = h('div', 'result en-result');
+    const score = h('p', 'en-score');
+    score.append(h('span', null, String(done.correct)), h('span', 'en-score-of', '/' + done.total));
+    box.append(score, h('p', 'rs-text', title));
+    return box;
+  }
+  function sendAssignmentScore(host, code, a, done) {
+    const box = resultCard(done, fill('You got {0} out of {1} right.', done.correct, done.total));
+    const sent = h('p', 'block-note pf-msg', 'Sending your score to your teacher…');
+    sent.setAttribute('role', 'status');
+    const retry = h('button', 'btn-outline', 'Send again');
+    retry.type = 'button';
+    retry.hidden = true;
+    box.append(sent, retry);
+    host.appendChild(box);
+    const send = () => {
+      retry.hidden = true;
+      sent.textContent = 'Sending your score to your teacher…';
+      cloudPostScore(code, { pct: done.pct, correct: done.correct, total: done.total, chapter: '', assessment: a.id, at: done.at }).then(() => {
+        sent.textContent = 'Your score was sent to your teacher.';
+      }, (e) => {
+        const gone = e.status === 403 || e.status === 404;
+        sent.textContent = gone
+          ? 'You are no longer in this classroom, so the score could not be sent.'
+          : 'Your score could not be sent. Check your connection, then send it again.';
+        retry.hidden = gone;
+      });
+    };
+    retry.addEventListener('click', send);
+    send();
+  }
+  function startAssignment(host, code, a, questions) {
+    const rec = { started: new Date().toISOString() };
+    saveAsgRecord(code, a.id, rec);
+    const progress = h('p', 'qp-text');
+    progress.setAttribute('aria-live', 'polite');
+    const stage = h('div');
+    const nextBtn = h('button', 'btn-primary', 'Next question');
+    nextBtn.type = 'button';
+    nextBtn.hidden = true;
+    const actions = h('div', 'quiz-actions');
+    actions.append(h('span'), nextBtn);
+    host.append(progress, stage, actions);
+    let i = 0;
+    let right = 0;
+    const finish = () => {
+      const done = { started: rec.started, finished: true, pct: Math.round((right / questions.length) * 100), correct: right, total: questions.length, at: new Date().toISOString() };
+      saveAsgRecord(code, a.id, done);
+      host.textContent = '';
+      sendAssignmentScore(host, code, a, done);
+    };
+    const show = () => {
+      progress.textContent = fill('Question {0} of {1}', i + 1, questions.length);
+      stage.textContent = '';
+      stage.appendChild(h('h3', 'quiz-q', questions[i].q));
+      nextBtn.hidden = true;
+      englishChoices(questions[i], stage, (correct) => {
+        if (correct) right++;
+        nextBtn.textContent = i === questions.length - 1 ? 'See my score' : 'Next question';
+        nextBtn.hidden = false;
+      });
+    };
+    nextBtn.addEventListener('click', () => {
+      if (i < questions.length - 1) {
+        i++;
+        show();
+      } else {
+        finish();
+      }
+    });
+    show();
+  }
+  function openAssignment(host, code, a) {
+    const head = $('#asgHead');
+    if (head) head.textContent = a.title;
+    const lead = $('#asgLead');
+    if (lead) lead.textContent = a.due ? fill('Due {0}. You have one attempt.', a.due) : 'You have one attempt.';
+    const rec = asgRecord(code, a.id);
+    const say = (text) => {
+      host.textContent = '';
+      host.appendChild(h('p', 'block-note', text));
+    };
+    if (rec && rec.finished) {
+      host.textContent = '';
+      host.appendChild(resultCard(rec, fill('You already did this assignment: {0} out of {1} right ({2}%).', rec.correct, rec.total, rec.pct)));
+      return;
+    }
+    if (a.due && isoToday() > a.due) {
+      say(fill('This assignment closed on {0}.', a.due));
+      return;
+    }
+    if (rec && rec.started) {
+      say('You started this assignment on this device already. Only one attempt is allowed.');
+      return;
+    }
+    const questions = assignmentQuestions(a);
+    if (!questions.length) {
+      say('There are no questions for this assignment on this device. Ask your teacher.');
+      return;
+    }
+    host.textContent = '';
+    startAssignment(host, code, a, questions);
+  }
+  function initAssignment() {
+    const host = $('#asgPlay');
+    if (!host) return;
+    const params = new URLSearchParams(location.search);
+    const code = (params.get('class') || '').trim().toUpperCase();
+    const id = (params.get('id') || '').trim().toUpperCase();
+    const say = (text) => {
+      host.textContent = '';
+      host.appendChild(h('p', 'block-note', text));
+    };
+    if (!JOIN_CODE_RE.test(code) || !JOIN_CODE_RE.test(id)) {
+      say('This link is not right. Open the assignment from your profile page.');
+      return;
+    }
+    if (!loadJoined().some((c) => c.code === code)) {
+      say('You are not in this classroom on this device. Join it on your profile page first.');
+      return;
+    }
+    if (!cloudReady()) {
+      say(CLOUD_OFF);
+      return;
+    }
+    say('Loading the assignment…');
+    cloudAssessment(code, id).then((a) => openAssignment(host, code, a), (err) => {
+      say(err.status === 404 ? 'This assignment is no longer open. Ask your teacher.' : CLOUD_ERROR);
+    });
+  }
+
+  /* Wires the teacher's tools on the profile page. */
+  function initClassTools() {
+    if (!$('#clsDetail')) return;
+    const chapters = $('#asgChapters');
+    chapters.textContent = '';
+    CHAPTER_ORDER.forEach((c) => chapters.appendChild(pickBox('chapter', c, c, false)));
+    $('#clsAnnounceSave').addEventListener('click', () => postAnnouncement($('#clsAnnounce').value.trim().slice(0, 300)));
+    $('#clsAnnounceClear').addEventListener('click', () => {
+      $('#clsAnnounce').value = '';
+      postAnnouncement('');
+    });
+    $('#clsRulesSave').addEventListener('click', saveRules);
+    $('#clsCsv').addEventListener('click', downloadScores);
+    $('#clsProgPick').addEventListener('change', renderProgressOut);
+    $('#asgForm').addEventListener('submit', onSaveAssignment);
+    $$('input[name="asgMode"]').forEach((r) => r.addEventListener('change', showAsgMode));
+    $('#asgAddQ').addEventListener('click', addDraftQuestion);
+    $('#asgQList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-index]');
+      if (!btn) return;
+      asgDraft.splice(Number(btn.dataset.index), 1);
+      renderDraft();
+    });
+    $('#asgList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-asg]');
+      if (!btn || !openCode) return;
+      armButton(btn, 'Delete', 'Tap again to delete', () => {
+        btn.disabled = true;
+        const code = openCode;
+        cloudDeleteAssessment(code, btn.dataset.asg).then(() => { if (code === openCode) loadRoster(); }, () => {
+          btn.disabled = false;
+          $('#asgMsg').textContent = CLOUD_ERROR;
+        });
+      });
+    });
+    showAsgMode();
+  }
+
+  function initProfile() {
+    const form = $('#profileForm');
+    if (!form) return;
+    const p = loadProfile();
+    pfPick = { emoji: p.emoji, colour: p.colour };
+    $('#pfNick').value = p.nickname;
+    $('#pfBio').value = p.bio;
+    buildProfileChoices(p);
+    paintPreview(p);
+    showTeacher(p.teacher);
+    $('#pfNick').addEventListener('input', () => paintPreview(readProfileForm()));
+    form.addEventListener('submit', onSaveProfile);
+    $('#pfTeacher').addEventListener('change', (e) => {
+      if (!e.target.checked) {
+        onTeacherToggle(false);
+        return;
+      }
+      e.target.checked = false;
+      $('#teacherPassForm').hidden = false;
+      $('#teacherPass').focus();
+    });
+    $('#teacherPassForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#teacherPass');
+      const msg = $('#teacherPassMsg');
+      if (input.value.trim() !== TEACHER_PASSWORD) {
+        msg.textContent = 'That password is not right.';
+        input.value = '';
+        input.focus();
+        return;
+      }
+      input.value = '';
+      msg.textContent = '';
+      $('#teacherPassForm').hidden = true;
+      onTeacherToggle(true);
+    });
+    $('#teacherPassCancel').addEventListener('click', () => {
+      $('#teacherPass').value = '';
+      $('#teacherPassMsg').textContent = '';
+      $('#teacherPassForm').hidden = true;
+    });
+    $('#createForm').addEventListener('submit', onMakeClass);
+    $('#clsList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-open]');
+      if (btn) openClassroom(btn.dataset.open);
+    });
+    $('#clsRoster').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-remove]');
+      if (!btn || !openCode) return;
+      armButton(btn, 'Remove', 'Tap again to remove', () => {
+        btn.disabled = true;
+        cloudRemoveMember(openCode, btn.dataset.remove)
+          .then(loadRoster)
+          .catch(() => { $('#clsDetailMsg').textContent = CLOUD_ERROR; });
+      });
+    });
+    $('#clsDelete').addEventListener('click', () => {
+      armButton($('#clsDelete'), 'Delete classroom', 'Tap again to delete', () => {
+        const code = openCode;
+        $('#clsDetailMsg').textContent = 'Deleting…';
+        cloudDeleteClass(code).then(() => {
+          openCode = '';
+          $('#clsDetail').hidden = true;
+          $('#createMsg').textContent = 'Classroom deleted.';
+          renderClassList();
+        }, () => { $('#clsDetailMsg').textContent = CLOUD_ERROR; });
+      });
+    });
+    $('#clsCopy').addEventListener('click', () => {
+      const msg = $('#clsDetailMsg');
+      try {
+        navigator.clipboard.writeText(openCode).then(
+          () => { msg.textContent = 'Code copied.'; },
+          () => { msg.textContent = 'Select the code and copy it.'; }
+        );
+      } catch (e) {
+        msg.textContent = 'Select the code and copy it.';
+      }
+    });
+    $('#clsRefresh').addEventListener('click', loadRoster);
+    $('#joinForm').addEventListener('submit', onJoin);
+    $('#joinedList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-leave]');
+      if (!btn) return;
+      armButton(btn, 'Leave', 'Tap again to leave', () => {
+        const code = btn.dataset.leave;
+        const msg = $('#joinMsg');
+        const finish = () => {
+          saveJoined(loadJoined().filter((c) => c.code !== code));
+          renderJoined();
+          refreshClassLists();
+          msg.textContent = 'You have left the classroom.';
+        };
+        if (!cloudReady()) {
+          finish();
+          return;
+        }
+        cloudLeave(code).then(finish, (err) => {
+          if (err.status === 404) finish();
+          else msg.textContent = CLOUD_ERROR;
+        });
+      });
+    });
+    $('#clsSite').value = savedSiteAddress() || thisPageAddress();
+    $('#clsSite').addEventListener('input', () => {
+      rememberSiteAddress($('#clsSite').value.trim());
+      if (!$('#clsQr').hidden) drawClassQr();
+    });
+    $('#clsQrBtn').addEventListener('click', () => showClassQr($('#clsQr').hidden));
+    $('#clsQrCopy').addEventListener('click', copyJoinLink);
+    renderJoined();
+    initClassTools();
+    refreshClassLists();
+    if (!cloudReady()) $('#cloudStatus').textContent = CLOUD_OFF;
+    joinFromLink();
+  }
+
+  /* English practice: word cards, a quiz and short reading for people learning English. The English
+     words and passages stay in English in every language; the meanings and explanations are translated. */
+  const ENGLISH_WORDS = [
+    { word: 'literacy', pos: 'noun', level: 'Intermediate', meaning: 'The ability to read and write.', example: 'Literacy rates have risen in most countries over the last fifty years.' },
+    { word: 'enrol', pos: 'verb', level: 'Starter', meaning: 'To officially join a school, college or course.', example: 'She will enrol at the local school in September.' },
+    { word: 'dropout', pos: 'noun', level: 'Starter', meaning: 'A student who leaves school before finishing.', example: 'The programme gives extra support to students at risk of becoming dropouts.' },
+    { word: 'scholarship', pos: 'noun', level: 'Starter', meaning: 'Money given to a student to pay for their studies.', example: 'She won a scholarship to study engineering at university.' },
+    { word: 'out of school', pos: 'phrase', level: 'Starter', meaning: 'Not attending school, although they are of school age.', example: 'Many children are out of school because their families cannot pay for uniforms or transport.' },
+    { word: 'sustainable', pos: 'adjective', level: 'Starter', meaning: 'Able to continue for a long time without harming people or the planet.', example: "Sustainable development means meeting today's needs without damaging the future." },
+    { word: 'curriculum', pos: 'noun', level: 'Intermediate', meaning: 'The subjects and lessons that a school or course teaches.', example: 'The new curriculum includes more maths and science.' },
+    { word: 'equity', pos: 'noun', level: 'Intermediate', meaning: 'Fairness, so that everyone has a fair chance, whatever their background.', example: "The government wants equity, so that poor children get the same chances as everyone else." },
+    { word: 'inclusive', pos: 'adjective', level: 'Intermediate', meaning: 'Welcoming and including everyone, including people with disabilities.', example: 'An inclusive school makes sure every child can learn.' },
+    { word: 'tuition', pos: 'noun', level: 'Intermediate', meaning: 'The money paid to be taught at a school or university.', example: 'Tuition fees have risen sharply in the past ten years.' },
+    { word: 'qualified', pos: 'adjective', level: 'Intermediate', meaning: 'Having passed the training or exams needed to do a job.', example: 'Schools need more qualified teachers, especially in rural areas.' },
+    { word: 'vocational training', pos: 'phrase', level: 'Advanced', meaning: 'Education that teaches practical skills for a particular job.', example: 'Vocational training prepares young people to work as electricians or nurses.' },
+    { word: 'completion rate', pos: 'phrase', level: 'Advanced', meaning: 'The share of students who finish a level of education.', example: 'The completion rate for secondary school is still low in some regions.' },
+    { word: 'pre-primary', pos: 'adjective', level: 'Advanced', meaning: 'Before primary school, usually for children aged three to five.', example: 'Pre-primary education helps children get ready for their first school year.' },
+    { word: 'lifelong learning', pos: 'phrase', level: 'Advanced', meaning: 'Learning throughout life, not only at school.', example: 'Adults can join evening classes as part of lifelong learning.' },
+    { word: 'gender parity', pos: 'phrase', level: 'Advanced', meaning: 'A situation where girls and boys have equal access to education.', example: 'The goal is gender parity at every level of schooling.' }
+  ];
+
+  const ENGLISH_QUIZ = [
+    { level: 'Starter', q: 'Choose the correct word: She ___ to school by bus every day.', options: ['go', 'goes', 'going', 'gone'], answer: 1, explain: 'With he, she or it, the present simple verb adds -s: she goes.' },
+    { level: 'Starter', q: 'Choose the correct word: There are ___ students in the class.', options: ['much', 'many', 'a lot', 'few of'], answer: 1, explain: 'Use many with countable nouns, such as students. Use much with uncountable nouns, such as water.' },
+    { level: 'Starter', q: 'Which word means "the money paid to study at a university"?', options: ['tuition', 'curriculum', 'literacy', 'equity'], answer: 0, explain: 'Tuition is the money paid to be taught. A curriculum is the list of subjects a school teaches.' },
+    { level: 'Starter', q: 'A student who leaves school before finishing is a …', options: ['dropout', 'graduate', 'teacher', 'scholar'], answer: 0, explain: 'A dropout is a student who leaves school before finishing their studies.' },
+    { level: 'Starter', q: 'Choose the correct form: Yesterday we ___ a long test in maths.', options: ['take', 'took', 'taken', 'taking'], answer: 1, explain: 'Yesterday shows the past simple. Took is the past form of take.' },
+    { level: 'Intermediate', q: 'Choose the correct form: If I ___ more time, I would learn English faster.', options: ['have', 'had', 'has', 'having'], answer: 1, explain: 'For an imagined situation now, use if + past simple (had), then would + the base verb.' },
+    { level: 'Intermediate', q: 'Which sentence is correct?', options: ['I have lived here since 2019.', 'I am living here since 2019.', 'I have live here since 2019.', 'I living here since 2019.'], answer: 0, explain: 'Use the present perfect with since and a point in time: I have lived here since 2019.' },
+    { level: 'Intermediate', q: 'A school where every child is welcome, including children with disabilities, is …', options: ['inclusive', 'vocational', 'pre-primary', 'tuition-free'], answer: 0, explain: 'An inclusive school welcomes and includes everyone.' },
+    { level: 'Intermediate', q: 'Children do better when they are interested ___ what they learn.', options: ['in', 'at', 'about', 'for'], answer: 0, explain: 'The adjective "interested" is followed by "in": interested in something.' },
+    { level: 'Intermediate', q: 'Choose the correct passive: The teachers ___ by the government last year.', options: ['were trained', 'trained', 'were training', 'have trained'], answer: 0, explain: 'The passive past simple is was or were + past participle. Plural teachers need were.' },
+    { level: 'Intermediate', q: 'Equity in education means …', options: ['everyone gets a fair chance', 'only the best students get places', 'schools charge the same fees', 'every school has the same building'], answer: 0, explain: 'Equity means fairness, so that everyone has a fair chance whatever their background.' },
+    { level: 'Advanced', q: 'A "completion rate" measures …', options: ['how many students finish a level of schooling', 'how much a school spends on books', 'how many teachers are qualified', 'how many new schools are built'], answer: 0, explain: 'The completion rate is the share of students who finish a level of education, such as lower secondary school.' },
+    { level: 'Advanced', q: 'Which phrase means learning throughout life, not only at school?', options: ['lifelong learning', 'vocational training', 'gender parity', 'pre-primary education'], answer: 0, explain: 'Lifelong learning is education and training at every age, including for adults.' },
+    { level: 'Advanced', q: 'A course that teaches practical skills for work as an electrician is …', options: ['vocational', 'pre-primary', 'academic', 'literate'], answer: 0, explain: 'Vocational training teaches practical skills for a particular job.' },
+    { level: 'Advanced', q: 'What does "gender parity" in education mean?', options: ['boys and girls have equal access to education', 'only girls go to school', 'every school costs the same', 'girls study only maths'], answer: 0, explain: 'Gender parity means girls and boys have equal access to education.' },
+    { level: 'Advanced', q: 'Which word is the noun form of "literate"?', options: ['literacy', 'literature', 'literal', 'literally'], answer: 0, explain: 'Literacy is the ability to read and write. Literature means written works such as novels and poems.' }
+  ];
+
+  const ENGLISH_READING = [
+    {
+      level: 'Starter',
+      title: 'Amina goes to school',
+      text: "Amina is twelve years old and lives in a small village. Every morning she walks two kilometres to school. Her school has a good library, and she likes reading stories there. Last year she won a scholarship, so her family does not have to pay the school fees. Amina wants to become a doctor one day. She says school is the best thing that has ever happened to her.",
+      questions: [
+        { q: 'How does Amina get to school?', options: ['She takes a bus', 'She walks', 'Her father drives her', 'She rides a bicycle'], answer: 1, explain: 'The text says she walks two kilometres to school every morning.' },
+        { q: "Why does Amina's family not pay the school fees?", options: ['The school is free for everyone', 'She won a scholarship', 'She works at the school', 'Her teacher pays for her'], answer: 1, explain: 'Last year she won a scholarship, so her family does not have to pay the fees.' },
+        { q: 'What does Amina want to become?', options: ['a teacher', 'a librarian', 'a doctor', 'a driver'], answer: 2, explain: 'The text says she wants to become a doctor one day.' }
+      ]
+    },
+    {
+      level: 'Intermediate',
+      title: 'Why girls leave school early',
+      text: 'Many girls in low-income countries leave school before they finish. Sometimes the reason is money: families cannot pay for uniforms, books or transport. In other cases, girls are asked to help at home, or they are married at a young age. Schools can help. Some governments give grants to families who keep their daughters in school, and some schools have toilets for girls, so that they do not miss lessons every month. These small changes can make a big difference to whether girls stay in school.',
+      questions: [
+        { q: 'What is one reason families might not send girls to school?', options: ['Schools are too big', 'They cannot pay for uniforms, books or transport', 'Girls do not want to learn', 'Teachers do not like girls'], answer: 1, explain: 'The text says that money for uniforms, books or transport can stop girls from going to school.' },
+        { q: 'According to the text, what can help girls stay in school?', options: ['Longer holidays', 'Grants and toilets at school', 'Fewer lessons', 'Bigger classes'], answer: 1, explain: 'The text mentions grants for families and toilets for girls at school.' },
+        { q: 'What do "these small changes" refer to?', options: ['the grants and the toilets', 'the families', 'the lessons', 'the holidays'], answer: 0, explain: '"These small changes" refers back to the grants and the toilets in the sentence before.' }
+      ]
+    },
+    {
+      level: 'Advanced',
+      title: 'Learning does not stop at school',
+      text: 'Education is no longer something that ends when people leave school. In many countries, adults return to classrooms to learn a new language, gain a qualification or retrain for a new job. Vocational courses, online lessons and evening classes make this possible for people who work during the day. Governments and employers increasingly see lifelong learning as essential, because technology and industry change quickly. Yet adults who left school early often find it hardest to return, which is why reaching them remains a challenge.',
+      questions: [
+        { q: 'What is the main idea of the passage?', options: ['Schools should close in the evening', 'Learning continues throughout life and matters more and more', 'Online lessons are always better than classrooms', 'Adults should not retrain for new jobs'], answer: 1, explain: 'The passage argues that lifelong learning matters more as work and technology change.' },
+        { q: 'Why is lifelong learning becoming essential?', options: ['Technology and industry change quickly', 'Schools are getting smaller', 'Teachers are retiring', 'Governments are reducing their budgets'], answer: 0, explain: 'The text says technology and industry change quickly, so people need to keep learning.' },
+        { q: 'Which group often finds it hardest to return to learning?', options: ['Adults who left school early', 'Adults who work in the evening', 'Students who take online lessons', 'Teachers of vocational courses'], answer: 0, explain: 'The passage says adults who left school early often find it hardest to return.' }
+      ]
+    }
+  ];
+
+  function initEnglish() {
+    initEnglishWords();
+    initEnglishQuiz();
+    renderEnglishReading();
+  }
+
+  // One question with four options. The learner picks once; done(correct) is then called.
+  function englishChoices(item, host, done) {
+    const opts = h('div', 'quiz-options');
+    const fb = h('div', 'quiz-feedback');
+    fb.hidden = true;
+    let locked = false;
+    item.options.forEach((text, j) => {
+      const b = h('button', 'opt');
+      b.type = 'button';
+      b.append(h('span', 'opt-key', 'ABCD'[j]), h('span', 'opt-text', text), h('span', 'opt-mark'));
+      b.addEventListener('click', () => {
+        if (locked) return;
+        locked = true;
+        const correct = j === item.answer;
+        opts.querySelectorAll('.opt').forEach((o, k) => {
+          o.disabled = true;
+          if (k === item.answer) { o.classList.add('is-correct'); drawMark(o.querySelector('.opt-mark'), 'tick'); }
+          else if (k === j) { o.classList.add('is-wrong'); drawMark(o.querySelector('.opt-mark'), 'cross'); }
+          else o.classList.add('is-muted');
+        });
+        Sound.play(correct ? 'correct' : 'wrong');
+        fb.textContent = '';
+        fb.append(h('p', 'fb-verdict', correct ? 'Correct!' : 'Not quite. The answer is ' + item.options[item.answer] + '.'), h('p', 'fb-text', item.explain));
+        fb.hidden = false;
+        done(correct);
+      });
+      opts.appendChild(b);
+    });
+    host.append(opts, fb);
+  }
+
+  function initEnglishWords() {
+    const total = ENGLISH_WORDS.length;
+    let order = ENGLISH_WORDS.map((w, n) => n);
+    let i = 0;
+    const card = $('#wordCard');
+    const front = $('#wordFront');
+    const back = $('#wordBack');
+
+    function show(turned) {
+      const w = ENGLISH_WORDS[order[i]];
+      $('#wordCount').textContent = fill('{0} of {1}', i + 1, total);
+      $('#wordFill').style.width = ((i + 1) / total) * 100 + '%';
+      $('#wordLevel').textContent = w.level;
+      front.textContent = '';
+      front.append(document.createTextNode(w.word), h('span', 'en-pos', w.pos));
+      back.textContent = '';
+      back.append(h('span', 'fa-answer', w.meaning), h('span', 'fa-why', w.example));
+      front.hidden = turned;
+      back.hidden = !turned;
+      card.setAttribute('aria-expanded', String(turned));
+    }
+
+    card.addEventListener('click', () => show(back.hidden));
+    $('#wordPrev').addEventListener('click', () => { i = (i - 1 + total) % total; show(false); });
+    $('#wordNext').addEventListener('click', () => { i = (i + 1) % total; show(false); });
+    $('#wordShuffle').addEventListener('click', () => {
+      order = shuffle(order);
+      i = 0;
+      show(false);
+      Sound.play('tap');
+    });
+    show(false);
+  }
+
+  function initEnglishQuiz() {
+    const size = Math.min(10, ENGLISH_QUIZ.length);
+    let order = [];
+    let i = 0;
+    let right = 0;
+    const bestRecord = () => store.get('sdg4.english.best', null);
+
+    function showBest() {
+      const b = bestRecord();
+      ['#enBest', '#enBestResult'].forEach((sel) => {
+        $(sel).hidden = !b;
+        if (b) $(sel).textContent = fill('Best so far: {0} out of {1}.', b.right, b.total);
+      });
+    }
+
+    function ask() {
+      const item = ENGLISH_QUIZ[order[i]];
+      $('#enProgress').textContent = fill('Question {0} of {1}', i + 1, order.length);
+      $('#enFill').style.width = (i / order.length) * 100 + '%';
+      $('#enLevel').textContent = item.level;
+      $('#enQ').textContent = item.q;
+      const host = $('#enAnswers');
+      host.textContent = '';
+      const next = $('#enNext');
+      next.hidden = true;
+      englishChoices(item, host, (ok) => {
+        if (ok) right += 1;
+        $('#enFill').style.width = ((i + 1) / order.length) * 100 + '%';
+        next.textContent = i === order.length - 1 ? 'See my score' : 'Next question';
+        next.hidden = false;
+        next.focus({ preventScroll: true });
+      });
+      $('#enQ').focus({ preventScroll: true });
+    }
+
+    function start() {
+      order = shuffle(ENGLISH_QUIZ.map((q, n) => n)).slice(0, size);
+      i = 0;
+      right = 0;
+      $('#enStart').hidden = true;
+      $('#enResult').hidden = true;
+      $('#enPlay').hidden = false;
+      ask();
+      Sound.play('tap');
+    }
+
+    function finish() {
+      const total = order.length;
+      const pct = right / total;
+      $('#enPlay').hidden = true;
+      $('#enResult').hidden = false;
+      $('#enRsScore').textContent = String(right);
+      $('#enRsOf').textContent = '/' + total;
+      $('#enRsTitle').textContent = pct >= 0.8 ? 'Excellent work!' : pct >= 0.5 ? 'Good progress.' : 'Keep practising.';
+      $('#enRsText').textContent = fill('You got {0} out of {1} right.', right, total);
+      const best = bestRecord();
+      if (!best || right / total > best.right / best.total) store.set('sdg4.english.best', { right: right, total: total });
+      showBest();
+      Sound.play(pct >= 0.8 ? 'streak' : 'tap');
+      $('#enRsTitle').focus({ preventScroll: true });
+    }
+
+    function backToStart() {
+      $('#enResult').hidden = true;
+      $('#enPlay').hidden = true;
+      $('#enStart').hidden = false;
+      showBest();
+      Sound.play('tap');
+    }
+
+    $('#enStartBtn').addEventListener('click', start);
+    $('#enAgain').addEventListener('click', start);
+    $('#enBack').addEventListener('click', () => {
+      backToStart();
+      $('#enStartBtn').focus({ preventScroll: true });
+    });
+    $('#enQuit').addEventListener('click', backToStart);
+    $('#enNext').addEventListener('click', () => {
+      if (i < order.length - 1) {
+        i += 1;
+        ask();
+      } else {
+        finish();
+      }
+    });
+    // A to D pick an answer while a question is showing, as on the main quiz.
+    document.addEventListener('keydown', (e) => {
+      if ($('#enPlay').hidden || e.altKey || e.ctrlKey || e.metaKey || e.defaultPrevented) return;
+      const t = e.target;
+      const tag = t && t.tagName ? t.tagName.toLowerCase() : '';
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+      const k = e.key.toLowerCase();
+      const pick = k.length === 1 ? 'abcd'.indexOf(k) : -1;
+      if (pick < 0) return;
+      const b = $$('#enAnswers .opt')[pick];
+      if (b && !b.disabled) {
+        e.preventDefault();
+        b.click();
+      }
+    });
+    showBest();
+  }
+
+  function renderEnglishReading() {
+    const host = $('#enReading');
+    ENGLISH_READING.forEach((p) => {
+      const art = h('article', 'en-passage');
+      const head = h('div', 'en-passage-head');
+      head.append(h('span', 'q-cat', p.level), h('h3', 'en-passage-title', p.title));
+      const qs = h('ol', 'en-qs');
+      const score = h('p', 'en-passage-score');
+      score.hidden = true;
+      let answered = 0;
+      let right = 0;
+      p.questions.forEach((item) => {
+        const li = h('li', 'en-q');
+        const answers = h('div', 'en-answers');
+        li.append(h('p', 'en-q-text', item.q), answers);
+        englishChoices(item, answers, (ok) => {
+          answered += 1;
+          if (ok) right += 1;
+          if (answered === p.questions.length) {
+            score.textContent = fill('You got {0} out of {1} right.', right, answered);
+            score.hidden = false;
+          }
+        });
+        qs.appendChild(li);
+      });
+      art.append(head, h('p', 'en-text', p.text), qs, score);
+      host.appendChild(art);
+    });
   }
 
   /* Search: pages, targets, facts and quiz questions, found as you type. Press / to open. */
@@ -2868,16 +4780,22 @@
     { title: 'Study timer', href: 'timer.html', text: 'Study in focus blocks with short breaks' },
     { title: 'About', href: 'about.html', text: 'About this school project, the glossary and every source' },
     { title: 'Slides for class', href: 'slides.html', text: 'Full-screen slides with the key numbers' },
+    { title: 'My profile', href: 'profile.html', text: 'Nickname, avatar and colour, join a classroom with a code, teacher mode' },
+    { title: 'Learn English', href: 'english.html', text: 'Word cards, a quiz and short reading on education words, from starter to advanced level.' },
     { title: 'My progress', href: 'progress.html', text: 'Badges, a summary and export, import or erase for your saved data' },
     { title: 'Get the app', href: 'download.html', text: 'Download for Windows, Mac and Android, or add the site to your Home Screen' }
   ];
   let searchIndex = null;
 
   function buildSearchIndex() {
-    const items = SEARCH_PAGES.map((p) => ({ kind: 'Page', title: p.title, text: p.text, href: p.href }));
-    TARGETS.forEach((t) => items.push({ kind: 'Target ' + t.code, title: t.title, text: t.plain + ' ' + t.action, href: 'targets.html' }));
-    FACTS.forEach((f) => items.push({ kind: 'Fact', title: f.num, text: f.text, href: 'facts.html' }));
-    QUIZ.forEach((q) => items.push({ kind: 'Quiz question', title: q.q, text: q.explain, href: 'quiz.html' }));
+    // Pages a teacher has turned off for this student's class are left out of the search.
+    const off = turnedOff();
+    const shown = (file) => !TURNABLE_PAGES.some((t) => t.file === file && off.pages.has(t.slug));
+    const items = SEARCH_PAGES.filter((p) => shown(p.href)).map((p) => ({ kind: 'Page', title: p.title, text: p.text, href: p.href }));
+    if (shown('targets.html')) TARGETS.forEach((t) => items.push({ kind: 'Target ' + t.code, title: t.title, text: t.plain + ' ' + t.action, href: 'targets.html' }));
+    if (shown('facts.html')) FACTS.forEach((f) => items.push({ kind: 'Fact', title: f.num, text: f.text, href: 'facts.html' }));
+    if (shown('quiz.html')) QUIZ.forEach((q) => items.push({ kind: 'Quiz question', title: q.q, text: q.explain, href: 'quiz.html' }));
+    if (shown('english.html')) ENGLISH_WORDS.forEach((w) => items.push({ kind: 'English word', title: w.word, text: w.meaning, href: 'english.html' }));
     return items;
   }
 
@@ -2944,14 +4862,31 @@
     quiz: initQuiz,
     timer: initTimer,
     about: initAbout,
-    slides: initSlides
+    slides: initSlides,
+    profile: initProfile,
+    english: initEnglish,
+    assignment: initAssignment
   };
   const siteNode = document.querySelector('.site[data-page]');
   const PAGE = siteNode ? siteNode.dataset.page : '';
+  function startPage() {
+    applyClassRules();
+    if (pageIsOff()) {
+      showOffPage();
+      return;
+    }
+    if (MODULES[PAGE]) MODULES[PAGE]();
+  }
   initChrome();
+  initLang();
   if (PAGE !== 'slides') {
     initReadingBar();
     initSearch();
   }
-  if (MODULES[PAGE]) MODULES[PAGE]();
+  if (loadJoined().length && cloudReady()) {
+    // Wait a moment for the teacher's latest settings. If the database is slow, the copy saved on this device is used.
+    Promise.race([refreshClassRules().catch(() => {}), new Promise((resolve) => setTimeout(resolve, 2500))]).then(startPage);
+  } else {
+    startPage();
+  }
 })();

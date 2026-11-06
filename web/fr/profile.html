@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mon profil · Éducation de qualité pour tous</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Choisissez un pseudonyme, un avatar et une couleur, rejoignez une classe avec un code ou activez le mode enseignant pour en créer une.">
+<meta property="og:title" content="Mon profil · Éducation de qualité pour tous">
+<meta property="og:description" content="Choisissez un pseudonyme, un avatar et une couleur, rejoignez une classe avec un code ou activez le mode enseignant pour en créer une.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Éducation de qualité pour tous">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="profile">
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Éducation de qualité</span>
+        <span class="brand-sub">pour tous, d’ici 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Principal">
+      <a href="facts.html" data-nav="facts">Faits</a>
+      <a href="targets.html" data-nav="targets">Cibles</a>
+      <a href="explore.html" data-nav="explore">Explorer</a>
+      <a href="solutions.html" data-nav="solutions">Solutions</a>
+      <a href="action.html" data-nav="action">Agir</a>
+      <a href="quiz.html" data-nav="quiz">Quiz</a>
+      <a href="timer.html" data-nav="timer">Minuteur d’étude</a>
+      <a class="nav-extra" href="about.html" data-nav="about">À propos</a>
+      <a class="nav-extra" href="slides.html">Diapositives pour la classe</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile" aria-current="page">Mon profil</a>
+      <a class="nav-extra" href="english.html" data-nav="english">Apprendre l'anglais</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../profile.html" lang="en">English</option><option value="../id/profile.html" lang="id">Bahasa Indonesia</option><option value="../es/profile.html" lang="es">Español</option><option value="profile.html" lang="fr" selected>Français</option><option value="../zh/profile.html" lang="zh-CN">中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Rechercher sur le site (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">Rechercher sur le site</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Effets sonores (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Son activé</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../profile.html" lang="en">English</option><option value="../id/profile.html" lang="id">Bahasa Indonesia</option><option value="../es/profile.html" lang="es">Español</option><option value="profile.html" lang="fr" selected>Français</option><option value="../zh/profile.html" lang="zh-CN">中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="Diapositives plein écran pour la classe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Présenter</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">Rechercher sur le site</h2>
+      <button class="sd-close" type="button" id="searchClose">Fermer</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">Mots recherchés</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="Essayez : filles, enseignants, lecture, 2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>Aucun résultat. Essayez un autre mot.</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled">
+    <div class="ph-inner">
+      <p class="ph-kicker">Mon profil</p>
+      <div class="ph-main">
+        <h1 class="ph-title">Votre profil et votre classe</h1>
+        <p class="ph-lead">Choisissez votre apparence, rejoignez une classe avec un code de votre enseignant, ou activez le mode enseignant pour en créer une. Vos scores aux quiz sont envoyés à chaque classe que vous avez rejointe.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section">
+
+    <section class="pf-block" aria-labelledby="profileTitle">
+      <h2 class="section-title" id="profileTitle">Votre profil</h2>
+      <p class="block-note">Utilisez un pseudo, pas votre nom complet. Une fois que vous rejoignez une classe, votre pseudo, votre avatar, votre couleur et votre bio sont visibles par vos camarades et votre enseignant. Ne mettez pas de renseignements personnels dans votre bio.</p>
+      <div class="pf-layout">
+        <div class="pf-preview" aria-hidden="true">
+          <span class="pf-avatar" id="pfAvatar"></span>
+          <span class="pf-name" id="pfPreviewName"></span>
+        </div>
+        <form class="pf-form" id="profileForm">
+          <label class="pf-label" for="pfNick">Pseudonyme</label>
+          <input class="cert-input" id="pfNick" type="text" maxlength="20" autocomplete="off" placeholder="Par exemple Maya">
+          <p class="pf-label" id="pfAvatarLabel">Avatar</p>
+          <div class="pf-choices" id="pfEmojis" role="group" aria-labelledby="pfAvatarLabel"></div>
+          <p class="pf-label" id="pfColourLabel">Couleur</p>
+          <div class="pf-choices" id="pfColours" role="group" aria-labelledby="pfColourLabel"></div>
+          <label class="pf-label" for="pfBio">Courte biographie (facultatif)</label>
+          <textarea class="cert-input pf-bio" id="pfBio" maxlength="120" rows="3" placeholder="Un sujet que vous aimez apprendre"></textarea>
+          <div class="data-actions">
+            <button class="btn-primary" type="submit">Enregistrer le profil</button>
+          </div>
+          <p class="block-note pf-msg" id="pfMsg" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="pf-block" aria-labelledby="teacherTitle">
+      <h2 class="section-title" id="teacherTitle">Mode enseignant</h2>
+      <p class="block-note">Activez cette option pour créer des classes et voir les scores de vos élèves. Les élèves n’en ont pas besoin.</p>
+      <label class="pf-toggle">
+        <input class="visually-hidden" type="checkbox" id="pfTeacher">
+        <span class="pf-switch" aria-hidden="true"></span>
+        <span>Le mode enseignant est <b id="pfTeacherState">désactivé</b></span>
+      </label>
+      <form class="pf-pass" id="teacherPassForm" hidden>
+        <label class="pf-label" for="teacherPass">Mot de passe enseignant</label>
+        <input class="cert-input" id="teacherPass" type="password" autocomplete="off">
+        <p class="block-note">Ce mot de passe est réservé aux enseignants.</p>
+        <div class="data-actions">
+          <button class="btn-primary" type="submit">Activer le mode enseignant</button>
+          <button class="btn-ghost" type="button" id="teacherPassCancel">Annuler</button>
+        </div>
+        <p class="block-note pf-msg" id="teacherPassMsg" role="status"></p>
+      </form>
+    </section>
+
+    <section class="pf-block" id="teacherPanel" aria-labelledby="classTitle" hidden>
+      <h2 class="section-title" id="classTitle">Vos classes</h2>
+      <p class="block-note">Créez une classe pour obtenir un code. Les élèves saisissent ce code sur cette page pour la rejoindre. Choisissez un nom que votre classe reconnaîtra.</p>
+      <form class="cert-form" id="createForm">
+        <label class="pf-label" for="clsName">Nom de la classe</label>
+        <input class="cert-input" id="clsName" type="text" maxlength="60" placeholder="Par exemple, Sciences de 5e">
+        <button class="btn-primary" type="submit">Créer la classe</button>
+      </form>
+      <p class="block-note pf-msg" id="createMsg" role="status"></p>
+      <ul class="cls-list" id="clsList"></ul>
+
+      <div class="cls-detail" id="clsDetail" hidden>
+        <div class="cls-detail-head">
+          <div>
+            <h3 class="cls-detail-name" id="clsDetailName"></h3>
+            <p class="cls-code-row">Code <b class="cls-code" id="clsDetailCode"></b></p>
+          </div>
+          <div class="cls-actions">
+            <button class="btn-outline" type="button" id="clsCopy">Copier le code</button>
+            <button class="btn-outline" type="button" id="clsRefresh">Actualiser les scores</button>
+            <button class="btn-ghost" type="button" id="clsDelete">Supprimer la classe</button>
+          </div>
+        </div>
+        <div class="cls-qr-row">
+          <button class="btn-outline" type="button" id="clsQrBtn" aria-expanded="false" aria-controls="clsQr">Afficher le code QR</button>
+        </div>
+        <div class="cls-qr" id="clsQr" hidden>
+          <div class="cls-qr-box" id="clsQrBox"></div>
+          <div class="cls-qr-info">
+            <p class="block-note">Les élèves pointent la caméra de leur téléphone sur ce code. La page de profil s'ouvre et ils rejoignent la classe. Ils doivent d'abord enregistrer un pseudo.</p>
+            <label class="pf-label" for="clsSite">Adresse du site web</label>
+            <input class="cert-input cls-site" id="clsSite" type="text" autocomplete="off" spellcheck="false" placeholder="https://your-site.example/profile.html">
+            <p class="cls-link" id="clsLink"></p>
+            <div class="cls-actions">
+              <button class="btn-outline" type="button" id="clsQrCopy">Copier le lien</button>
+            </div>
+            <p class="block-note pf-msg" id="clsQrMsg" role="status"></p>
+          </div>
+        </div>
+        <p class="block-note pf-msg" id="clsDetailMsg" role="status"></p>
+        <div class="data-table" id="clsRoster"></div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">Progrès et notes</h3>
+          <p class="block-note">La meilleure note à chaque quiz de chapitre, pour un élève. Les notes des devoirs figurent dans le tableau ci-dessus et dans la feuille de calcul.</p>
+          <div class="cls-actions">
+            <button class="btn-outline" type="button" id="clsCsv">Télécharger les notes (CSV)</button>
+          </div>
+          <label class="pf-label" for="clsProgPick">Élève</label>
+          <select class="cert-input cls-pick" id="clsProgPick"></select>
+          <ul class="cls-list" id="clsProgOut"></ul>
+        </div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">Message à la classe</h3>
+          <label class="pf-label" for="clsAnnounce">Annonce</label>
+          <textarea class="cert-input pf-bio" id="clsAnnounce" maxlength="300" rows="3" placeholder="Par exemple : Quiz vendredi. Lisez d’abord les faits sur l’alphabétisation."></textarea>
+          <div class="cls-actions">
+            <button class="btn-primary" type="button" id="clsAnnounceSave">Publier l’annonce</button>
+            <button class="btn-ghost" type="button" id="clsAnnounceClear">Supprimer l’annonce</button>
+          </div>
+        </div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">Désactiver pour cette classe</h3>
+          <p class="block-note">Les élèves de cette classe ne voient pas ce que vous cochez ici. Ils voient une courte note à la place.</p>
+          <p class="pf-label">Pages</p>
+          <div class="pick-grid" id="clsOffPages"></div>
+          <details class="pick-details">
+            <summary>Faits pour la machine à faits de la page Explore</summary>
+            <div class="pick-list" id="clsOffFacts"></div>
+          </details>
+          <details class="pick-details">
+            <summary>Questions du quiz</summary>
+            <div class="pick-list" id="clsOffQuiz"></div>
+          </details>
+          <div class="cls-actions">
+            <button class="btn-primary" type="button" id="clsRulesSave">Enregistrer ce qui est désactivé</button>
+          </div>
+          <p class="block-note pf-msg" id="clsRulesMsg" role="status"></p>
+        </div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">Devoirs</h3>
+          <p class="block-note">Créez un devoir à partir de chapitres du quiz, ou rédigez vos propres questions. Chaque élève le fait une fois, depuis sa page de profil.</p>
+          <form class="cert-form" id="asgForm">
+            <label class="pf-label" for="asgTitle">Titre</label>
+            <input class="cert-input" id="asgTitle" type="text" maxlength="80" placeholder="Par exemple : Contrôle de lecture et d’écriture">
+            <label class="pf-label" for="asgDue">Date limite</label>
+            <input class="cert-input" id="asgDue" type="date">
+            <fieldset class="pick-fieldset">
+              <legend class="pf-label">Les questions viennent de</legend>
+              <label class="pick"><input type="radio" name="asgMode" value="chapters" checked> <span>Chapitres du quiz</span></label>
+              <label class="pick"><input type="radio" name="asgMode" value="custom"> <span>Questions que j’écris</span></label>
+            </fieldset>
+            <div id="asgChapterPart">
+              <p class="pf-label">Chapitres</p>
+              <div class="pick-grid" id="asgChapters"></div>
+              <label class="pf-label" for="asgCount">Combien de questions</label>
+              <input class="cert-input" id="asgCount" type="number" min="1" max="52" value="10">
+            </div>
+            <div id="asgCustomPart" hidden>
+              <label class="pf-label" for="asgQText">Question</label>
+              <input class="cert-input" id="asgQText" type="text" maxlength="300">
+              <label class="pf-label" for="asgOpt0">Réponse A</label>
+              <input class="cert-input" id="asgOpt0" type="text" maxlength="120">
+              <label class="pf-label" for="asgOpt1">Réponse B</label>
+              <input class="cert-input" id="asgOpt1" type="text" maxlength="120">
+              <label class="pf-label" for="asgOpt2">Réponse C</label>
+              <input class="cert-input" id="asgOpt2" type="text" maxlength="120">
+              <label class="pf-label" for="asgOpt3">Réponse D</label>
+              <input class="cert-input" id="asgOpt3" type="text" maxlength="120">
+              <label class="pf-label" for="asgCorrect">Bonne réponse</label>
+              <select class="cert-input" id="asgCorrect">
+                <option value="0">A</option>
+                <option value="1">B</option>
+                <option value="2">C</option>
+                <option value="3">D</option>
+              </select>
+              <label class="pf-label" for="asgExplain">Explication (affichée après la réponse)</label>
+              <input class="cert-input" id="asgExplain" type="text" maxlength="300">
+              <div class="cls-actions">
+                <button class="btn-outline" type="button" id="asgAddQ">Ajouter une question</button>
+              </div>
+              <ol class="cls-list" id="asgQList"></ol>
+            </div>
+            <div class="cls-actions">
+              <button class="btn-primary" type="submit" id="asgSave">Créer le devoir</button>
+            </div>
+          </form>
+          <p class="block-note pf-msg" id="asgMsg" role="status"></p>
+          <ul class="cls-list" id="asgList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="pf-block" aria-labelledby="joinTitle">
+      <h2 class="section-title" id="joinTitle">Rejoindre une classe</h2>
+      <p class="block-note">Demandez à votre enseignant le code à six caractères. L’inscription ne fonctionne que sur cet appareil.</p>
+      <form class="cert-form" id="joinForm">
+        <label class="pf-label" for="joinCode">Code de classe</label>
+        <input class="cert-input cls-code-input" id="joinCode" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC123">
+        <button class="btn-primary" type="submit">Rejoindre</button>
+      </form>
+      <p class="block-note pf-msg" id="joinMsg" role="status"></p>
+      <ul class="cls-list" id="joinedList"></ul>
+    </section>
+
+    <section class="pf-block" id="asgBlock" aria-labelledby="asgStuTitle" hidden>
+      <h2 class="section-title" id="asgStuTitle">Devoirs</h2>
+      <p class="block-note">Devoirs de vos classes. Vous pouvez faire chacun une seule fois, sur cet appareil.</p>
+      <ul class="cls-list" id="asgStudent"></ul>
+    </section>
+
+    <section class="pf-block" id="mateBlock" aria-labelledby="mateTitle" hidden>
+      <h2 class="section-title" id="mateTitle">Camarades de classe</h2>
+      <p class="block-note">Tout le monde dans vos classes peut voir le pseudo, l’avatar, la couleur et la bio des autres.</p>
+      <div id="classmates"></div>
+    </section>
+
+    <section class="pf-block" aria-labelledby="privacyTitle">
+      <h2 class="section-title" id="privacyTitle">Classes et confidentialité</h2>
+      <p class="block-note">Les classes ont besoin d’une connexion internet. Un enseignant peut voir le pseudo, l’avatar, la bio, les notes aux quiz et la date du dernier quiz. Les camarades peuvent voir le pseudo, l’avatar, la couleur et la bio. Rien d’autre n’est partagé.</p>
+      <p class="block-note">Effacer vos données sur cet appareil efface aussi votre compte enseignant ici : les classes créées sur cet appareil ne pourront plus être gérées.</p>
+      <p class="block-note pf-msg" id="cloudStatus" role="status"></p>
+    </section>
+  </div>
+
+  <script src="qr.js"></script>
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Éducation de qualité</span>
+          <span class="brand-sub">pour tous, d’ici 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">Projet scolaire indépendant sur l’Objectif de développement durable 4 des Nations unies. Ce n’est pas un site officiel des Nations unies ou de l’UNESCO.</p>
+      <p class="sf-count"><b data-days>1,525</b> jours restants jusqu’à la fin de 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="Toutes les pages">
+      <div class="sf-col">
+        <p class="sf-h">Apprendre</p>
+        <a href="facts.html">Les faits</a>
+        <a href="targets.html">Les 10 cibles</a>
+        <a href="solutions.html">Solutions</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Jouer</p>
+        <a href="explore.html">Explorer</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="english.html">Apprendre l'anglais</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Agir</p>
+        <a href="action.html">Agir</a>
+        <a href="timer.html">Minuteur d’étude</a>
+        <a href="slides.html">Diapositives pour la classe</a>
+        <a href="profile.html">Mon profil</a>
+        <a href="progress.html">Ma progression</a>
+        <a href="download.html">Obtenir l’application</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">À propos</p>
+        <a href="about.html">À propos de ce site</a>
+        <a href="about.html#glossary">Glossaire</a>
+        <a href="about.html#sources">Sources</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Données compilées le 28 octobre 2026 à partir des rapports de l’ONU et de l’UNESCO.</p>
+      <p>Appuyez sur <kbd>M</kbd> pour activer ou désactiver les effets sonores, et <kbd>?</kbd> pour afficher tous les raccourcis.</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../profile.html" lang="en">English</option><option value="../id/profile.html" lang="id">Bahasa Indonesia</option><option value="../es/profile.html" lang="es">Español</option><option value="profile.html" lang="fr" selected>Français</option><option value="../zh/profile.html" lang="zh-CN">中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Raccourcis clavier</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Effets sonores activés ou désactivés, sur chaque page</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Cible, jalon ou diapositive précédent ou suivant</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">à</span><kbd class="k">D</kbd></dt><dd>Répondre à une question du quiz (1 à 4 fonctionnent aussi)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Passer à la question suivante du quiz</dd>
+    <dt><kbd class="k">Espace</kbd></dt><dd>Démarrer ou mettre en pause le minuteur d’étude</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Réinitialiser le minuteur</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Passer à la session de minuteur suivante</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Plein écran sur la page des diapositives</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Afficher cette liste</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "fr-FR", "date": "fr-FR", "short": "fr-FR"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

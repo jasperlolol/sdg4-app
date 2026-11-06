@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Éducation de qualité pour tous</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Un site sur l’Objectif de développement durable 4 des Nations unies : les dernières données, les dix cibles, ce qui fonctionne et ce que vous pouvez faire.">
+<meta property="og:title" content="Éducation de qualité pour tous">
+<meta property="og:description" content="Un site sur l’Objectif de développement durable 4 des Nations unies : les dernières données, les dix cibles, ce qui fonctionne et ce que vous pouvez faire.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Éducation de qualité pour tous">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="home">
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Éducation de qualité</span>
+        <span class="brand-sub">pour tous, d’ici 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Principal">
+      <a href="facts.html" data-nav="facts">Faits</a>
+      <a href="targets.html" data-nav="targets">Cibles</a>
+      <a href="explore.html" data-nav="explore">Explorer</a>
+      <a href="solutions.html" data-nav="solutions">Solutions</a>
+      <a href="action.html" data-nav="action">Agir</a>
+      <a href="quiz.html" data-nav="quiz">Quiz</a>
+      <a href="timer.html" data-nav="timer">Minuteur d’étude</a>
+      <a class="nav-extra" href="about.html" data-nav="about">À propos</a>
+      <a class="nav-extra" href="slides.html">Diapositives pour la classe</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile">Mon profil</a>
+      <a class="nav-extra" href="english.html" data-nav="english">Apprendre l'anglais</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../index.html" lang="en">English</option><option value="../id/index.html" lang="id">Bahasa Indonesia</option><option value="../es/index.html" lang="es">Español</option><option value="index.html" lang="fr" selected>Français</option><option value="../zh/index.html" lang="zh-CN">中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Rechercher sur le site (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">Rechercher sur le site</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Effets sonores (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Son activé</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../index.html" lang="en">English</option><option value="../id/index.html" lang="id">Bahasa Indonesia</option><option value="../es/index.html" lang="es">Español</option><option value="index.html" lang="fr" selected>Français</option><option value="../zh/index.html" lang="zh-CN">中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="Diapositives plein écran pour la classe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Présenter</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">Rechercher sur le site</h2>
+      <button class="sd-close" type="button" id="searchClose">Fermer</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">Mots recherchés</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="Essayez : filles, enseignants, lecture, 2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>Aucun résultat. Essayez un autre mot.</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <section class="home-hero ruled" aria-labelledby="heroTitle">
+    <div class="hh-inner">
+      <div class="hh-margin">
+        <p class="hh-goal">ODD 4</p>
+        <p class="hh-years"><span>Adopté en 2015</span><span>Échéance : 2030</span></p>
+      </div>
+      <div class="hh-main">
+        <h1 class="hh-title" id="heroTitle">273 millions d’enfants, d’adolescents et de jeunes sont <span class="pen">non scolarisés.</span></h1>
+        <p class="hh-lead">Cela représente un enfant, adolescent ou jeune en âge scolaire sur six dans le monde, et ce nombre augmente depuis sept ans. Ce site explique l’objectif, présente les dernières données et propose des moyens d’agir.</p>
+        <div class="hh-ctas">
+          <a class="btn-primary" href="facts.html">Voir les faits</a>
+          <a class="btn-outline btn-outline--lg" href="quiz.html">Faire le quiz</a>
+        </div>
+      </div>
+      <figure class="one-in-six">
+        <div class="people" aria-hidden="true"></div>
+        <figcaption>
+          <span class="ois-num">1 sur 6</span>
+          <span class="ois-text">enfants, adolescents et jeunes d’âge scolaire sont non scolarisés. Le taux était de 16,8 % en 2024, à peine inférieur aux 17,4 % de 2015.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="count-band" aria-label="Compte à rebours jusqu’en 2030">
+    <div class="cb-inner">
+      <p class="cb-num"><b data-days>1,525</b><span>jours restants</span></p>
+      <div class="cb-body">
+        <p class="cb-text">jusqu’à la fin de 2030, la date limite de chaque cible ODD 4.</p>
+        <div class="cb-track" aria-hidden="true"><span data-era-fill></span></div>
+        <div class="cb-scale">
+          <span>1er janvier 2016</span>
+          <span><b data-era-pct>72</b>% du temps écoulé</span>
+          <span>31 décembre 2030</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-goal" aria-labelledby="goalTitle">
+    <div class="wrap goal-grid">
+      <div>
+        <h2 class="eyebrow" id="goalTitle">L’objectif</h2>
+        <blockquote class="goal-big">
+          <p>“Assurer à tous une éducation équitable, inclusive et de qualité et promouvoir les possibilités d’apprentissage tout au long de la vie.”</p>
+          <footer>Objectif de développement durable 4, adopté par les 193 États membres de l’ONU en 2015</footer>
+        </blockquote>
+      </div>
+      <div class="goal-side">
+        <p class="gs-num">10</p>
+        <p class="gs-text">cibles transforment l’objectif en engagements, de l’école primaire et secondaire gratuite pour chaque enfant à un nombre suffisant d’enseignants qualifiés.</p>
+        <a class="text-link" href="targets.html">Lire les 10 cibles</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-pp" aria-labelledby="ppTitle">
+    <div class="wrap">
+      <h2 class="section-title" id="ppTitle">Des progrès réels, mais très loin d’être suffisants</h2>
+      <div class="pp-grid">
+        <div class="pp-col">
+          <h3 class="pp-h">Mieux qu’en 2000</h3>
+          <ul class="pp-list">
+            <li><b>+327 millions</b><span>élèves supplémentaires dans le primaire et le secondaire (2000 à 2024)</span></li>
+            <li><b>37% → 61%</b><span>des jeunes achèvent le second cycle du secondaire</span></li>
+            <li><b>87% → 93%</b><span>des jeunes savent lire et écrire</span></li>
+            <li><b>25% → 18%</b><span>des filles se marient avant 18 ans (2000 à 2025)</span></li>
+          </ul>
+        </div>
+        <div class="pp-col pp-col--bad">
+          <h3 class="pp-h">Toujours en retard</h3>
+          <ul class="pp-list">
+            <li><b>273 millions</b><span>non scolarisés en 2024, en hausse pour la septième année consécutive</span></li>
+            <li><b>58 sur 100</b><span>élèves atteignent le niveau minimum de lecture à la fin du primaire (2019)</span></li>
+            <li><b>7.5%</b><span>de l’aide au développement a été consacrée à l’éducation en 2024, la part la plus faible depuis deux décennies</span></li>
+            <li><b>2105</b><span>est l’année où 95 % des jeunes achèveraient le second cycle du secondaire au rythme actuel</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="fig-foot">Sources : UNESCO GEM Report 2026 ; UN SDG Report 2026 ; UNESCO GEM Gender Report 2026. Détails sur la <a href="about.html#sources">page À propos</a>.</p>
+    </div>
+  </section>
+
+  <section class="home-qotd" aria-labelledby="qotdTitle">
+    <div class="wrap qotd">
+      <div class="qotd-main">
+        <h2 class="eyebrow" id="qotdTitle">Question du jour</h2>
+        <p class="qotd-cat" id="qotdCat"></p>
+        <p class="qotd-q" id="qotdQ"></p>
+        <div class="qotd-options" id="qotdOptions" role="group" aria-labelledby="qotdQ"></div>
+        <p class="qotd-feedback" id="qotdFeedback" aria-live="polite" hidden></p>
+      </div>
+      <aside class="qotd-side">
+        <p class="qotd-note">Une nouvelle question chaque jour, tirée des 52 du quiz. Votre réponse est enregistrée sur cet appareil.</p>
+        <a class="text-link" href="quiz.html">Faire le quiz complet</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="home-pages" aria-labelledby="pagesTitle">
+    <div class="wrap">
+      <h2 class="section-title" id="pagesTitle">Explorer le site</h2>
+      <div class="page-cards">
+        <a class="pcard" href="facts.html">
+          <span class="pc-tag">Apprendre</span>
+          <span class="pc-name">Les faits</span>
+          <span class="pc-desc">Graphiques sur ceux qui ne vont pas à l’école, ceux qui achèvent leur scolarité, ceux qui apprennent et ceux qui restent sur le bord du chemin.</span>
+          <span class="pc-go">Voir les faits</span>
+        </a>
+        <a class="pcard" href="targets.html">
+          <span class="pc-tag">Apprendre</span>
+          <span class="pc-name">Les 10 cibles</span>
+          <span class="pc-desc">Chaque engagement de l’ODD 4 en termes simples, avec les derniers chiffres et ce que vous pouvez faire.</span>
+          <span class="pc-go">Lire les cibles</span>
+        </a>
+        <a class="pcard" href="solutions.html">
+          <span class="pc-tag">Apprendre</span>
+          <span class="pc-name">Solutions</span>
+          <span class="pc-desc">Ce qui a fonctionné, des repas scolaires aux transferts monétaires, et les pays qui ont le plus progressé.</span>
+          <span class="pc-go">Voir ce qui marche</span>
+        </a>
+        <a class="pcard" href="explore.html">
+          <span class="pc-tag">Jouer</span>
+          <span class="pc-name">Explorer</span>
+          <span class="pc-desc">Suivez 100 enfants à l’école, voyagez de 1948 à 2030 et tirez des faits de la machine à faits.</span>
+          <span class="pc-go">Commencer l’exploration</span>
+        </a>
+        <a class="pcard" href="quiz.html">
+          <span class="pc-tag">Jouer</span>
+          <span class="pc-name">Quiz</span>
+          <span class="pc-desc">52 questions en trois modes et douze chapitres, avec minuteur, séries, 50:50, classement et effets sonores.</span>
+          <span class="pc-go">Jouer au quiz</span>
+        </a>
+        <a class="pcard" href="action.html">
+          <span class="pc-tag">Agir</span>
+          <span class="pc-name">Agir</span>
+          <span class="pc-desc">Choisissez jusqu’à trois actions, créez votre propre engagement et cochez-les au fur et à mesure.</span>
+          <span class="pc-go">Prendre un engagement</span>
+        </a>
+        <a class="pcard" href="timer.html">
+          <span class="pc-tag">Agir</span>
+          <span class="pc-name">Minuteur d’étude</span>
+          <span class="pc-desc">Étudiez par blocs de concentration de 25 minutes avec de courtes pauses entre eux.</span>
+          <span class="pc-go">Ouvrir le minuteur</span>
+        </a>
+        <a class="pcard pcard--feature" href="slides.html">
+          <span class="pc-tag">Présenter</span>
+          <span class="pc-name">Diapositives pour la classe</span>
+          <span class="pc-desc">13 diapositives plein écran avec les chiffres clés. Naviguez avec les flèches du clavier.</span>
+          <span class="pc-go">Ouvrir les diapositives</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Éducation de qualité</span>
+          <span class="brand-sub">pour tous, d’ici 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">Projet scolaire indépendant sur l’Objectif de développement durable 4 des Nations unies. Ce n’est pas un site officiel des Nations unies ou de l’UNESCO.</p>
+      <p class="sf-count"><b data-days>1,525</b> jours restants jusqu’à la fin de 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="Toutes les pages">
+      <div class="sf-col">
+        <p class="sf-h">Apprendre</p>
+        <a href="facts.html">Les faits</a>
+        <a href="targets.html">Les 10 cibles</a>
+        <a href="solutions.html">Solutions</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Jouer</p>
+        <a href="explore.html">Explorer</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="english.html">Apprendre l'anglais</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Agir</p>
+        <a href="action.html">Agir</a>
+        <a href="timer.html">Minuteur d’étude</a>
+        <a href="slides.html">Diapositives pour la classe</a>
+        <a href="profile.html">Mon profil</a>
+        <a href="progress.html">Ma progression</a>
+        <a href="download.html">Obtenir l’application</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">À propos</p>
+        <a href="about.html">À propos de ce site</a>
+        <a href="about.html#glossary">Glossaire</a>
+        <a href="about.html#sources">Sources</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Données compilées le 28 octobre 2026 à partir des rapports de l’ONU et de l’UNESCO.</p>
+      <p>Appuyez sur <kbd>M</kbd> pour activer ou désactiver les effets sonores, et <kbd>?</kbd> pour afficher tous les raccourcis.</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../index.html" lang="en">English</option><option value="../id/index.html" lang="id">Bahasa Indonesia</option><option value="../es/index.html" lang="es">Español</option><option value="index.html" lang="fr" selected>Français</option><option value="../zh/index.html" lang="zh-CN">中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Raccourcis clavier</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Effets sonores activés ou désactivés, sur chaque page</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Cible, jalon ou diapositive précédent ou suivant</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">à</span><kbd class="k">D</kbd></dt><dd>Répondre à une question du quiz (1 à 4 fonctionnent aussi)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Passer à la question suivante du quiz</dd>
+    <dt><kbd class="k">Espace</kbd></dt><dd>Démarrer ou mettre en pause le minuteur d’étude</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Réinitialiser le minuteur</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Passer à la session de minuteur suivante</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Plein écran sur la page des diapositives</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Afficher cette liste</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "fr-FR", "date": "fr-FR", "short": "fr-FR"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

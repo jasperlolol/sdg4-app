@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz · Éducation de qualité pour tous</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Un quiz ODD 4 de 52 questions avec trois modes, des séries et des effets sonores.">
+<meta property="og:title" content="Quiz · Éducation de qualité pour tous">
+<meta property="og:description" content="Un quiz ODD 4 de 52 questions avec trois modes, des séries et des effets sonores.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Éducation de qualité pour tous">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="quiz">
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Éducation de qualité</span>
+        <span class="brand-sub">pour tous, d’ici 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Principal">
+      <a href="facts.html" data-nav="facts">Faits</a>
+      <a href="targets.html" data-nav="targets">Cibles</a>
+      <a href="explore.html" data-nav="explore">Explorer</a>
+      <a href="solutions.html" data-nav="solutions">Solutions</a>
+      <a href="action.html" data-nav="action">Agir</a>
+      <a href="quiz.html" data-nav="quiz" aria-current="page">Quiz</a>
+      <a href="timer.html" data-nav="timer">Minuteur d’étude</a>
+      <a class="nav-extra" href="about.html" data-nav="about">À propos</a>
+      <a class="nav-extra" href="slides.html">Diapositives pour la classe</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile">Mon profil</a>
+      <a class="nav-extra" href="english.html" data-nav="english">Apprendre l'anglais</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../quiz.html" lang="en">English</option><option value="../id/quiz.html" lang="id">Bahasa Indonesia</option><option value="../es/quiz.html" lang="es">Español</option><option value="quiz.html" lang="fr" selected>Français</option><option value="../zh/quiz.html" lang="zh-CN">中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Rechercher sur le site (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">Rechercher sur le site</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Effets sonores (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Son activé</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../quiz.html" lang="en">English</option><option value="../id/quiz.html" lang="id">Bahasa Indonesia</option><option value="../es/quiz.html" lang="es">Español</option><option value="quiz.html" lang="fr" selected>Français</option><option value="../zh/quiz.html" lang="zh-CN">中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="Diapositives plein écran pour la classe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Présenter</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">Rechercher sur le site</h2>
+      <button class="sd-close" type="button" id="searchClose">Fermer</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">Mots recherchés</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="Essayez : filles, enseignants, lecture, 2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>Aucun résultat. Essayez un autre mot.</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled quiz-head">
+    <div class="ph-inner">
+      <p class="ph-kicker">Quiz</p>
+      <div class="ph-main">
+        <h1 class="ph-title">Que savez-vous de l’ODD 4 ?</h1>
+        <p class="ph-lead"><span id="bankSize">52</span> questions sur l’objectif, ses cibles, les dernières données et leur histoire. Chaque réponse est accompagnée du fait qui la justifie.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section quiz-wrap">
+    <div id="quizStart">
+      <h2 class="section-title">Choisissez un mode</h2>
+      <div class="mode-grid" id="modeGrid"></div>
+      <p class="mode-hint">Répondez avec les touches A à D, appuyez sur Entrée pour la question suivante et sur M pour couper le son. Vos meilleurs scores sont enregistrés dans ce navigateur.</p>
+
+      <section class="chapters-block" aria-labelledby="chaptersTitle">
+        <h2 class="section-title" id="chaptersTitle">Ou jouez par chapitre</h2>
+        <p class="block-note">Chaque chapitre correspond à un thème du quiz, avec toutes les questions sur ce thème. Jouez-les dans l’ordre que vous voulez.</p>
+        <div class="chapter-grid" id="chapterGrid"></div>
+      </section>
+
+      <section class="flash-block" aria-labelledby="flashTitle">
+        <h2 class="section-title" id="flashTitle">Cartes mémoire</h2>
+        <p class="block-note">Parcourez les 52 questions, une carte à la fois. Chaque carte montre la réponse et le fait qui la sous-tend.</p>
+        <button class="btn-outline flash-open" type="button" id="flashOpen">Étudiez les 52 cartes</button>
+      </section>
+
+      <section class="board-block" aria-labelledby="boardTitle">
+        <h2 class="section-title" id="boardTitle">Classement</h2>
+        <p class="block-note">Les scores sont conservés dans ce navigateur : le classement n’affiche donc que les personnes ayant joué sur cet appareil.</p>
+        <div class="board-tabs" id="boardTabs"></div>
+        <ol class="board-list" id="boardList"></ol>
+        <p class="board-empty" id="boardEmpty" hidden>Aucun score sur ce classement pour l’instant. Terminez un quiz et enregistrez votre score pour le voir ici.</p>
+        <button class="btn-ghost board-clear" type="button" id="boardClear" hidden>Effacer le classement</button>
+      </section>
+    </div>
+
+    <div id="flashPlay" hidden>
+      <div class="flash-top">
+        <button class="btn-ghost" type="button" id="flashBack">Retour au quiz</button>
+        <p class="flash-count" id="flashCount" aria-live="polite">1 sur 52</p>
+        <button class="btn-ghost" type="button" id="flashShuffle">Mélanger</button>
+      </div>
+      <div class="flash-track" aria-hidden="true"><span id="flashFill"></span></div>
+      <p class="flash-cat" id="flashCat"></p>
+      <button class="flash-card" type="button" id="flashCard" aria-expanded="false">
+        <span class="flash-front" id="flashFront"></span>
+        <span class="flash-answer" id="flashAnswer" hidden></span>
+      </button>
+      <div class="flash-nav">
+        <button class="btn-outline" type="button" id="flashPrev">Précédent</button>
+        <button class="btn-primary" type="button" id="flashNext">Carte suivante</button>
+      </div>
+      <p class="flash-hint">Cliquez sur la carte ou appuyez sur Espace pour la retourner. Utilisez les flèches pour passer d’une carte à l’autre.</p>
+    </div>
+
+    <div id="quizPlay" hidden>
+      <div class="quiz-progress">
+        <div class="qp-track" aria-hidden="true"><span id="qpFill"></span></div>
+        <p class="qp-text" id="qpText">Question 1 sur 10</p>
+        <div class="qp-right">
+          <span class="streak" id="streakBadge" hidden></span>
+          <p class="qp-score" id="qpScore">Score 0</p>
+        </div>
+      </div>
+      <div class="q-timer" id="qTimer" hidden>
+        <div class="qt-track" aria-hidden="true"><span id="qtFill"></span></div>
+        <p class="qt-secs" id="qtSecs" aria-hidden="true">20 s</p>
+      </div>
+      <div class="q-meta">
+        <span class="q-cat" id="qCat"></span>
+        <button class="lifeline" type="button" id="lifelineBtn" hidden>Utiliser le 50:50</button>
+      </div>
+      <h2 class="quiz-q" id="quizQ" tabindex="-1"></h2>
+      <div class="quiz-options" id="quizOptions" role="group" aria-labelledby="quizQ"></div>
+      <div class="quiz-feedback" id="quizFeedback" aria-live="polite" hidden></div>
+      <div class="quiz-actions">
+        <button class="btn-ghost" type="button" id="quizSpeak">Lire à voix haute</button>
+        <button class="btn-ghost" type="button" id="quizQuit">Quitter</button>
+        <button class="btn-primary" type="button" id="quizNext" hidden>Question suivante</button>
+      </div>
+    </div>
+
+    <div class="result" id="quizResult" hidden>
+      <div class="result-score" id="resultScore">
+        <svg viewBox="0 0 290 190" aria-hidden="true"><path d="M222 44 C190 14 92 12 46 50 C8 82 22 150 112 168 C196 184 268 150 262 92 C258 52 210 26 150 24"/></svg>
+        <p class="rs-num"><span id="rsScore">0</span><span class="rs-of" id="rsOf">/10</span></p>
+      </div>
+      <p class="new-best" id="newBest" hidden>Nouveau record personnel</p>
+      <p class="rs-chapter" id="rsChapter" hidden></p>
+      <h2 class="rs-title" id="rsTitle" tabindex="-1"></h2>
+      <p class="rs-text" id="rsText"></p>
+      <div class="result-stats" id="resultStats"></div>
+      <p class="rs-topics" id="rsTopics"></p>
+      <p class="block-note class-sent" id="classSent" role="status" hidden></p>
+      <form class="save-score" id="saveScore" hidden>
+        <label class="ss-label" for="ssName">Ajoutez votre score au classement</label>
+        <div class="ss-row">
+          <input id="ssName" type="text" maxlength="20" autocomplete="nickname" placeholder="Votre nom">
+          <button class="btn-primary" type="submit" id="ssBtn">Enregistrer le score</button>
+        </div>
+        <p class="ss-msg" id="ssMsg" role="status" tabindex="-1"></p>
+      </form>
+      <div class="result-actions">
+        <button class="btn-primary" type="button" id="quizRetry">Rejouer</button>
+        <button class="btn-outline" type="button" id="quizModes">Choisir un autre mode</button>
+        <button class="btn-outline" type="button" id="quizReviewBtn" aria-expanded="false" aria-controls="quizReview">Revoir les réponses</button>
+        <button class="btn-outline" type="button" id="quizShare">Partager mon score</button>
+      </div>
+      <p class="share-msg" id="shareMsg" role="status" hidden></p>
+      <ol class="review" id="quizReview" hidden></ol>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Éducation de qualité</span>
+          <span class="brand-sub">pour tous, d’ici 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">Projet scolaire indépendant sur l’Objectif de développement durable 4 des Nations unies. Ce n’est pas un site officiel des Nations unies ou de l’UNESCO.</p>
+      <p class="sf-count"><b data-days>1,525</b> jours restants jusqu’à la fin de 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="Toutes les pages">
+      <div class="sf-col">
+        <p class="sf-h">Apprendre</p>
+        <a href="facts.html">Les faits</a>
+        <a href="targets.html">Les 10 cibles</a>
+        <a href="solutions.html">Solutions</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Jouer</p>
+        <a href="explore.html">Explorer</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="english.html">Apprendre l'anglais</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Agir</p>
+        <a href="action.html">Agir</a>
+        <a href="timer.html">Minuteur d’étude</a>
+        <a href="slides.html">Diapositives pour la classe</a>
+        <a href="profile.html">Mon profil</a>
+        <a href="progress.html">Ma progression</a>
+        <a href="download.html">Obtenir l’application</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">À propos</p>
+        <a href="about.html">À propos de ce site</a>
+        <a href="about.html#glossary">Glossaire</a>
+        <a href="about.html#sources">Sources</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Données compilées le 28 octobre 2026 à partir des rapports de l’ONU et de l’UNESCO.</p>
+      <p>Appuyez sur <kbd>M</kbd> pour activer ou désactiver les effets sonores, et <kbd>?</kbd> pour afficher tous les raccourcis.</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../quiz.html" lang="en">English</option><option value="../id/quiz.html" lang="id">Bahasa Indonesia</option><option value="../es/quiz.html" lang="es">Español</option><option value="quiz.html" lang="fr" selected>Français</option><option value="../zh/quiz.html" lang="zh-CN">中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Raccourcis clavier</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Effets sonores activés ou désactivés, sur chaque page</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Cible, jalon ou diapositive précédent ou suivant</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">à</span><kbd class="k">D</kbd></dt><dd>Répondre à une question du quiz (1 à 4 fonctionnent aussi)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Passer à la question suivante du quiz</dd>
+    <dt><kbd class="k">Espace</kbd></dt><dd>Démarrer ou mettre en pause le minuteur d’étude</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Réinitialiser le minuteur</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Passer à la session de minuteur suivante</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Plein écran sur la page des diapositives</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Afficher cette liste</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "fr-FR", "date": "fr-FR", "short": "fr-FR"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

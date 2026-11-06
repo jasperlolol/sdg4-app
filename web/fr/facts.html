@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Les faits · Éducation de qualité pour tous</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Les dernières données de l’ONU et de l’UNESCO sur ceux qui sont scolarisés, ceux qui achèvent, ceux qui apprennent et ceux qui restent sur le bord du chemin.">
+<meta property="og:title" content="Les faits · Éducation de qualité pour tous">
+<meta property="og:description" content="Les dernières données de l’ONU et de l’UNESCO sur ceux qui sont scolarisés, ceux qui achèvent, ceux qui apprennent et ceux qui restent sur le bord du chemin.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Éducation de qualité pour tous">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="facts">
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">Éducation de qualité</span>
+        <span class="brand-sub">pour tous, d’ici 2030</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="Principal">
+      <a href="facts.html" data-nav="facts" aria-current="page">Faits</a>
+      <a href="targets.html" data-nav="targets">Cibles</a>
+      <a href="explore.html" data-nav="explore">Explorer</a>
+      <a href="solutions.html" data-nav="solutions">Solutions</a>
+      <a href="action.html" data-nav="action">Agir</a>
+      <a href="quiz.html" data-nav="quiz">Quiz</a>
+      <a href="timer.html" data-nav="timer">Minuteur d’étude</a>
+      <a class="nav-extra" href="about.html" data-nav="about">À propos</a>
+      <a class="nav-extra" href="slides.html">Diapositives pour la classe</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile">Mon profil</a>
+      <a class="nav-extra" href="english.html" data-nav="english">Apprendre l'anglais</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../facts.html" lang="en">English</option><option value="../id/facts.html" lang="id">Bahasa Indonesia</option><option value="../es/facts.html" lang="es">Español</option><option value="facts.html" lang="fr" selected>Français</option><option value="../zh/facts.html" lang="zh-CN">中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Rechercher sur le site (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">Rechercher sur le site</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="Effets sonores (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">Son activé</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../facts.html" lang="en">English</option><option value="../id/facts.html" lang="id">Bahasa Indonesia</option><option value="../es/facts.html" lang="es">Español</option><option value="facts.html" lang="fr" selected>Français</option><option value="../zh/facts.html" lang="zh-CN">中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="Diapositives plein écran pour la classe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>Présenter</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">Rechercher sur le site</h2>
+      <button class="sd-close" type="button" id="searchClose">Fermer</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">Mots recherchés</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="Essayez : filles, enseignants, lecture, 2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>Aucun résultat. Essayez un autre mot.</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head page-head--margin ruled">
+    <div class="ph-inner">
+      <p class="ph-kicker">Les faits</p>
+      <div class="ph-main">
+        <h1 class="ph-title">Où en est le monde</h1>
+        <p class="ph-lead">Les derniers chiffres sur ceux qui vont à l’école, ceux qui achèvent leur scolarité, ceux qui apprennent et ceux qui restent sur le bord du chemin. Survolez ou touchez les graphiques pour voir les valeurs exactes.</p>
+        <nav class="jump" aria-label="Sur cette page">
+          <a href="#access">Accès</a>
+          <a href="#key-figures">Chiffres clés</a>
+          <a href="#completion">Achèvement</a>
+          <a href="#learning">Apprentissage</a>
+          <a href="#equity">Équité</a>
+          <a href="#resources">Ressources</a>
+          <a href="#sources">Sources</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="sheet sheet--ruled">
+
+    <article class="block" id="access">
+      <div class="margin-note">
+        <p class="mn-label">Accès</p>
+        <p class="mn-src">Sources <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-2" data-src="2">2</a>, <a class="src-ref" href="#src-3" data-src="3">3</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">273 millions sont non scolarisés, et ce nombre augmente</h2>
+        <p class="block-sub">Un enfant, adolescent ou jeune en âge scolaire sur six dans le monde était non scolarisé en 2024. Ce nombre augmente depuis sept ans.</p>
+        <div class="access-grid">
+          <figure class="oos">
+            <figcaption>
+              <h3 class="fig-title">Qui est non scolarisé, par tranche d’âge</h3>
+              <p class="fig-sub">Millions d’enfants, d’adolescents et de jeunes, 2024</p>
+            </figcaption>
+            <div class="stack-labels" id="oosLabels"></div>
+            <div class="stack" id="oosStack" role="img" aria-label="Non scolarisés en 2024 : 79 millions en âge d’école primaire, 64 millions en âge du premier cycle du secondaire et 130 millions en âge du second cycle du secondaire, soit 273 millions au total."></div>
+            <p class="fig-note">Les taux de non-scolarisation vont de 3 % dans les pays à revenu élevé à 36 % dans les pays à faible revenu.</p>
+          </figure>
+          <figure class="one-in-six">
+            <div class="people" aria-hidden="true"></div>
+            <figcaption>
+              <span class="ois-num">1 sur 6</span>
+              <span class="ois-text">est non scolarisé. Le taux de non-scolarisation était de 16,8 % en 2024, à peine inférieur aux 17,4 % de 2015.</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="key-figures">
+      <div class="margin-note">
+        <p class="mn-label">Chiffres clés</p>
+        <p class="mn-src">Sources <a class="src-ref" href="#src-2" data-src="2">2</a>, <a class="src-ref" href="#src-4" data-src="4">4</a>, <a class="src-ref" href="#src-5" data-src="5">5</a>, <a class="src-ref" href="#src-6" data-src="6">6</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="visually-hidden">Chiffres clés</h2>
+        <div class="ledger">
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-num">1.4</span><span class="kpi-unit">milliards</span></p>
+            <p class="kpi-label">élèves inscrits dans les écoles du monde entier (2024)</p>
+            <p class="kpi-detail">327 millions de plus dans le primaire et le secondaire qu’en 2000.</p>
+          </div>
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-num">44</span><span class="kpi-unit">millions</span></p>
+            <p class="kpi-label">enseignants supplémentaires nécessaires d’ici 2030</p>
+            <p class="kpi-detail">Un sur trois, soit 15 millions, se trouve en Afrique subsaharienne.</p>
+          </div>
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-num">739</span><span class="kpi-unit">millions</span></p>
+            <p class="kpi-label">jeunes et adultes ne disposent pas des compétences de base en lecture et en écriture (2024)</p>
+            <p class="kpi-detail">Environ les deux tiers d’entre eux sont des femmes.</p>
+          </div>
+          <div class="kpi">
+            <p class="kpi-value"><span class="kpi-pre">$</span><span class="kpi-num">97</span><span class="kpi-unit">milliards</span></p>
+            <p class="kpi-label">de déficit de financement de l’éducation chaque année</p>
+            <p class="kpi-detail">Ce qui manque aux pays à faible revenu et à revenu intermédiaire de la tranche inférieure pour atteindre leurs propres cibles 2030.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="completion">
+      <div class="margin-note">
+        <p class="mn-label">Achèvement</p>
+        <p class="mn-src">Sources <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-2" data-src="2">2</a>, <a class="src-ref" href="#src-3" data-src="3">3</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Davantage de jeunes achèvent leur scolarité, mais les progrès sont lents</h2>
+        <p class="block-sub">Au rythme actuel, le monde n’atteindrait un achèvement du second cycle du secondaire de 95 % qu’en 2105.</p>
+        <div class="grid-2 grid-2--completion">
+          <figure class="panel">
+            <figcaption>
+              <h3 class="panel-title">Taux d’achèvement dans le monde</h3>
+              <p class="panel-sub">Part des jeunes qui achèvent chaque niveau, 2000 à 2024</p>
+            </figcaption>
+            <ul class="legend" id="slopeLegend"></ul>
+            <div class="chart" id="slopeChart" tabindex="0" role="img" aria-label="Graphique linéaire des taux d’achèvement dans le monde. Primaire : 77 % en 2000, 85 % en 2015, 88 % en 2024. Premier cycle du secondaire : 60 %, 75 %, 78 %. Second cycle du secondaire : 37 %, 53 %, 61 %. Utilisez les flèches pour lire chaque année."></div>
+            <button class="table-toggle" type="button" aria-expanded="false" aria-controls="slopeTable">Afficher le tableau de données</button>
+            <div class="data-table" id="slopeTable" hidden></div>
+          </figure>
+          <figure class="panel">
+            <figcaption>
+              <h3 class="panel-title">Taux d’achèvement par région, 2024</h3>
+              <p class="panel-sub">Chaque ligne indique combien achèvent le primaire, le premier cycle du secondaire et le second cycle du secondaire</p>
+            </figcaption>
+            <ul class="legend" id="regionLegend"></ul>
+            <div class="dotplot" id="regionPlot"></div>
+            <p class="fig-foot">* Océanie hors Australie et Nouvelle-Zélande.</p>
+            <button class="table-toggle" type="button" aria-expanded="false" aria-controls="regionTable">Afficher le tableau de données</button>
+            <div class="data-table" id="regionTable" hidden></div>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="learning">
+      <div class="margin-note">
+        <p class="mn-label">Apprentissage</p>
+        <p class="mn-src">Sources <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-3" data-src="3">3</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Être scolarisé n’est pas la même chose qu’apprendre</h2>
+        <p class="block-sub">Élèves qui atteignent le niveau minimum de compétence à la fin du primaire. Il s’agit de la dernière estimation mondiale, datant de 2019 ; elle n’a pas été actualisée depuis la pandémie.</p>
+        <div class="learning">
+          <figure class="waffle-fig">
+            <div class="waffle" data-value="58" role="img" aria-label="58 élèves sur 100 atteignent le niveau minimum en lecture"></div>
+            <figcaption><span class="wf-num">58</span><span class="wf-text">sur 100 atteignent le niveau minimum en lecture</span></figcaption>
+          </figure>
+          <figure class="waffle-fig">
+            <div class="waffle" data-value="44" role="img" aria-label="44 élèves sur 100 atteignent le niveau minimum en mathématiques"></div>
+            <figcaption><span class="wf-num">44</span><span class="wf-text">sur 100 atteignent le niveau minimum en mathématiques</span></figcaption>
+          </figure>
+          <div class="learning-note">
+            <p class="ln-num">De 59 % à 47 %</p>
+            <p class="ln-text">La part d’élèves ayant des compétences minimales en lecture a diminué entre 2012 et 2022 dans 57 pays, pour la plupart à revenu intermédiaire ou élevé, dont les données sont comparables. En mathématiques, elle est passée de 41 % à 36 %.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="equity">
+      <div class="margin-note">
+        <p class="mn-label">Équité</p>
+        <p class="mn-src">Sources <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-7" data-src="7">7</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Les plus pauvres prennent de plus en plus de retard à chaque niveau</h2>
+        <div class="grid-2 grid-2--equity">
+          <figure class="panel">
+            <figcaption>
+              <h3 class="panel-title">Parmi les 20 % les plus pauvres, ceux qui achèvent leur scolarité, pour 100 des 20 % les plus riches</h3>
+              <p class="panel-sub">À l’échelle mondiale, dernières données de 2019 à 2025. 100 signifierait des chances égales.</p>
+            </figcaption>
+            <div class="parity" id="parityChart"></div>
+            <button class="table-toggle" type="button" aria-expanded="false" aria-controls="parityTable">Afficher le tableau de données</button>
+            <div class="data-table" id="parityTable" hidden></div>
+          </figure>
+          <div class="facts">
+            <div class="fact">
+              <p class="fact-num">Près de 4 sur 10</p>
+              <p class="fact-text">pays n’ont pas atteint la parité de genre dans l’achèvement du primaire. Au second cycle du secondaire, c’est presque 5 sur 6.</p>
+            </div>
+            <div class="fact">
+              <p class="fact-num">76%</p>
+              <p class="fact-text">Les jeunes des zones rurales achèvent le second cycle du secondaire à un taux égal à 76 % de celui de leurs pairs urbains.</p>
+            </div>
+            <div class="fact">
+              <p class="fact-num">18%</p>
+              <p class="fact-text">des filles se marient avant 18 ans (2025), contre 25 % en 2000. Le mariage précoce et les grossesses précoces écartent encore de nombreuses filles de l’école.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="resources">
+      <div class="margin-note">
+        <p class="mn-label">Ressources</p>
+        <p class="mn-src">Sources <a class="src-ref" href="#src-1" data-src="1">1</a>, <a class="src-ref" href="#src-3" data-src="3">3</a>, <a class="src-ref" href="#src-4" data-src="4">4</a>, <a class="src-ref" href="#src-6" data-src="6">6</a></p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">Écoles, enseignants et budgets sont très tendus</h2>
+        <div class="res">
+          <section class="res-col">
+            <h3 class="res-title">Écoles</h3>
+            <div class="res-item"><p class="res-num">Plus d’un sur cinq</p><p class="res-text">des écoles primaires dans le monde n’ont pas l’électricité, d’eau potable sûre ou d’installations sanitaires de base.</p></div>
+            <div class="res-item"><p class="res-num">28%</p><p class="res-text">des écoles des pays à faible revenu ont l’électricité, soit la même proportion qu’en 2015.</p></div>
+          </section>
+          <section class="res-col">
+            <h3 class="res-title">Enseignants</h3>
+            <div class="res-item"><p class="res-num">1 sur 5</p><p class="res-text">des enseignants dans le monde ne répondent pas aux normes minimales de qualification de leur pays (2024).</p></div>
+            <div class="res-item"><p class="res-num">15 millions</p><p class="res-text">enseignants supplémentaires sont nécessaires rien qu’en Afrique subsaharienne d’ici 2030.</p></div>
+          </section>
+          <section class="res-col">
+            <h3 class="res-title">Financement</h3>
+            <div class="res-item"><p class="res-num">7.5%</p><p class="res-text">de l’aide au développement a été consacrée à l’éducation en 2024, sa part la plus faible depuis deux décennies.</p></div>
+            <div class="res-item"><p class="res-num">113</p><p class="res-text">pays, où vivent 6,1 milliards de personnes, consacrent davantage au remboursement de leur dette qu’à l’éducation.</p></div>
+          </section>
+        </div>
+      </div>
+    </article>
+
+    <article class="block" id="sources">
+      <div class="margin-note">
+        <p class="mn-label">Sources</p>
+      </div>
+      <div class="block-body">
+        <h2 class="block-title">D’où viennent les chiffres</h2>
+        <p class="block-sub">Compilé le 28 octobre 2026 à partir des dernières publications de l’UNESCO et des Nations unies. L’année indiquée à côté d’un chiffre est celle à laquelle se rapportent les données.</p>
+        <ol class="sources">
+          <li id="src-1"><span class="src-num">1</span><span><cite>Rapport sur les objectifs de développement durable 2026</cite>, Objectif 4 : Éducation de qualité. Nations unies, Département des affaires économiques et sociales, juillet 2026. <a href="https://unstats.un.org/sdgs/report/2026/The-Sustainable-Development-Goals-Report-2026.pdf" target="_blank" rel="noopener">unstats.un.org/sdgs/report/2026</a></span></li>
+          <li id="src-2"><span class="src-num">2</span><span><cite>Rapport mondial de suivi sur l’éducation 2026 : accès et équité, compte à rebours jusqu’en 2030</cite>. UNESCO, messages clés et communiqué de presse, 25 mars 2026. <a href="https://www.unesco.org/reports/gem-report/en/2026" target="_blank" rel="noopener">unesco.org/reports/gem-report/en/2026</a></span></li>
+          <li id="src-3"><span class="src-num">3</span><span><cite>Rapport mondial de suivi sur l’éducation 2026, chapitre 7 : suivi de l’éducation dans les ODD</cite>. UNESCO, 2026. <a href="https://www.unesco.org/reports/gem-report/en/2026-monitoring-sdg4" target="_blank" rel="noopener">unesco.org/reports/gem-report/en/2026-monitoring-sdg4</a></span></li>
+          <li id="src-4"><span class="src-num">4</span><span><cite>Rapport mondial sur les enseignants : répondre à la pénurie d’enseignants et transformer la profession</cite>. UNESCO et le Groupe de travail international sur les enseignants pour l’éducation 2030, 2024. <a href="https://unesdoc.unesco.org/ark:/48223/pf0000387001" target="_blank" rel="noopener">unesdoc.unesco.org/ark:/48223/pf0000387001</a></span></li>
+          <li id="src-5"><span class="src-num">5</span><span><cite>Journée internationale de l’alphabétisation 2026</cite>. UNESCO, 8 septembre 2026. Au moins 739 millions de jeunes et d’adultes ne disposaient pas de compétences de base en lecture et en écriture en 2024.</span></li>
+          <li id="src-6"><span class="src-num">6</span><span><cite>Les pays peuvent-ils financer leurs repères nationaux de l’ODD 4 ?</cite> Rapport GEM de l’UNESCO, 2023, pour le déficit annuel de 97 milliards de dollars ; constats sur l’aide et la dette publiés par l’UNESCO au Sommet Transformer l’éducation +4, juillet 2026. <a href="https://news.un.org/en/node/1135697" target="_blank" rel="noopener">news.un.org/en/node/1135697</a></span></li>
+          <li id="src-7"><span class="src-num">7</span><span><cite>Rapport GEM sur le genre 2026</cite>. Communiqué de presse de l’UNESCO, 8 octobre 2026. <a href="https://www.unesco.org/en/articles/gender-gaps-education-narrow-globally-yet-early-marriage-remains-major-barrier-girls-education-new" target="_blank" rel="noopener">unesco.org/en/articles/gender-gaps-education-narrow-globally</a></span></li>
+          <li id="src-8"><span class="src-num">8</span><span><cite>Transformer notre monde : le Programme de développement durable à l’horizon 2030</cite>. Résolution A/RES/70/1 de l’Assemblée générale des Nations unies, 2015. Libellé officiel des cibles de l’ODD 4.</span></li>
+        </ol>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">Éducation de qualité</span>
+          <span class="brand-sub">pour tous, d’ici 2030</span>
+        </span>
+      </a>
+      <p class="sf-about">Projet scolaire indépendant sur l’Objectif de développement durable 4 des Nations unies. Ce n’est pas un site officiel des Nations unies ou de l’UNESCO.</p>
+      <p class="sf-count"><b data-days>1,525</b> jours restants jusqu’à la fin de 2030</p>
+    </div>
+    <nav class="sf-cols" aria-label="Toutes les pages">
+      <div class="sf-col">
+        <p class="sf-h">Apprendre</p>
+        <a href="facts.html">Les faits</a>
+        <a href="targets.html">Les 10 cibles</a>
+        <a href="solutions.html">Solutions</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Jouer</p>
+        <a href="explore.html">Explorer</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="english.html">Apprendre l'anglais</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">Agir</p>
+        <a href="action.html">Agir</a>
+        <a href="timer.html">Minuteur d’étude</a>
+        <a href="slides.html">Diapositives pour la classe</a>
+        <a href="profile.html">Mon profil</a>
+        <a href="progress.html">Ma progression</a>
+        <a href="download.html">Obtenir l’application</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">À propos</p>
+        <a href="about.html">À propos de ce site</a>
+        <a href="about.html#glossary">Glossaire</a>
+        <a href="about.html#sources">Sources</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>Données compilées le 28 octobre 2026 à partir des rapports de l’ONU et de l’UNESCO.</p>
+      <p>Appuyez sur <kbd>M</kbd> pour activer ou désactiver les effets sonores, et <kbd>?</kbd> pour afficher tous les raccourcis.</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">Langue</span><select class="lang-sel" aria-label="Langue"><option value="../facts.html" lang="en">English</option><option value="../id/facts.html" lang="id">Bahasa Indonesia</option><option value="../es/facts.html" lang="es">Español</option><option value="facts.html" lang="fr" selected>Français</option><option value="../zh/facts.html" lang="zh-CN">中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">Raccourcis clavier</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>Effets sonores activés ou désactivés, sur chaque page</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>Cible, jalon ou diapositive précédent ou suivant</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">à</span><kbd class="k">D</kbd></dt><dd>Répondre à une question du quiz (1 à 4 fonctionnent aussi)</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>Passer à la question suivante du quiz</dd>
+    <dt><kbd class="k">Espace</kbd></dt><dd>Démarrer ou mettre en pause le minuteur d’étude</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>Réinitialiser le minuteur</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>Passer à la session de minuteur suivante</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>Plein écran sur la page des diapositives</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>Afficher cette liste</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "fr-FR", "date": "fr-FR", "short": "fr-FR"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

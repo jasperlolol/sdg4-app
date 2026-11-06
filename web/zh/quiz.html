@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>测验 · 人人享有优质教育</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="包含52道题、三种模式、连对计分和音效的SDG 4测验。">
+<meta property="og:title" content="测验 · 人人享有优质教育">
+<meta property="og:description" content="包含52道题、三种模式、连对计分和音效的SDG 4测验。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="人人享有优质教育">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="quiz">
+<a class="skip" href="#main">跳到正文</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">优质教育</span>
+        <span class="brand-sub">人人享有 · 2030年前</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="主要内容">
+      <a href="facts.html" data-nav="facts">事实</a>
+      <a href="targets.html" data-nav="targets">具体目标</a>
+      <a href="explore.html" data-nav="explore">探索</a>
+      <a href="solutions.html" data-nav="solutions">解决方案</a>
+      <a href="action.html" data-nav="action">行动起来</a>
+      <a href="quiz.html" data-nav="quiz" aria-current="page">测验</a>
+      <a href="timer.html" data-nav="timer">学习计时器</a>
+      <a class="nav-extra" href="about.html" data-nav="about">关于</a>
+      <a class="nav-extra" href="slides.html">课堂幻灯片</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile">我的资料</a>
+      <a class="nav-extra" href="english.html" data-nav="english">学习英语</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">语言</span><select class="lang-sel" aria-label="语言"><option value="../quiz.html" lang="en">English</option><option value="../id/quiz.html" lang="id">Bahasa Indonesia</option><option value="../es/quiz.html" lang="es">Español</option><option value="../fr/quiz.html" lang="fr">Français</option><option value="quiz.html" lang="zh-CN" selected>中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="搜索本站 (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">搜索本站</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="音效 (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">声音开启</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">语言</span><select class="lang-sel" aria-label="语言"><option value="../quiz.html" lang="en">English</option><option value="../id/quiz.html" lang="id">Bahasa Indonesia</option><option value="../es/quiz.html" lang="es">Español</option><option value="../fr/quiz.html" lang="fr">Français</option><option value="quiz.html" lang="zh-CN" selected>中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="课堂全屏幻灯片">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>演示</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">菜单</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">搜索本站</h2>
+      <button class="sd-close" type="button" id="searchClose">关闭</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">搜索词</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="试试：女孩、教师、阅读、2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>没有找到结果。请试试其他词语。</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled quiz-head">
+    <div class="ph-inner">
+      <p class="ph-kicker">测验</p>
+      <div class="ph-main">
+        <h1 class="ph-title">你对SDG 4了解多少？</h1>
+        <p class="ph-lead"><span id="bankSize">52</span> 道题，涵盖该目标、其具体目标、最新数据及其背景历史。每个答案都附有相应的数据。</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section quiz-wrap">
+    <div id="quizStart">
+      <h2 class="section-title">选择模式</h2>
+      <div class="mode-grid" id="modeGrid"></div>
+      <p class="mode-hint">使用A至D键作答，按Enter进入下一题，按M关闭声音。你的最高分保存在本浏览器中。</p>
+
+      <section class="chapters-block" aria-labelledby="chaptersTitle">
+        <h2 class="section-title" id="chaptersTitle">或按章节练习</h2>
+        <p class="block-note">每个章节对应测验中的一个主题，包含该主题的全部题目。可按任意顺序练习。</p>
+        <div class="chapter-grid" id="chapterGrid"></div>
+      </section>
+
+      <section class="flash-block" aria-labelledby="flashTitle">
+        <h2 class="section-title" id="flashTitle">记忆卡片</h2>
+        <p class="block-note">逐张浏览全部52道题，每张卡片都显示答案和背后的事实。</p>
+        <button class="btn-outline flash-open" type="button" id="flashOpen">学习52张记忆卡片</button>
+      </section>
+
+      <section class="board-block" aria-labelledby="boardTitle">
+        <h2 class="section-title" id="boardTitle">排行榜</h2>
+        <p class="block-note">分数保存在本浏览器中，因此排行榜只显示在本设备上玩过的人。</p>
+        <div class="board-tabs" id="boardTabs"></div>
+        <ol class="board-list" id="boardList"></ol>
+        <p class="board-empty" id="boardEmpty" hidden>排行榜上还没有分数。完成一次测验并保存分数，即可在此查看。</p>
+        <button class="btn-ghost board-clear" type="button" id="boardClear" hidden>清空排行榜</button>
+      </section>
+    </div>
+
+    <div id="flashPlay" hidden>
+      <div class="flash-top">
+        <button class="btn-ghost" type="button" id="flashBack">返回测验</button>
+        <p class="flash-count" id="flashCount" aria-live="polite">第1张，共52张</p>
+        <button class="btn-ghost" type="button" id="flashShuffle">打乱顺序</button>
+      </div>
+      <div class="flash-track" aria-hidden="true"><span id="flashFill"></span></div>
+      <p class="flash-cat" id="flashCat"></p>
+      <button class="flash-card" type="button" id="flashCard" aria-expanded="false">
+        <span class="flash-front" id="flashFront"></span>
+        <span class="flash-answer" id="flashAnswer" hidden></span>
+      </button>
+      <div class="flash-nav">
+        <button class="btn-outline" type="button" id="flashPrev">上一个</button>
+        <button class="btn-primary" type="button" id="flashNext">下一张卡片</button>
+      </div>
+      <p class="flash-hint">点击卡片或按空格键翻面。使用方向键切换卡片。</p>
+    </div>
+
+    <div id="quizPlay" hidden>
+      <div class="quiz-progress">
+        <div class="qp-track" aria-hidden="true"><span id="qpFill"></span></div>
+        <p class="qp-text" id="qpText">第1题，共10题</p>
+        <div class="qp-right">
+          <span class="streak" id="streakBadge" hidden></span>
+          <p class="qp-score" id="qpScore">得分 0</p>
+        </div>
+      </div>
+      <div class="q-timer" id="qTimer" hidden>
+        <div class="qt-track" aria-hidden="true"><span id="qtFill"></span></div>
+        <p class="qt-secs" id="qtSecs" aria-hidden="true">20秒</p>
+      </div>
+      <div class="q-meta">
+        <span class="q-cat" id="qCat"></span>
+        <button class="lifeline" type="button" id="lifelineBtn" hidden>使用50:50</button>
+      </div>
+      <h2 class="quiz-q" id="quizQ" tabindex="-1"></h2>
+      <div class="quiz-options" id="quizOptions" role="group" aria-labelledby="quizQ"></div>
+      <div class="quiz-feedback" id="quizFeedback" aria-live="polite" hidden></div>
+      <div class="quiz-actions">
+        <button class="btn-ghost" type="button" id="quizSpeak">朗读</button>
+        <button class="btn-ghost" type="button" id="quizQuit">退出</button>
+        <button class="btn-primary" type="button" id="quizNext" hidden>下一题</button>
+      </div>
+    </div>
+
+    <div class="result" id="quizResult" hidden>
+      <div class="result-score" id="resultScore">
+        <svg viewBox="0 0 290 190" aria-hidden="true"><path d="M222 44 C190 14 92 12 46 50 C8 82 22 150 112 168 C196 184 268 150 262 92 C258 52 210 26 150 24"/></svg>
+        <p class="rs-num"><span id="rsScore">0</span><span class="rs-of" id="rsOf">/10</span></p>
+      </div>
+      <p class="new-best" id="newBest" hidden>个人新纪录</p>
+      <p class="rs-chapter" id="rsChapter" hidden></p>
+      <h2 class="rs-title" id="rsTitle" tabindex="-1"></h2>
+      <p class="rs-text" id="rsText"></p>
+      <div class="result-stats" id="resultStats"></div>
+      <p class="rs-topics" id="rsTopics"></p>
+      <p class="block-note class-sent" id="classSent" role="status" hidden></p>
+      <form class="save-score" id="saveScore" hidden>
+        <label class="ss-label" for="ssName">将你的分数加入排行榜</label>
+        <div class="ss-row">
+          <input id="ssName" type="text" maxlength="20" autocomplete="nickname" placeholder="你的名字">
+          <button class="btn-primary" type="submit" id="ssBtn">保存分数</button>
+        </div>
+        <p class="ss-msg" id="ssMsg" role="status" tabindex="-1"></p>
+      </form>
+      <div class="result-actions">
+        <button class="btn-primary" type="button" id="quizRetry">再玩一次</button>
+        <button class="btn-outline" type="button" id="quizModes">选择其他模式</button>
+        <button class="btn-outline" type="button" id="quizReviewBtn" aria-expanded="false" aria-controls="quizReview">查看答案</button>
+        <button class="btn-outline" type="button" id="quizShare">分享我的分数</button>
+      </div>
+      <p class="share-msg" id="shareMsg" role="status" hidden></p>
+      <ol class="review" id="quizReview" hidden></ol>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">优质教育</span>
+          <span class="brand-sub">人人享有 · 2030年前</span>
+        </span>
+      </a>
+      <p class="sf-about">一个关于联合国可持续发展目标4的独立学校项目。它并非联合国或联合国教科文组织的官方网站。</p>
+      <p class="sf-count"><b data-days>1,525</b> 天后即2030年底</p>
+    </div>
+    <nav class="sf-cols" aria-label="全部页面">
+      <div class="sf-col">
+        <p class="sf-h">学习</p>
+        <a href="facts.html">事实数据</a>
+        <a href="targets.html">十项具体目标</a>
+        <a href="solutions.html">解决方案</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">游戏</p>
+        <a href="explore.html">探索</a>
+        <a href="quiz.html">测验</a>
+        <a href="english.html">学习英语</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">行动</p>
+        <a href="action.html">行动起来</a>
+        <a href="timer.html">学习计时器</a>
+        <a href="slides.html">课堂幻灯片</a>
+        <a href="profile.html">我的资料</a>
+        <a href="progress.html">我的进度</a>
+        <a href="download.html">获取应用</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">关于</p>
+        <a href="about.html">关于本站</a>
+        <a href="about.html#glossary">术语表</a>
+        <a href="about.html#sources">资料来源</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>数据于2026年10月28日根据联合国和联合国教科文组织的报告汇编。</p>
+      <p>按 <kbd>M</kbd> 开启或关闭音效，并按 <kbd>?</kbd> 查看所有快捷键。</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">语言</span><select class="lang-sel" aria-label="语言"><option value="../quiz.html" lang="en">English</option><option value="../id/quiz.html" lang="id">Bahasa Indonesia</option><option value="../es/quiz.html" lang="es">Español</option><option value="../fr/quiz.html" lang="fr">Français</option><option value="quiz.html" lang="zh-CN" selected>中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">键盘快捷键</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>开启或关闭音效，适用于每个页面</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>上一个或下一个目标、里程碑或幻灯片</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">至</span><kbd class="k">D</kbd></dt><dd>回答测验题目（数字键1至4也可以）</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>进入下一道测验题</dd>
+    <dt><kbd class="k">空格键</kbd></dt><dd>开始或暂停学习计时器</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>重置计时器</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>跳到下一个计时时段</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>幻灯片页面全屏显示</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>显示此列表</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "zh-CN", "date": "zh-CN", "short": "zh-CN"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>

@@ -13,6 +13,9 @@
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
 <link rel="stylesheet" href="site.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -41,6 +44,9 @@
       <a href="timer.html" data-nav="timer">Study timer</a>
       <a class="nav-extra" href="about.html" data-nav="about" aria-current="page">About</a>
       <a class="nav-extra" href="slides.html">Slides for class</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile">My profile</a>
+      <a class="nav-extra" href="english.html" data-nav="english">Learn English</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">Language</span><select class="lang-sel" aria-label="Language"><option value="about.html" lang="en" selected>English</option><option value="id/about.html" lang="id">Bahasa Indonesia</option><option value="es/about.html" lang="es">Español</option><option value="fr/about.html" lang="fr">Français</option><option value="zh/about.html" lang="zh-CN">中文</option></select></div>
     </nav>
     <div class="sh-actions">
       <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="Search the site (/)">
@@ -52,6 +58,7 @@
         <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
         <span class="sound-label" id="soundLabel">Sound on</span>
       </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">Language</span><select class="lang-sel" aria-label="Language"><option value="about.html" lang="en" selected>English</option><option value="id/about.html" lang="id">Bahasa Indonesia</option><option value="es/about.html" lang="es">Español</option><option value="fr/about.html" lang="fr">Français</option><option value="zh/about.html" lang="zh-CN">中文</option></select></span>
       <a class="btn-present" href="slides.html" title="Full-screen slides for class">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
         <span>Present</span>
@@ -203,12 +210,14 @@
         <p class="sf-h">Play</p>
         <a href="explore.html">Explore</a>
         <a href="quiz.html">Quiz</a>
+        <a href="english.html">Learn English</a>
       </div>
       <div class="sf-col">
         <p class="sf-h">Do</p>
         <a href="action.html">Take action</a>
         <a href="timer.html">Study timer</a>
         <a href="slides.html">Slides for class</a>
+        <a href="profile.html">My profile</a>
         <a href="progress.html">My progress</a>
         <a href="download.html">Get the app</a>
       </div>
@@ -224,6 +233,7 @@
     <div class="sf-base-inner">
       <p>Data compiled on 28 October 2026 from UN and UNESCO reports.</p>
       <p>Press <kbd>M</kbd> to turn sound effects on or off, and <kbd>?</kbd> for all shortcuts.</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">Language</span><select class="lang-sel" aria-label="Language"><option value="about.html" lang="en" selected>English</option><option value="id/about.html" lang="id">Bahasa Indonesia</option><option value="es/about.html" lang="es">Español</option><option value="fr/about.html" lang="fr">Français</option><option value="zh/about.html" lang="zh-CN">中文</option></select></div>
     </div>
   </div>
 </footer>
@@ -251,6 +261,7 @@
 </dialog>
 
 </div>
+<script>window.SDG4_LOCALES = {"num": "en-US", "date": "en-GB"};</script>
 <script src="site.js"></script>
 <script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
 </body>
