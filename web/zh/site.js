@@ -17,9 +17,15 @@
     return n;
   };
   const SVGNS = 'http://www.w3.org/2000/svg';
+  // SVG attributes cannot read CSS variables, so a var(--name) colour is looked up from the page when it is drawn.
+  const cssValue = (v) => {
+    if (typeof v !== 'string' || v.indexOf('var(--') !== 0) return v;
+    const root = document.querySelector('.site') || document.documentElement;
+    return getComputedStyle(root).getPropertyValue(v.slice(4, -1)).trim() || v;
+  };
   const sv = (tag, attrs, parent) => {
     const n = document.createElementNS(SVGNS, tag);
-    if (attrs) Object.keys(attrs).forEach((k) => n.setAttribute(k, attrs[k]));
+    if (attrs) Object.keys(attrs).forEach((k) => n.setAttribute(k, cssValue(attrs[k])));
     if (parent) parent.appendChild(n);
     return n;
   };
@@ -46,6 +52,8 @@
     },
     set(key, value) {
       try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* storage unavailable */ }
+      // Tell the badge check that something was saved.
+      window.dispatchEvent(new CustomEvent('sdg4:save', { detail: key }));
     }
   };
   const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -214,9 +222,9 @@
 
   // One red hue, three lightness steps: education levels are an ordered sequence.
   const LEVELS = [
-    { key: 'primary', name: '小学', color: '#7A1526' },
-    { key: 'lower', name: '初中', color: '#B8344A' },
-    { key: 'upper', name: '高中', color: '#E58B98' }
+    { key: 'primary', name: '小学', color: 'var(--chart-1)' },
+    { key: 'lower', name: '初中', color: 'var(--chart-2)' },
+    { key: 'upper', name: '高中', color: 'var(--chart-3)' }
   ];
 
   // Completion rate worldwide (%). 2000: UNESCO GEM Report 2026. 2015 and 2024: UN SDG Report 2026.
@@ -242,9 +250,9 @@
 
   // Out of school by age group, 2024, millions: GEM Report 2026, ch. 7.
   const OOS = [
-    { value: 79, name: '小学学龄', color: '#7A1526' },
-    { value: 64, name: '初中学龄', color: '#B8344A' },
-    { value: 130, name: '高中学龄', color: '#E58B98' }
+    { value: 79, name: '小学学龄', color: 'var(--chart-1)' },
+    { value: 64, name: '初中学龄', color: 'var(--chart-2)' },
+    { value: 130, name: '高中学龄', color: 'var(--chart-3)' }
   ];
 
   // Completion of the poorest 20% for every 100 of the richest 20% (parity index x 100): UN SDG Report 2026.
@@ -762,7 +770,7 @@
     const v = Number(host.dataset.value);
     for (let i = 0; i < 100; i++) {
       const c = h('i');
-      if (i < v) c.className = 'on';
+      if (i < v) c.className = '开启';
       host.appendChild(c);
     }
   }
@@ -1568,7 +1576,7 @@
     $('#flashAnswer').hidden = !show;
     $('#flashCard').setAttribute('aria-expanded', String(show));
     if (show) {
-      const idx = fcState.order[fcState.i];
+      const idx = ALL_QUIZ.indexOf(QUIZ[fcState.order[fcState.i]]); // position in the full bank, which does not change
       const seen = fcSeen();
       if (seen.indexOf(idx) < 0) store.set('sdg4.flash', seen.concat(idx));
     }
@@ -1695,6 +1703,7 @@
     if (total && quiz.correct === total) lifetime.perfect = (lifetime.perfect || 0) + 1;
     lifetime.bestStreak = Math.max(lifetime.bestStreak || 0, quiz.bestStreak);
     store.set('sdg4.stats', lifetime);
+    sendQuizScore({ pct: Math.round(ratio * 100), correct: quiz.correct, total, chapter: quiz.chapter || '', at: new Date().toISOString() });
 
     const ring = $('#resultScore');
     ring.classList.remove('is-drawn');
@@ -1788,7 +1797,7 @@
     const done = Math.min(timer.cycle, timer.s.every);
     for (let i = 0; i < timer.s.every; i++) {
       const dot = h('span');
-      if (i < done) dot.className = 'on';
+      if (i < done) dot.className = '开启';
       host.appendChild(dot);
     }
     const left = timer.s.every - done;
@@ -2709,7 +2718,8 @@
     bar.appendChild(fill);
     const toTop = h('button', 'to-top', '返回顶部');
     toTop.type = 'button';
-    document.body.append(bar, toTop);
+    // Inside the page's own .site wrapper, so the bar and button take that page's colours.
+    ($('.site') || document.body).append(bar, toTop);
     let ticking = false;
     const update = () => {
       ticking = false;
@@ -2792,6 +2802,67 @@
     { name: '打造你自己的', text: '在“行动起来”页面制定你自己的承诺。', earned: () => { const p = store.get('sdg4.pledge', null); return !!(p && p.made); } },
     { name: '勇敢发声', text: '将一个分数保存到排行榜。', earned: () => readBoard().length > 0 }
   ];
+
+  /* A pop-up when a badge is first earned. Badges already earned are remembered, so they do not pop up again. */
+  const BADGE_SEEN_KEY = 'sdg4.badges.got';
+  const badgeLine = [];
+  let badgeBusy = false;
+  let badgeToast = null;
+  let badgeHideTimer = null;
+  function buildBadgeToast() {
+    const box = h('div', 'badge-toast');
+    box.id = 'badgeToast';
+    box.setAttribute('role', 'status');
+    box.setAttribute('aria-live', 'polite');
+    box.hidden = true;
+    const icon = h('span', 'badge-toast-icon', '★');
+    icon.setAttribute('aria-hidden', 'true');
+    const body = h('div', 'badge-toast-body');
+    const see = h('a', 'badge-toast-link', '查看我的徽章');
+    see.href = 'progress.html';
+    body.append(h('p', 'badge-toast-kicker', '获得徽章！'), h('p', 'badge-toast-name'), h('p', 'badge-toast-text'), see);
+    const close = h('button', 'badge-toast-close', '关闭');
+    close.type = 'button';
+    close.addEventListener('click', hideBadgeToast);
+    box.append(icon, body, close);
+    document.body.appendChild(box);
+    return box;
+  }
+  function showNextBadge() {
+    if (badgeBusy || !badgeLine.length) return;
+    badgeBusy = true;
+    const b = badgeLine.shift();
+    if (!badgeToast) badgeToast = buildBadgeToast();
+    badgeToast.querySelector('.badge-toast-name').textContent = b.name;
+    badgeToast.querySelector('.badge-toast-text').textContent = b.text;
+    badgeToast.hidden = false;
+    badgeToast.classList.remove('is-in');
+    void badgeToast.offsetWidth;
+    badgeToast.classList.add('is-in');
+    badgeHideTimer = setTimeout(hideBadgeToast, 7000);
+  }
+  function hideBadgeToast() {
+    clearTimeout(badgeHideTimer);
+    if (badgeToast) badgeToast.hidden = true;
+    badgeBusy = false;
+    showNextBadge();
+  }
+  function checkBadges() {
+    const now = BADGES.filter((b) => b.earned()).map((b) => b.name);
+    const seen = store.get(BADGE_SEEN_KEY, null);
+    // First time: remember what is already earned, without a pop-up.
+    if (!Array.isArray(seen)) {
+      store.set(BADGE_SEEN_KEY, now);
+      return;
+    }
+    const fresh = BADGES.filter((b) => now.indexOf(b.name) >= 0 && seen.indexOf(b.name) < 0);
+    if (!fresh.length) return;
+    store.set(BADGE_SEEN_KEY, seen.concat(fresh.map((b) => b.name)));
+    fresh.forEach((b) => badgeLine.push(b));
+    showNextBadge();
+  }
+  window.addEventListener('sdg4:save', (e) => { if (e.detail !== BADGE_SEEN_KEY) checkBadges(); });
+  checkBadges();
 
   function renderProgress() {
     const stats = getStats();
@@ -2887,6 +2958,7 @@
     savedKeys().forEach((k) => {
       try { window.localStorage.removeItem(k); } catch (e) { /* storage unavailable */ }
     });
+    try { window.localStorage.removeItem(CLOUD_AUTH_KEY); } catch (e) { /* storage unavailable */ }
     btn.textContent = '清除本设备上的我的数据';
     btn.classList.remove('is-armed');
     renderProgress();
@@ -2939,6 +3011,1764 @@
     initCertificate();
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Profile, teacher mode and classrooms                                */
+  /* ------------------------------------------------------------------ */
+  /* Classrooms live in a shared Firestore database. The site talks to it with plain requests,
+     so no extra script is loaded. The keys go below: the project ID and the Web API key from
+     the Firebase project. Until they are here, profiles and teacher mode still work on this
+     device, and the classroom tools say that they are not set up yet. */
+  const CLOUD = { projectId: 'jaspers-website-4ddc6', apiKey: 'AIzaSyDbVIRD2y-pkT5Fk7ZmJUgsTchxbloOPwg' };
+  const PROFILE_KEY = 'sdg4.profile';
+  const TEACHER_PASSWORD = 'NoHesi12345';
+  const JOINED_KEY = 'sdg4.classrooms';
+  const CLOUD_AUTH_KEY = 'sdg4cloud.auth';
+  const PROFILE_EMOJI = ['🦉', '🦊', '🐼', '🐯', '🦁', '🐸', '🐙', '🌟', '🚀', '📚', '🌍', '🎨'];
+  const PROFILE_COLOURS = [
+    { name: '红色', value: '#861A2B' },
+    { name: '玫瑰色', value: '#B8344A' },
+    { name: '绿色', value: '#1F6F5C' },
+    { name: '蓝色', value: '#2D5BA8' },
+    { name: '金色', value: '#8A5A12' },
+    { name: '紫色', value: '#5B3F8C' }
+  ];
+  /* No I, L, O, 0 or 1, so that codes are easy to read aloud. */
+  const CODE_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const CLOUD_OFF = '本网站尚未设置班级功能。';
+  const CLOUD_ERROR = '无法连接班级数据库。请检查网络连接后重试。';
+  const cloudReady = () => !!(CLOUD.projectId && CLOUD.apiKey);
+  /* Untouched copies of the quiz and the facts. A student's device takes turned-off items out of QUIZ and FACTS,
+     but the teacher's list always uses these full copies, and their numbers match the build order. */
+  const ALL_QUIZ = QUIZ.slice();
+  const ALL_FACTS = FACTS.slice();
+
+  const defaultProfile = () => ({ nickname: '', emoji: PROFILE_EMOJI[0], colour: PROFILE_COLOURS[0].value, bio: '', teacher: false });
+  const cleanProfile = (p) => ({
+    nickname: String(p.nickname || '').trim().replace(/\s+/g, ' ').slice(0, 20),
+    emoji: PROFILE_EMOJI.indexOf(p.emoji) >= 0 ? p.emoji : PROFILE_EMOJI[0],
+    colour: PROFILE_COLOURS.some((c) => c.value === p.colour) ? p.colour : PROFILE_COLOURS[0].value,
+    bio: String(p.bio || '').trim().slice(0, 120),
+    teacher: p.teacher === true
+  });
+  const loadProfile = () => cleanProfile(Object.assign(defaultProfile(), store.get(PROFILE_KEY, {}) || {}));
+  const loadJoined = () => {
+    const list = store.get(JOINED_KEY, []);
+    if (!Array.isArray(list)) return [];
+    return list
+      .filter((c) => c && typeof c.code === 'string' && /^[A-Z0-9]{6}$/.test(c.code))
+      .map((c) => ({ code: c.code, name: String(c.name || '班级').slice(0, 60) }));
+  };
+  const saveJoined = (list) => store.set(JOINED_KEY, list);
+
+  /* Requests to the database. Firestore's REST format wraps every value in a type. */
+  async function cloudCall(url, method, body, type, token) {
+    const headers = {};
+    if (type) headers['Content-Type'] = type;
+    if (token) headers.Authorization = 'Bearer ' + token;
+    let res;
+    try {
+      res = await fetch(url, { method, headers, body });
+    } catch (e) {
+      throw new Error('offline');
+    }
+    let data = null;
+    try { data = await res.json(); } catch (e) { data = null; }
+    if (!res.ok) {
+      const err = new Error((data && data.error && data.error.message) || 'HTTP ' + res.status);
+      err.status = res.status;
+      throw err;
+    }
+    return data;
+  }
+
+  /* Each browser gets an anonymous account, so a teacher's classrooms belong to that browser.
+     The account is kept under its own key, which the progress file does not include. */
+  let signingIn = null;
+  function cloudAuth() {
+    if (!signingIn) signingIn = cloudSignIn().finally(() => { signingIn = null; });
+    return signingIn;
+  }
+  async function cloudSignIn() {
+    const key = encodeURIComponent(CLOUD.apiKey);
+    const saved = store.get(CLOUD_AUTH_KEY, null);
+    if (saved && saved.uid && saved.token && saved.until > Date.now() + 60000) return saved;
+    const keep = (uid, token, refresh, seconds) => {
+      const auth = { uid, token, refresh, until: Date.now() + Number(seconds) * 1000 };
+      store.set(CLOUD_AUTH_KEY, auth);
+      return auth;
+    };
+    if (saved && saved.refresh) {
+      try {
+        const r = await cloudCall('https://securetoken.googleapis.com/v1/token?key=' + key, 'POST',
+          'grant_type=refresh_token&refresh_token=' + encodeURIComponent(saved.refresh),
+          'application/x-www-form-urlencoded');
+        return keep(r.user_id, r.id_token, r.refresh_token, r.expires_in);
+      } catch (e) {
+        /* Only a sign-in the database no longer accepts starts a new account. A dropped connection keeps the old one. */
+        if (e.status !== 400) throw e;
+      }
+    }
+    const r = await cloudCall('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + key, 'POST',
+      JSON.stringify({ returnSecureToken: true }), 'application/json');
+    return keep(r.localId, r.idToken, r.refreshToken, r.expiresIn);
+  }
+
+  const docsUrl = () => 'https://firestore.googleapis.com/v1/projects/' + encodeURIComponent(CLOUD.projectId) + '/databases/(default)/documents';
+  function fsValue(v) {
+    if (v === null || v === undefined) return { nullValue: null };
+    if (typeof v === 'string') return { stringValue: v };
+    if (typeof v === 'boolean') return { booleanValue: v };
+    if (typeof v === 'number') return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+    if (Array.isArray(v)) return { arrayValue: { values: v.map(fsValue) } };
+    return { mapValue: { fields: fsFields(v) } };
+  }
+  function fsFields(obj) {
+    const fields = {};
+    Object.keys(obj).forEach((k) => { fields[k] = fsValue(obj[k]); });
+    return fields;
+  }
+  function fsDecode(v) {
+    if (!v) return null;
+    if ('stringValue' in v) return v.stringValue;
+    if ('integerValue' in v) return Number(v.integerValue);
+    if ('doubleValue' in v) return Number(v.doubleValue);
+    if ('booleanValue' in v) return v.booleanValue;
+    if ('arrayValue' in v) return (v.arrayValue.values || []).map(fsDecode);
+    if ('mapValue' in v) return fsRead(v.mapValue.fields);
+    return null;
+  }
+  function fsRead(fields) {
+    const out = {};
+    Object.keys(fields || {}).forEach((k) => { out[k] = fsDecode(fields[k]); });
+    return out;
+  }
+  const fsId = (doc) => String(doc.name || '').split('/').pop();
+
+  async function fsRequest(method, path, body, query) {
+    const auth = await cloudAuth();
+    return cloudCall(docsUrl() + path + (query || ''), method,
+      body === undefined ? undefined : JSON.stringify(body),
+      body === undefined ? '' : 'application/json', auth.token);
+  }
+  async function fsList(path) {
+    const docs = [];
+    let token = '';
+    for (let page = 0; page < 10; page++) {
+      const res = await fsRequest('GET', path, undefined, '?pageSize=300' + (token ? '&pageToken=' + encodeURIComponent(token) : ''));
+      (res.documents || []).forEach((d) => docs.push(d));
+      token = res.nextPageToken || '';
+      if (!token) break;
+    }
+    return docs;
+  }
+
+  function randomCode() {
+    const bytes = new Uint32Array(6);
+    window.crypto.getRandomValues(bytes);
+    let code = '';
+    bytes.forEach((b) => { code += CODE_CHARS.charAt(b % CODE_CHARS.length); });
+    return code;
+  }
+
+  async function cloudMakeClass(name) {
+    const uid = (await cloudAuth()).uid;
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const code = randomCode();
+      try {
+        await fsRequest('POST', '/classrooms', { fields: fsFields({ name, teacherUid: uid, created: new Date().toISOString() }) }, '?documentId=' + code);
+        return code;
+      } catch (e) {
+        if (e.status !== 409) throw e; /* 409: that code is already in use, so try another */
+      }
+    }
+    throw new Error('no free code');
+  }
+
+  async function cloudMyClasses() {
+    const uid = (await cloudAuth()).uid;
+    const rows = await fsRequest('POST', ':runQuery', {
+      structuredQuery: {
+        from: [{ collectionId: 'classrooms' }],
+        where: { fieldFilter: { field: { fieldPath: 'teacherUid' }, op: 'EQUAL', value: { stringValue: uid } } }
+      }
+    });
+    return (rows || []).filter((r) => r.document).map((r) => {
+      const f = fsRead(r.document.fields);
+      return { code: fsId(r.document), name: f.name || '班级', created: f.created || '' };
+    }).sort((a, b) => (a.created < b.created ? 1 : -1));
+  }
+
+  async function cloudRoster(code) {
+    const [members, scores] = await Promise.all([
+      fsList('/classrooms/' + code + '/members'),
+      fsList('/classrooms/' + code + '/scores')
+    ]);
+    return {
+      members: members.map((d) => Object.assign({ uid: fsId(d) }, fsRead(d.fields))),
+      scores: scores.map((d) => Object.assign({ id: fsId(d) }, fsRead(d.fields)))
+    };
+  }
+
+  async function cloudRemoveMember(code, uid) {
+    const scores = await fsList('/classrooms/' + code + '/scores');
+    const mine = scores.filter((d) => fsRead(d.fields).uid === uid);
+    await Promise.all(mine.map((d) => fsRequest('DELETE', '/classrooms/' + code + '/scores/' + fsId(d))));
+    await fsRequest('DELETE', '/classrooms/' + code + '/members/' + uid);
+  }
+
+  /* Deleting the classroom document does not remove what is stored under it, so each part is removed first. */
+  async function cloudDeleteClass(code) {
+    const [{ members, scores }, assessments] = await Promise.all([cloudRoster(code), fsList('/classrooms/' + code + '/assessments')]);
+    await Promise.all([
+      ...scores.map((s) => fsRequest('DELETE', '/classrooms/' + code + '/scores/' + s.id)),
+      ...members.map((m) => fsRequest('DELETE', '/classrooms/' + code + '/members/' + m.uid)),
+      ...assessments.map((d) => fsRequest('DELETE', '/classrooms/' + code + '/assessments/' + fsId(d)))
+    ]);
+    await fsRequest('DELETE', '/classrooms/' + code);
+  }
+
+  async function cloudPutMember(code, p) {
+    const uid = (await cloudAuth()).uid;
+    await fsRequest('PATCH', '/classrooms/' + code + '/members/' + uid, {
+      fields: fsFields({ uid, nickname: p.nickname, emoji: p.emoji, colour: p.colour, bio: p.bio || '', updated: new Date().toISOString() })
+    });
+  }
+
+  /* Returns the classroom's name, or null when no classroom has that code. */
+  async function cloudJoin(code, p) {
+    let doc;
+    try {
+      doc = await fsRequest('GET', '/classrooms/' + code);
+    } catch (e) {
+      if (e.status === 404) return null;
+      throw e;
+    }
+    await cloudPutMember(code, p);
+    return fsRead(doc.fields).name || '班级';
+  }
+
+  async function cloudLeave(code) {
+    const uid = (await cloudAuth()).uid;
+    await fsRequest('DELETE', '/classrooms/' + code + '/members/' + uid);
+  }
+
+  async function cloudPostScore(code, entry) {
+    const uid = (await cloudAuth()).uid;
+    await fsRequest('POST', '/classrooms/' + code + '/scores', { fields: fsFields(Object.assign({ uid }, entry)) });
+  }
+
+  /* Turned-off pages. Each entry is a page a teacher can switch off, with its file and its English name. */
+  const TURNABLE_PAGES = [
+    { slug: 'facts', file: 'facts.html', name: '事实数据' },
+    { slug: 'targets', file: 'targets.html', name: '十项具体目标' },
+    { slug: 'explore', file: 'explore.html', name: '探索' },
+    { slug: 'solutions', file: 'solutions.html', name: '解决方案' },
+    { slug: 'action', file: 'action.html', name: '行动起来' },
+    { slug: 'quiz', file: 'quiz.html', name: '测验' },
+    { slug: 'english', file: 'english.html', name: '学习英语' },
+    { slug: 'timer', file: 'timer.html', name: '学习计时器' },
+    { slug: 'about', file: 'about.html', name: '关于' },
+    { slug: 'slides', file: 'slides.html', name: '幻灯片' }
+  ];
+  const clampList = (v, max) => (Array.isArray(v) ? v : []).slice(0, max);
+  const isIndex = (n, size) => Number.isInteger(n) && n >= 0 && n < size;
+
+  /* Classroom settings as the database returns them. Bad values are dropped, so a bad write cannot break a page. */
+  function cleanRules(f) {
+    return {
+      offPages: clampList(f.offPages, 20).filter((s) => TURNABLE_PAGES.some((p) => p.slug === s)),
+      offFacts: clampList(f.offFacts, 100).filter((n) => isIndex(n, ALL_FACTS.length)),
+      offQuiz: clampList(f.offQuiz, 100).filter((n) => isIndex(n, ALL_QUIZ.length)),
+      announcement: String(f.announcement || '').trim().slice(0, 300),
+      announcedAt: String(f.announcedAt || '')
+    };
+  }
+  async function cloudClassRules(code) {
+    const doc = await fsRequest('GET', '/classrooms/' + code);
+    const f = fsRead(doc.fields);
+    return Object.assign({ code, name: f.name || '班级' }, cleanRules(f));
+  }
+  /* Writes only the fields named in changes, so the rest of the classroom is left alone. */
+  async function cloudSaveSettings(code, changes) {
+    const query = '?' + Object.keys(changes).map((n) => 'updateMask.fieldPaths=' + encodeURIComponent(n)).join('&');
+    await fsRequest('PATCH', '/classrooms/' + code, { fields: fsFields(changes) }, query);
+  }
+
+  /* Assignments. A question is kept in the same shape as a quiz question. */
+  function cleanQuestion(q) {
+    if (!q || typeof q !== 'object') return null;
+    const prompt = String(q.q || '').trim().slice(0, 300);
+    const options = clampList(q.options, 4).map((o) => String(o || '').trim().slice(0, 120));
+    const answer = Number(q.answer);
+    if (!prompt || options.length !== 4 || options.some((o) => !o) || !isIndex(answer, 4)) return null;
+    return { q: prompt, options, answer, explain: String(q.explain || '').trim().slice(0, 300) };
+  }
+  function cleanAssessment(f) {
+    return {
+      title: String(f.title || '作业').slice(0, 80),
+      due: /^\d{4}-\d{2}-\d{2}$/.test(String(f.due || '')) ? String(f.due) : '',
+      mode: f.mode === 'custom' ? 'custom' : 'chapters',
+      chapters: clampList(f.chapters, 12).filter((c) => CHAPTER_ORDER.indexOf(c) >= 0),
+      count: Math.min(52, Math.max(1, Number(f.count) || 10)),
+      questions: clampList(f.questions, 60).map(cleanQuestion).filter(Boolean),
+      created: String(f.created || '')
+    };
+  }
+  async function cloudAssessments(code) {
+    const docs = await fsList('/classrooms/' + code + '/assessments');
+    return docs.map((d) => Object.assign({ id: fsId(d) }, cleanAssessment(fsRead(d.fields))))
+      .sort((a, b) => (a.created < b.created ? 1 : -1));
+  }
+  async function cloudAssessment(code, id) {
+    const doc = await fsRequest('GET', '/classrooms/' + code + '/assessments/' + id);
+    return Object.assign({ id }, cleanAssessment(fsRead(doc.fields)));
+  }
+  async function cloudMakeAssessment(code, a) {
+    const body = Object.assign({}, a, { created: new Date().toISOString() });
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const id = randomCode();
+      try {
+        await fsRequest('POST', '/classrooms/' + code + '/assessments', { fields: fsFields(body) }, '?documentId=' + id);
+        return id;
+      } catch (e) {
+        if (e.status !== 409) throw e; /* 409: that id is already in use, so try another */
+      }
+    }
+    throw new Error('no free code');
+  }
+  async function cloudDeleteAssessment(code, id) {
+    await fsRequest('DELETE', '/classrooms/' + code + '/assessments/' + id);
+  }
+  async function cloudMembers(code) {
+    const docs = await fsList('/classrooms/' + code + '/members');
+    return docs.map((d) => Object.assign({ uid: fsId(d) }, fsRead(d.fields)));
+  }
+
+  /* After a quiz, the score goes to every classroom this device has joined. */
+  function sendQuizScore(entry) {
+    const msg = $('#classSent');
+    if (!msg) return;
+    const joined = loadJoined();
+    msg.hidden = true;
+    msg.textContent = '';
+    if (!joined.length || !cloudReady() || !loadProfile().nickname) return;
+    msg.hidden = false;
+    msg.textContent = '正在将你的成绩发送到班级…';
+    Promise.all(joined.map((c) => cloudPostScore(c.code, entry).then(() => 'sent', (e) => (e.status === 403 || e.status === 404 ? 'left' : 'failed'))))
+      .then((states) => {
+        const kept = joined.filter((c, i) => states[i] !== 'left');
+        if (kept.length !== joined.length) saveJoined(kept);
+        const notes = [fill('成绩已发送：{1} 个班级中有 {0} 个已收到。', states.filter((s) => s === 'sent').length, joined.length)];
+        if (states.indexOf('failed') >= 0) notes.push('部分成绩未能发送。请检查网络后重试。');
+        if (states.indexOf('left') >= 0) notes.push('你已不在其中一个班级，因此已将其从本设备移除。');
+        msg.textContent = notes.join(' ');
+      });
+  }
+
+  /* Buttons that need a second tap: the first tap changes the label, the second does the action. */
+  function armButton(btn, idle, armed, confirm) {
+    if (btn.dataset.armed === '1') {
+      disarmButton(btn, idle);
+      confirm();
+      return;
+    }
+    btn.dataset.armed = '1';
+    btn.classList.add('is-armed');
+    btn.textContent = armed;
+    setTimeout(() => { if (btn.dataset.armed === '1') disarmButton(btn, idle); }, 4000);
+  }
+  function disarmButton(btn, idle) {
+    btn.dataset.armed = '';
+    btn.classList.remove('is-armed');
+    btn.textContent = idle;
+  }
+  function markChoice(host, active) {
+    host.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === active)));
+  }
+
+  /* Profile */
+  let pfPick = { emoji: PROFILE_EMOJI[0], colour: PROFILE_COLOURS[0].value };
+  function readProfileForm() {
+    return cleanProfile({
+      nickname: $('#pfNick').value,
+      emoji: pfPick.emoji,
+      colour: pfPick.colour,
+      bio: $('#pfBio').value,
+      teacher: loadProfile().teacher
+    });
+  }
+  function paintPreview(p) {
+    const av = $('#pfAvatar');
+    av.textContent = p.emoji;
+    av.style.setProperty('--av', p.colour);
+    $('#pfPreviewName').textContent = p.nickname || '你的昵称';
+  }
+  function buildProfileChoices(p) {
+    const emojis = $('#pfEmojis');
+    emojis.textContent = '';
+    PROFILE_EMOJI.forEach((em, i) => {
+      const b = h('button', null, em);
+      b.type = 'button';
+      b.setAttribute('aria-label', fill('头像 {0}', i + 1));
+      b.setAttribute('aria-pressed', String(em === p.emoji));
+      b.addEventListener('click', () => {
+        pfPick.emoji = em;
+        markChoice(emojis, b);
+        paintPreview(readProfileForm());
+      });
+      emojis.appendChild(b);
+    });
+    const colours = $('#pfColours');
+    colours.textContent = '';
+    PROFILE_COLOURS.forEach((c) => {
+      const b = h('button', 'pf-swatch');
+      b.type = 'button';
+      b.style.setProperty('--sw', c.value);
+      b.setAttribute('aria-label', c.name);
+      b.setAttribute('aria-pressed', String(c.value === p.colour));
+      b.addEventListener('click', () => {
+        pfPick.colour = c.value;
+        markChoice(colours, b);
+        paintPreview(readProfileForm());
+      });
+      colours.appendChild(b);
+    });
+  }
+  function onSaveProfile(e) {
+    e.preventDefault();
+    const msg = $('#pfMsg');
+    const p = readProfileForm();
+    if (!p.nickname) {
+      msg.classList.remove('is-ok');
+      msg.textContent = '请先输入昵称。';
+      $('#pfNick').focus();
+      return;
+    }
+    store.set(PROFILE_KEY, p);
+    paintPreview(p);
+    msg.classList.add('is-ok');
+    msg.textContent = '已保存。';
+    const joined = loadJoined();
+    if (!joined.length || !cloudReady()) return;
+    msg.textContent = '正在保存到你的班级…';
+    Promise.all(joined.map((c) => cloudPutMember(c.code, p))).then(
+      () => { msg.textContent = '已保存。你的班级已使用新的资料。'; },
+      () => {
+        msg.classList.remove('is-ok');
+        msg.textContent = '已保存在本设备上，但无法更新你的班级。';
+      }
+    );
+  }
+
+  /* Teacher mode */
+  function showTeacher(on) {
+    $('#teacherPanel').hidden = !on;
+    $('#pfTeacher').checked = on;
+    $('#pfTeacherState').textContent = on ? '开启' : '关闭';
+    if (on) renderClassList();
+  }
+  function onTeacherToggle(on) {
+    const p = loadProfile();
+    p.teacher = on;
+    store.set(PROFILE_KEY, p);
+    showTeacher(on);
+  }
+
+  let myClasses = [];
+  let openCode = '';
+  async function renderClassList() {
+    const list = $('#clsList');
+    const note = (text) => {
+      list.textContent = '';
+      list.appendChild(h('li', 'pf-empty', text));
+    };
+    if (!cloudReady()) {
+      note(CLOUD_OFF);
+      return;
+    }
+    note('正在加载你的班级…');
+    try {
+      myClasses = await cloudMyClasses();
+    } catch (e) {
+      note(CLOUD_ERROR);
+      return;
+    }
+    list.textContent = '';
+    if (!myClasses.length) {
+      note('你还没有创建班级。');
+      return;
+    }
+    myClasses.forEach((c) => {
+      const li = h('li');
+      const info = h('div');
+      const code = h('span', null, '代码 ');
+      code.appendChild(h('span', 'cls-code', c.code));
+      info.append(h('b', null, c.name), code);
+      const open = h('button', 'btn-outline', '打开');
+      open.type = 'button';
+      open.dataset.open = c.code;
+      li.append(info, open);
+      list.appendChild(li);
+    });
+  }
+  async function onMakeClass(e) {
+    e.preventDefault();
+    const msg = $('#createMsg');
+    const input = $('#clsName');
+    const name = input.value.trim().replace(/\s+/g, ' ').slice(0, 60);
+    if (!cloudReady()) {
+      msg.textContent = CLOUD_OFF;
+      return;
+    }
+    if (!name) {
+      msg.textContent = '请先输入班级名称。';
+      input.focus();
+      return;
+    }
+    msg.textContent = '正在创建班级…';
+    try {
+      const code = await cloudMakeClass(name);
+      input.value = '';
+      msg.textContent = fill('班级已创建。代码是 {0}。', code);
+      myClasses.unshift({ code, name, created: new Date().toISOString() });
+      openClassroom(code);
+      renderClassList();
+    } catch (err) {
+      msg.textContent = CLOUD_ERROR;
+    }
+  }
+  async function openClassroom(code) {
+    const cls = myClasses.find((c) => c.code === code) || { code, name: '班级' };
+    openCode = code;
+    showClassQr(false);
+    $('#clsDetail').hidden = false;
+    $('#clsDetailName').textContent = cls.name;
+    $('#clsDetailCode').textContent = code;
+    disarmButton($('#clsDelete'), '删除班级');
+    $('#clsDetail').scrollIntoView({ behavior: smooth, block: 'start' });
+    asgDraft = [];
+    renderDraft();
+    await Promise.all([loadRoster(), loadClassSettings(code)]);
+  }
+  async function loadRoster() {
+    const code = openCode;
+    const msg = $('#clsDetailMsg');
+    const host = $('#clsRoster');
+    if (!code) return;
+    msg.classList.remove('is-ok');
+    msg.textContent = '正在加载成绩…';
+    try {
+      const [{ members, scores }, assessments] = await Promise.all([cloudRoster(code), cloudAssessments(code)]);
+      if (code !== openCode) return;
+      rosterData = { members, scores, assessments };
+      host.textContent = '';
+      renderAssignmentList(assessments, scores);
+      renderProgressPick();
+      if (!members.length) {
+        msg.textContent = '还没有人加入。请把代码分享给班上的同学。';
+        return;
+      }
+      msg.textContent = fill('目前共 {0} 名学生、{1} 次测验。', members.length, scores.length);
+      const table = h('table');
+      const headRow = h('tr');
+      ['学生', '测验', '平均', '最高', '最近', ''].forEach((t) => {
+        const th = h('th', null, t);
+        th.scope = 'col';
+        headRow.appendChild(th);
+      });
+      table.appendChild(h('thead')).appendChild(headRow);
+      const tbody = h('tbody');
+      members.sort((a, b) => String(a.nickname || '').localeCompare(String(b.nickname || ''))).forEach((m) => {
+        const mine = scores.filter((s) => s.uid === m.uid).sort((a, b) => (a.at > b.at ? 1 : -1));
+        const pcts = mine.map((s) => Number(s.pct) || 0);
+        const row = h('tr');
+        const name = h('th', null, (m.emoji ? m.emoji + ' ' : '') + (m.nickname || '学生'));
+        name.scope = 'row';
+        row.appendChild(name);
+        [
+          pcts.length ? String(pcts.length) : '–',
+          pcts.length ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) + '%' : '–',
+          pcts.length ? Math.max(...pcts) + '%' : '–',
+          pcts.length ? pcts[pcts.length - 1] + '%' : '–'
+        ].forEach((cell) => row.appendChild(h('td', null, cell)));
+        const td = h('td');
+        const remove = h('button', null, '移除');
+        remove.type = 'button';
+        remove.dataset.remove = m.uid;
+        td.appendChild(remove);
+        row.appendChild(td);
+        tbody.appendChild(row);
+      });
+      table.appendChild(tbody);
+      host.appendChild(table);
+    } catch (e) {
+      msg.textContent = CLOUD_ERROR;
+    }
+  }
+  function renderJoined() {
+    const list = $('#joinedList');
+    list.textContent = '';
+    const joined = loadJoined();
+    if (!joined.length) {
+      list.appendChild(h('li', 'pf-empty', '你还没有加入任何班级。'));
+      return;
+    }
+    joined.forEach((c) => {
+      const li = h('li');
+      const info = h('div');
+      const code = h('span', null, '代码 ');
+      code.appendChild(h('span', 'cls-code', c.code));
+      info.append(h('b', null, c.name), code);
+      const leave = h('button', 'btn-ghost', '退出');
+      leave.type = 'button';
+      leave.dataset.leave = c.code;
+      li.append(info, leave);
+      list.appendChild(li);
+    });
+  }
+  async function onJoin(e) {
+    e.preventDefault();
+    const input = $('#joinCode');
+    const msg = $('#joinMsg');
+    const code = input.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    input.value = code;
+    if (!/^[A-Z0-9]{6}$/.test(code)) {
+      msg.textContent = '班级代码由六个字母或数字组成。';
+      input.focus();
+      return;
+    }
+    const p = loadProfile();
+    if (!p.nickname) {
+      msg.textContent = '加入前请先在资料中保存昵称。';
+      return;
+    }
+    if (!cloudReady()) {
+      msg.textContent = CLOUD_OFF;
+      return;
+    }
+    if (loadJoined().some((c) => c.code === code)) {
+      msg.textContent = '你已加入该班级。';
+      return;
+    }
+    msg.textContent = '正在加入…';
+    try {
+      const name = await cloudJoin(code, p);
+      if (name === null) {
+        msg.textContent = '没有使用该代码的班级。请向老师确认。';
+        return;
+      }
+      saveJoined(loadJoined().concat([{ code, name }]));
+      input.value = '';
+      msg.textContent = fill('你已加入 {0}。', name);
+      renderJoined();
+      refreshClassLists();
+    } catch (err) {
+      msg.textContent = CLOUD_ERROR;
+    }
+  }
+
+  /* Join QR code: the teacher shows a code on screen. A student who scans it opens the profile page
+     with the classroom code filled in, and joins once a nickname is saved. */
+  const SITE_ADDRESS_KEY = 'sdg4.siteAddress';
+  const JOIN_CODE_RE = /^[A-Z0-9]{6}$/;
+  const QR_QUIET = 4; // blank border, in modules, that scanners expect around the code
+
+  function savedSiteAddress() {
+    try { return window.localStorage.getItem(SITE_ADDRESS_KEY) || ''; } catch (e) { return ''; }
+  }
+  function rememberSiteAddress(value) {
+    try { window.localStorage.setItem(SITE_ADDRESS_KEY, value); } catch (e) { /* storage unavailable */ }
+  }
+  // The profile page of this site when it is opened online. On a local copy the teacher types the address.
+  function thisPageAddress() {
+    return /^https?:$/.test(location.protocol) ? location.origin + location.pathname : '';
+  }
+  // The address students open for this classroom, built from what the teacher typed. '' if it is not a web address.
+  function joinLink(code) {
+    let raw = ($('#clsSite').value || '').trim();
+    if (!raw || /\s/.test(raw)) return '';
+    if (!/^https?:\/\//i.test(raw)) raw = 'https://' + raw;
+    let u;
+    try { u = new URL(raw); } catch (e) { return ''; }
+    if (!/^https?:$/.test(u.protocol)) return '';
+    if (u.hostname !== 'localhost' && u.hostname.indexOf('.') < 1) return '';
+    if (!/\.html$/i.test(u.pathname)) u.pathname = u.pathname.replace(/\/?$/, '/') + 'profile.html';
+    u.search = '?join=' + code;
+    u.hash = '';
+    return u.href;
+  }
+  // Draws the QR code for the open classroom, or says what is missing.
+  function drawClassQr() {
+    const link = joinLink(openCode);
+    const box = $('#clsQrBox');
+    const msg = $('#clsQrMsg');
+    box.textContent = '';
+    $('#clsLink').textContent = link;
+    $('#clsQrCopy').disabled = !link;
+    if (!link) {
+      msg.textContent = '请输入网站地址，例如 https://your-site.example';
+      return;
+    }
+    if (!window.SDG4QR) {
+      msg.textContent = '二维码无法加载。请刷新页面后重试。';
+      return;
+    }
+    msg.textContent = '';
+    const qr = SDG4QR.encode(link);
+    const size = qr.size + QR_QUIET * 2;
+    const svg = sv('svg', { viewBox: '0 0 ' + size + ' ' + size, 'shape-rendering': 'crispEdges' }, box);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', '加入此班级的二维码');
+    sv('rect', { x: 0, y: 0, width: size, height: size, fill: '#ffffff' }, svg);
+    let d = '';
+    for (let r = 0; r < qr.size; r++) {
+      for (let c = 0; c < qr.size; c++) {
+        if (qr.dark(r, c)) d += 'M' + (c + QR_QUIET) + ' ' + (r + QR_QUIET) + 'h1v1h-1z';
+      }
+    }
+    sv('path', { d: d, fill: '#111111' }, svg);
+  }
+  function showClassQr(show) {
+    const btn = $('#clsQrBtn');
+    $('#clsQr').hidden = !show;
+    btn.textContent = show ? '隐藏二维码' : '显示二维码';
+    btn.setAttribute('aria-expanded', String(show));
+    if (show) drawClassQr();
+  }
+  function copyJoinLink() {
+    const link = joinLink(openCode);
+    const msg = $('#clsQrMsg');
+    if (!link) return;
+    try {
+      navigator.clipboard.writeText(link).then(
+        () => { msg.textContent = '链接已复制。'; },
+        () => { msg.textContent = '请选中链接并复制。'; }
+      );
+    } catch (e) {
+      msg.textContent = '请选中链接并复制。';
+    }
+  }
+  // A student who scans the code lands on ?join=CODE. The code is filled in and the student joins
+  // straight away if a nickname is saved; otherwise they are asked to save one first.
+  function joinFromLink() {
+    const raw = (new URLSearchParams(location.search).get('join') || '').trim().toUpperCase();
+    if (!JOIN_CODE_RE.test(raw)) return;
+    try { window.history.replaceState(null, '', location.pathname); } catch (e) { /* keep the address as it is */ }
+    $('#joinCode').value = raw;
+    $('#joinForm').scrollIntoView({ behavior: 'auto', block: 'center' });
+    if (loadProfile().nickname) {
+      $('#joinForm').dispatchEvent(new Event('submit', { cancelable: true }));
+    } else {
+      $('#joinMsg').textContent = '请先在上方保存昵称，然后点击“加入”进入班级。';
+    }
+  }
+
+  /* Settings a student gets from their classrooms. They are saved on the device, so a page still
+     knows them when the database cannot be reached. */
+  const RULES_KEY = 'sdg4.classRules';
+  const NOTICE_KEY = 'sdg4.classNoticeSeen';
+  const ASG_KEY = 'sdg4.assignments';
+  const byName = (a, b) => String(a.nickname || '').localeCompare(String(b.nickname || ''));
+  function cachedRules() {
+    const all = store.get(RULES_KEY, {}) || {};
+    return loadJoined().map((c) => all[c.code]).filter(Boolean);
+  }
+  async function refreshClassRules() {
+    const joined = loadJoined();
+    if (!joined.length || !cloudReady()) return;
+    const found = {};
+    await Promise.all(joined.map((c) => cloudClassRules(c.code).then((r) => { found[c.code] = r; }, () => {})));
+    const all = store.get(RULES_KEY, {}) || {};
+    const kept = {};
+    joined.forEach((c) => {
+      if (found[c.code]) kept[c.code] = found[c.code];
+      else if (all[c.code]) kept[c.code] = all[c.code];
+    });
+    store.set(RULES_KEY, kept);
+  }
+  /* What the student's classrooms have turned off, joined across all of them. */
+  function turnedOff() {
+    const out = { pages: new Set(), facts: new Set(), quiz: new Set() };
+    cachedRules().forEach((r) => {
+      r.offPages.forEach((s) => out.pages.add(s));
+      r.offFacts.forEach((n) => out.facts.add(n));
+      r.offQuiz.forEach((n) => out.quiz.add(n));
+    });
+    return out;
+  }
+  /* Takes turned-off facts and quiz questions out of the lists the pages use (the copies in ALL_* stay whole),
+     hides the menu links of turned-off pages, and shows the teacher's messages above the page. */
+  function applyClassRules() {
+    const off = turnedOff();
+    if (off.facts.size) FACTS.splice(0, FACTS.length, ...ALL_FACTS.filter((f, i) => !off.facts.has(i)));
+    if (off.quiz.size) QUIZ.splice(0, QUIZ.length, ...ALL_QUIZ.filter((q, i) => !off.quiz.has(i)));
+    TURNABLE_PAGES.forEach((p) => {
+      if (off.pages.has(p.slug)) $$('a[href="' + p.file + '"]').forEach((a) => { a.hidden = true; });
+    });
+    showAnnouncements();
+  }
+  function showAnnouncements() {
+    const anchor = $('main') || $('.site');
+    if (!anchor) return;
+    const seen = store.get(NOTICE_KEY, {}) || {};
+    cachedRules().filter((r) => r.announcement).forEach((r) => {
+      const key = r.announcedAt || r.announcement;
+      if (seen[r.code] === key) return;
+      const box = h('section', 'class-note');
+      box.setAttribute('aria-label', '老师的留言');
+      const close = h('button', 'btn-ghost', '关闭');
+      close.type = 'button';
+      close.addEventListener('click', () => {
+        box.remove();
+        const all = store.get(NOTICE_KEY, {}) || {};
+        all[r.code] = key;
+        store.set(NOTICE_KEY, all);
+      });
+      box.append(h('p', 'class-note-title', fill('来自 {0} 老师的留言', r.name)), h('p', 'class-note-text', r.announcement), close);
+      anchor.parentNode.insertBefore(box, anchor);
+    });
+  }
+  function pageIsOff() { return turnedOff().pages.has(PAGE); }
+  function showOffPage() {
+    const host = $('main') || $('.site');
+    if (!host) return;
+    host.textContent = '';
+    const back = h('a', 'btn-primary', '前往首页');
+    back.href = 'index.html';
+    const box = h('section', 'off-page');
+    box.append(h('h1', 'off-page-title', '此页面已关闭'), h('p', 'block-note', '老师已为你们班关闭此页面。'), back);
+    host.appendChild(box);
+  }
+
+  /* Teacher: the open classroom's settings, assignments, progress and spreadsheet. */
+  let rosterData = null; // { members, scores, assessments } for the open classroom
+  let asgDraft = [];     // questions written so far for a new assignment
+  const shortText = (text, n) => (text.length > n ? text.slice(0, n - 1) + '…' : text);
+  function pickBox(kind, value, label, checked) {
+    const row = h('label', 'pick');
+    const box = h('input');
+    box.type = 'checkbox';
+    box.checked = checked;
+    box.dataset.kind = kind;
+    box.value = String(value);
+    row.append(box, h('span', null, label));
+    return row;
+  }
+  function picked(id, asNumber) {
+    return Array.from($(id).querySelectorAll('input:checked')).map((b) => (asNumber ? Number(b.value) : b.value));
+  }
+  function renderRules(r) {
+    $('#clsAnnounce').value = r.announcement;
+    const pages = $('#clsOffPages');
+    pages.textContent = '';
+    TURNABLE_PAGES.forEach((p) => pages.appendChild(pickBox('page', p.slug, p.name, r.offPages.indexOf(p.slug) >= 0)));
+    const facts = $('#clsOffFacts');
+    facts.textContent = '';
+    ALL_FACTS.forEach((f, i) => facts.appendChild(pickBox('fact', i, (i + 1) + '. ' + shortText(f.num + ': ' + f.text, 120), r.offFacts.indexOf(i) >= 0)));
+    const quiz = $('#clsOffQuiz');
+    quiz.textContent = '';
+    ALL_QUIZ.forEach((q, i) => quiz.appendChild(pickBox('quiz', i, (i + 1) + '. ' + q.cat + ': ' + shortText(q.q, 110), r.offQuiz.indexOf(i) >= 0)));
+  }
+  async function loadClassSettings(code) {
+    try {
+      const r = await cloudClassRules(code);
+      if (code === openCode) renderRules(r);
+    } catch (e) {
+      if (code === openCode) $('#clsRulesMsg').textContent = CLOUD_ERROR;
+    }
+  }
+  function saveRules() {
+    const msg = $('#clsRulesMsg');
+    if (!openCode || !cloudReady()) return;
+    const code = openCode;
+    const changes = { offPages: picked('#clsOffPages', false), offFacts: picked('#clsOffFacts', true), offQuiz: picked('#clsOffQuiz', true) };
+    msg.classList.remove('is-ok');
+    msg.textContent = '正在保存…';
+    cloudSaveSettings(code, changes).then(() => {
+      msg.classList.add('is-ok');
+      msg.textContent = '已保存。学生下次打开网站时会看到这一变化。';
+    }, () => {
+      msg.classList.remove('is-ok');
+      msg.textContent = CLOUD_ERROR;
+    });
+  }
+  function postAnnouncement(text) {
+    const msg = $('#clsRulesMsg');
+    if (!openCode || !cloudReady()) return;
+    const code = openCode;
+    const changes = text ? { announcement: text, announcedAt: new Date().toISOString() } : { announcement: '', announcedAt: '' };
+    msg.classList.remove('is-ok');
+    msg.textContent = text ? '正在发布…' : '正在删除…';
+    cloudSaveSettings(code, changes).then(() => {
+      msg.classList.add('is-ok');
+      msg.textContent = text ? '已发布。学生会在他们的页面顶部看到。' : '已删除。';
+    }, () => {
+      msg.classList.remove('is-ok');
+      msg.textContent = CLOUD_ERROR;
+    });
+  }
+
+  function showAsgMode() {
+    const custom = document.querySelector('input[name="asgMode"]:checked').value === 'custom';
+    $('#asgChapterPart').hidden = custom;
+    $('#asgCustomPart').hidden = !custom;
+  }
+  function renderDraft() {
+    const list = $('#asgQList');
+    list.textContent = '';
+    asgDraft.forEach((q, i) => {
+      const li = h('li');
+      const rm = h('button', 'btn-ghost', '移除');
+      rm.type = 'button';
+      rm.dataset.index = String(i);
+      li.append(h('span', null, (i + 1) + '. ' + q.q), rm);
+      list.appendChild(li);
+    });
+  }
+  function addDraftQuestion() {
+    const msg = $('#asgMsg');
+    const q = cleanQuestion({ q: $('#asgQText').value, options: [0, 1, 2, 3].map((i) => $('#asgOpt' + i).value), answer: Number($('#asgCorrect').value), explain: $('#asgExplain').value });
+    if (!q) {
+      msg.classList.remove('is-ok');
+      msg.textContent = '请先输入题目和四个选项。';
+      $('#asgQText').focus();
+      return;
+    }
+    asgDraft.push(q);
+    ['#asgQText', '#asgExplain', '#asgOpt0', '#asgOpt1', '#asgOpt2', '#asgOpt3'].forEach((s) => { $(s).value = ''; });
+    $('#asgCorrect').value = '0';
+    renderDraft();
+    msg.classList.add('is-ok');
+    msg.textContent = fill('已添加第 {0} 题。', asgDraft.length);
+    $('#asgQText').focus();
+  }
+  function resetAsgForm() {
+    $('#asgTitle').value = '';
+    $('#asgDue').value = '';
+    $('#asgCount').value = '10';
+    $('#asgChapters').querySelectorAll('input').forEach((b) => { b.checked = false; });
+    document.querySelector('input[name="asgMode"][value="chapters"]').checked = true;
+    asgDraft = [];
+    renderDraft();
+    showAsgMode();
+  }
+  async function onSaveAssignment(e) {
+    e.preventDefault();
+    const msg = $('#asgMsg');
+    msg.classList.remove('is-ok');
+    if (!openCode || !cloudReady()) {
+      msg.textContent = CLOUD_OFF;
+      return;
+    }
+    const title = $('#asgTitle').value.trim().replace(/\s+/g, ' ').slice(0, 80);
+    const due = $('#asgDue').value;
+    const mode = document.querySelector('input[name="asgMode"]:checked').value;
+    if (!title) {
+      msg.textContent = '请先输入标题。';
+      $('#asgTitle').focus();
+      return;
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(due)) {
+      msg.textContent = '请选择截止日期。';
+      $('#asgDue').focus();
+      return;
+    }
+    const a = { title, due, mode, chapters: [], count: 10, questions: [] };
+    if (mode === 'custom') {
+      if (!asgDraft.length) {
+        msg.textContent = '请先添加至少一道题。';
+        return;
+      }
+      a.questions = asgDraft.slice();
+    } else {
+      a.chapters = picked('#asgChapters', false);
+      if (!a.chapters.length) {
+        msg.textContent = '请至少勾选一个章节。';
+        return;
+      }
+      const count = Math.round(Number($('#asgCount').value));
+      if (!(count >= 1 && count <= 52)) {
+        msg.textContent = '请选择 1 到 52 道题。';
+        $('#asgCount').focus();
+        return;
+      }
+      a.count = count;
+    }
+    const code = openCode;
+    msg.textContent = '正在设置作业…';
+    $('#asgSave').disabled = true;
+    try {
+      await cloudMakeAssessment(code, a);
+      resetAsgForm();
+      msg.classList.add('is-ok');
+      msg.textContent = '作业已设置。学生可以在他们的个人资料页面看到。';
+      if (code === openCode) loadRoster();
+    } catch (err) {
+      msg.textContent = CLOUD_ERROR;
+    } finally {
+      $('#asgSave').disabled = false;
+    }
+  }
+  function renderAssignmentList(assessments, scores) {
+    const list = $('#asgList');
+    list.textContent = '';
+    if (!assessments.length) {
+      list.appendChild(h('li', 'pf-empty', '还没有作业。'));
+      return;
+    }
+    assessments.forEach((a) => {
+      const pcts = scores.filter((s) => s.assessment === a.id).map((s) => Number(s.pct) || 0);
+      const avg = pcts.length ? Math.round(pcts.reduce((x, y) => x + y, 0) / pcts.length) + '%' : '–';
+      const scope = a.mode === 'custom' ? fill('你写的 {0} 道题', a.questions.length) : fill('来自 {1} 个章节的 {0} 道题', a.count, a.chapters.length);
+      const info = h('div');
+      info.append(h('b', null, a.title), h('span', null, fill('截止 {0} · {1}', a.due || 'no date', scope)), h('span', null, fill('{0} 名学生已完成 · 平均 {1}', pcts.length, avg)));
+      const del = h('button', 'btn-ghost', '删除');
+      del.type = 'button';
+      del.dataset.asg = a.id;
+      const li = h('li');
+      li.append(info, del);
+      list.appendChild(li);
+    });
+  }
+  function renderProgressPick() {
+    const sel = $('#clsProgPick');
+    const members = rosterData ? rosterData.members.slice().sort(byName) : [];
+    const before = sel.value;
+    sel.textContent = '';
+    members.forEach((m) => {
+      const o = h('option', null, m.nickname || '学生');
+      o.value = m.uid;
+      sel.appendChild(o);
+    });
+    if (members.some((m) => m.uid === before)) sel.value = before;
+    renderProgressOut();
+  }
+  function renderProgressOut() {
+    const out = $('#clsProgOut');
+    out.textContent = '';
+    if (!rosterData || !rosterData.members.length) {
+      out.appendChild(h('li', 'pf-empty', '还没有人加入。'));
+      return;
+    }
+    const uid = $('#clsProgPick').value;
+    const mine = rosterData.scores.filter((s) => s.uid === uid && s.chapter && !s.assessment);
+    CHAPTER_ORDER.forEach((c) => {
+      const tries = mine.filter((s) => s.chapter === c);
+      const li = h('li');
+      const detail = tries.length
+        ? fill('最高 {0}% · 尝试次数：{1}', Math.max(...tries.map((s) => Number(s.pct) || 0)), tries.length)
+        : '尚未尝试';
+      li.append(h('b', null, c), h('span', null, detail));
+      out.appendChild(li);
+    });
+  }
+  function csvCell(v) {
+    let s = String(v === null || v === undefined ? '' : v);
+    // A cell that starts with = + - or @ would run as a formula in a spreadsheet, so it is shown as text instead.
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  function downloadScores() {
+    const msg = $('#clsDetailMsg');
+    if (!rosterData) {
+      msg.classList.remove('is-ok');
+      msg.textContent = '请先加载成绩。';
+      return;
+    }
+    const { members, scores, assessments } = rosterData;
+    const rows = [['学生', '测验', '平均 %', '最高 %', '最近 %'].concat(assessments.map((a) => a.title + ' %'))];
+    members.slice().sort(byName).forEach((m) => {
+      const mine = scores.filter((s) => s.uid === m.uid).sort((a, b) => (a.at > b.at ? 1 : -1));
+      const pcts = mine.map((s) => Number(s.pct) || 0);
+      const row = [m.nickname || '学生', pcts.length, pcts.length ? Math.round(pcts.reduce((x, y) => x + y, 0) / pcts.length) : '',
+        pcts.length ? Math.max(...pcts) : '', pcts.length ? pcts[pcts.length - 1] : ''];
+      assessments.forEach((a) => {
+        const s = mine.find((x) => x.assessment === a.id);
+        row.push(s ? Number(s.pct) || 0 : '');
+      });
+      rows.push(row);
+    });
+    // The byte order mark lets spreadsheets read names with accents and other letters correctly.
+    const text = '﻿' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+    const link = h('a');
+    link.href = url;
+    link.download = 'sdg4-scores-' + openCode + '.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    msg.classList.add('is-ok');
+    msg.textContent = '成绩已下载为电子表格文件。';
+  }
+
+  /* Student: classmates and assignments on the profile page. */
+  async function renderClassmates() {
+    const block = $('#mateBlock');
+    if (!block) return;
+    const joined = loadJoined();
+    block.hidden = !joined.length || !cloudReady();
+    if (block.hidden) return;
+    const host = $('#classmates');
+    host.textContent = '正在加载同学…';
+    let me = '';
+    try { me = (await cloudAuth()).uid; } catch (e) { /* show the list without the "you" mark */ }
+    const groups = await Promise.all(joined.map((c) => cloudMembers(c.code).then((members) => ({ c, members }), () => ({ c, members: null }))));
+    host.textContent = '';
+    groups.forEach(({ c, members }) => {
+      const sec = h('div', 'mate-group');
+      sec.appendChild(h('h3', 'mate-name', c.name));
+      if (!members) {
+        sec.appendChild(h('p', 'block-note', CLOUD_ERROR));
+      } else if (!members.length) {
+        sec.appendChild(h('p', 'block-note', '还没有其他人加入。'));
+      } else {
+        const ul = h('ul', 'mate-list');
+        members.sort(byName).forEach((m) => {
+          const av = h('span', 'mate-av', m.emoji || PROFILE_EMOJI[0]);
+          av.style.setProperty('--av', m.colour || PROFILE_COLOURS[0].value);
+          const text = h('div');
+          text.appendChild(h('b', null, (m.nickname || '学生') + (m.uid === me ? ' (you)' : '')));
+          if (m.bio) text.appendChild(h('span', 'mate-bio', m.bio));
+          const li = h('li', 'mate');
+          li.append(av, text);
+          ul.appendChild(li);
+        });
+        sec.appendChild(ul);
+      }
+      host.appendChild(sec);
+    });
+  }
+  const asgRecord = (code, id) => (store.get(ASG_KEY, {}) || {})[code + '/' + id] || null;
+  function saveAsgRecord(code, id, rec) {
+    const all = store.get(ASG_KEY, {}) || {};
+    all[code + '/' + id] = rec;
+    store.set(ASG_KEY, all);
+  }
+  /* Today as YYYY-MM-DD, with leading zeros, so it compares with a due date. */
+  function isoToday() {
+    const d = new Date();
+    const two = (n) => (n < 10 ? '0' : '') + n;
+    return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate());
+  }
+  async function renderStudentAssignments() {
+    const block = $('#asgBlock');
+    if (!block) return;
+    const joined = loadJoined();
+    block.hidden = !joined.length || !cloudReady();
+    if (block.hidden) return;
+    const list = $('#asgStudent');
+    list.textContent = '';
+    list.appendChild(h('li', 'pf-empty', '正在加载作业…'));
+    const groups = await Promise.all(joined.map((c) => cloudAssessments(c.code).then((items) => items.map((a) => ({ c, a })), () => null)));
+    const failed = groups.some((g) => g === null);
+    const items = [].concat(...groups.filter(Boolean));
+    // Earliest due date first; assignments with no date go last ('~' sorts after the digits of a date).
+    items.sort((x, y) => {
+      const dx = x.a.due || '~';
+      const dy = y.a.due || '~';
+      return dx < dy ? -1 : (dx > dy ? 1 : 0);
+    });
+    list.textContent = '';
+    if (!items.length) {
+      list.appendChild(h('li', 'pf-empty', failed ? CLOUD_ERROR : '还没有作业。'));
+      return;
+    }
+    items.forEach(({ c, a }) => {
+      const rec = asgRecord(c.code, a.id);
+      const info = h('div');
+      info.append(h('b', null, a.title), h('span', null, c.name + ' · ' + (a.due ? fill('截止 {0}', a.due) : '没有截止日期')));
+      let action;
+      if (rec && rec.finished) action = h('span', 'asg-status', fill('已完成 · {0}%', rec.pct));
+      else if (rec && rec.started) action = h('span', 'asg-status', '已开始');
+      else if (a.due && isoToday() > a.due) action = h('span', 'asg-status', '已结束');
+      else {
+        action = h('a', 'btn-primary', '开始');
+        action.href = 'assignment.html?class=' + c.code + '&id=' + a.id;
+      }
+      const li = h('li');
+      li.append(info, action);
+      list.appendChild(li);
+    });
+  }
+  function refreshClassLists() {
+    renderClassmates();
+    renderStudentAssignments();
+  }
+
+  /* Assignment page: one attempt per student. The questions come from the chapters the teacher chose,
+     with turned-off questions left out, or are the questions the teacher wrote. */
+  function assignmentQuestions(a) {
+    if (a.mode === 'custom') return a.questions.slice();
+    const off = turnedOff().quiz;
+    const pool = ALL_QUIZ.filter((q, i) => a.chapters.indexOf(q.cat) >= 0 && !off.has(i));
+    return shuffle(pool).slice(0, Math.min(a.count, pool.length))
+      .map((q) => ({ q: q.q, options: q.options, answer: q.answer, explain: q.explain }));
+  }
+  function resultCard(done, title) {
+    const box = h('div', 'result en-result');
+    const score = h('p', 'en-score');
+    score.append(h('span', null, String(done.correct)), h('span', 'en-score-of', '/' + done.total));
+    box.append(score, h('p', 'rs-text', title));
+    return box;
+  }
+  function sendAssignmentScore(host, code, a, done) {
+    const box = resultCard(done, fill('你答对了 {0} 题，共 {1} 题。', done.correct, done.total));
+    const sent = h('p', 'block-note pf-msg', '正在把你的成绩发送给老师…');
+    sent.setAttribute('role', 'status');
+    const retry = h('button', 'btn-outline', '重新发送');
+    retry.type = 'button';
+    retry.hidden = true;
+    box.append(sent, retry);
+    host.appendChild(box);
+    const send = () => {
+      retry.hidden = true;
+      sent.textContent = '正在把你的成绩发送给老师…';
+      cloudPostScore(code, { pct: done.pct, correct: done.correct, total: done.total, chapter: '', assessment: a.id, at: done.at }).then(() => {
+        sent.textContent = '你的成绩已发送给老师。';
+      }, (e) => {
+        const gone = e.status === 403 || e.status === 404;
+        sent.textContent = gone
+          ? '你已不在这个班级里，因此无法发送成绩。'
+          : '成绩无法发送。请检查网络连接，然后重新发送。';
+        retry.hidden = gone;
+      });
+    };
+    retry.addEventListener('click', send);
+    send();
+  }
+  function startAssignment(host, code, a, questions) {
+    const rec = { started: new Date().toISOString() };
+    saveAsgRecord(code, a.id, rec);
+    const progress = h('p', 'qp-text');
+    progress.setAttribute('aria-live', 'polite');
+    const stage = h('div');
+    const nextBtn = h('button', 'btn-primary', '下一题');
+    nextBtn.type = 'button';
+    nextBtn.hidden = true;
+    const actions = h('div', 'quiz-actions');
+    actions.append(h('span'), nextBtn);
+    host.append(progress, stage, actions);
+    let i = 0;
+    let right = 0;
+    const finish = () => {
+      const done = { started: rec.started, finished: true, pct: Math.round((right / questions.length) * 100), correct: right, total: questions.length, at: new Date().toISOString() };
+      saveAsgRecord(code, a.id, done);
+      host.textContent = '';
+      sendAssignmentScore(host, code, a, done);
+    };
+    const show = () => {
+      progress.textContent = fill('第 {0} 题，共 {1} 题', i + 1, questions.length);
+      stage.textContent = '';
+      stage.appendChild(h('h3', 'quiz-q', questions[i].q));
+      nextBtn.hidden = true;
+      englishChoices(questions[i], stage, (correct) => {
+        if (correct) right++;
+        nextBtn.textContent = i === questions.length - 1 ? '查看我的分数' : '下一题';
+        nextBtn.hidden = false;
+      });
+    };
+    nextBtn.addEventListener('click', () => {
+      if (i < questions.length - 1) {
+        i++;
+        show();
+      } else {
+        finish();
+      }
+    });
+    show();
+  }
+  function openAssignment(host, code, a) {
+    const head = $('#asgHead');
+    if (head) head.textContent = a.title;
+    const lead = $('#asgLead');
+    if (lead) lead.textContent = a.due ? fill('截止 {0}。你只有一次作答机会。', a.due) : '你只有一次作答机会。';
+    const rec = asgRecord(code, a.id);
+    const say = (text) => {
+      host.textContent = '';
+      host.appendChild(h('p', 'block-note', text));
+    };
+    if (rec && rec.finished) {
+      host.textContent = '';
+      host.appendChild(resultCard(rec, fill('你已完成这份作业：答对 {0} / {1} 题（{2}%）。', rec.correct, rec.total, rec.pct)));
+      return;
+    }
+    if (a.due && isoToday() > a.due) {
+      say(fill('这份作业已于 {0} 结束。', a.due));
+      return;
+    }
+    if (rec && rec.started) {
+      say('你已在此设备上开始这份作业。只允许作答一次。');
+      return;
+    }
+    const questions = assignmentQuestions(a);
+    if (!questions.length) {
+      say('此设备上没有这份作业的题目。请询问老师。');
+      return;
+    }
+    host.textContent = '';
+    startAssignment(host, code, a, questions);
+  }
+  function initAssignment() {
+    const host = $('#asgPlay');
+    if (!host) return;
+    const params = new URLSearchParams(location.search);
+    const code = (params.get('class') || '').trim().toUpperCase();
+    const id = (params.get('id') || '').trim().toUpperCase();
+    const say = (text) => {
+      host.textContent = '';
+      host.appendChild(h('p', 'block-note', text));
+    };
+    if (!JOIN_CODE_RE.test(code) || !JOIN_CODE_RE.test(id)) {
+      say('这个链接不正确。请从你的个人资料页面打开作业。');
+      return;
+    }
+    if (!loadJoined().some((c) => c.code === code)) {
+      say('此设备上你还未加入这个班级。请先在你的个人资料页面加入。');
+      return;
+    }
+    if (!cloudReady()) {
+      say(CLOUD_OFF);
+      return;
+    }
+    say('正在加载作业…');
+    cloudAssessment(code, id).then((a) => openAssignment(host, code, a), (err) => {
+      say(err.status === 404 ? '这份作业已不再开放。请询问老师。' : CLOUD_ERROR);
+    });
+  }
+
+  /* Wires the teacher's tools on the profile page. */
+  function initClassTools() {
+    if (!$('#clsDetail')) return;
+    const chapters = $('#asgChapters');
+    chapters.textContent = '';
+    CHAPTER_ORDER.forEach((c) => chapters.appendChild(pickBox('chapter', c, c, false)));
+    $('#clsAnnounceSave').addEventListener('click', () => postAnnouncement($('#clsAnnounce').value.trim().slice(0, 300)));
+    $('#clsAnnounceClear').addEventListener('click', () => {
+      $('#clsAnnounce').value = '';
+      postAnnouncement('');
+    });
+    $('#clsRulesSave').addEventListener('click', saveRules);
+    $('#clsCsv').addEventListener('click', downloadScores);
+    $('#clsProgPick').addEventListener('change', renderProgressOut);
+    $('#asgForm').addEventListener('submit', onSaveAssignment);
+    $$('input[name="asgMode"]').forEach((r) => r.addEventListener('change', showAsgMode));
+    $('#asgAddQ').addEventListener('click', addDraftQuestion);
+    $('#asgQList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-index]');
+      if (!btn) return;
+      asgDraft.splice(Number(btn.dataset.index), 1);
+      renderDraft();
+    });
+    $('#asgList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-asg]');
+      if (!btn || !openCode) return;
+      armButton(btn, '删除', '再点一次即可删除', () => {
+        btn.disabled = true;
+        const code = openCode;
+        cloudDeleteAssessment(code, btn.dataset.asg).then(() => { if (code === openCode) loadRoster(); }, () => {
+          btn.disabled = false;
+          $('#asgMsg').textContent = CLOUD_ERROR;
+        });
+      });
+    });
+    showAsgMode();
+  }
+
+  function initProfile() {
+    const form = $('#profileForm');
+    if (!form) return;
+    const p = loadProfile();
+    pfPick = { emoji: p.emoji, colour: p.colour };
+    $('#pfNick').value = p.nickname;
+    $('#pfBio').value = p.bio;
+    buildProfileChoices(p);
+    paintPreview(p);
+    showTeacher(p.teacher);
+    $('#pfNick').addEventListener('input', () => paintPreview(readProfileForm()));
+    form.addEventListener('submit', onSaveProfile);
+    $('#pfTeacher').addEventListener('change', (e) => {
+      if (!e.target.checked) {
+        onTeacherToggle(false);
+        return;
+      }
+      e.target.checked = false;
+      $('#teacherPassForm').hidden = false;
+      $('#teacherPass').focus();
+    });
+    $('#teacherPassForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#teacherPass');
+      const msg = $('#teacherPassMsg');
+      if (input.value.trim() !== TEACHER_PASSWORD) {
+        msg.textContent = '密码不正确。';
+        input.value = '';
+        input.focus();
+        return;
+      }
+      input.value = '';
+      msg.textContent = '';
+      $('#teacherPassForm').hidden = true;
+      onTeacherToggle(true);
+    });
+    $('#teacherPassCancel').addEventListener('click', () => {
+      $('#teacherPass').value = '';
+      $('#teacherPassMsg').textContent = '';
+      $('#teacherPassForm').hidden = true;
+    });
+    $('#createForm').addEventListener('submit', onMakeClass);
+    $('#clsList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-open]');
+      if (btn) openClassroom(btn.dataset.open);
+    });
+    $('#clsRoster').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-remove]');
+      if (!btn || !openCode) return;
+      armButton(btn, '移除', '再点一次即可移除', () => {
+        btn.disabled = true;
+        cloudRemoveMember(openCode, btn.dataset.remove)
+          .then(loadRoster)
+          .catch(() => { $('#clsDetailMsg').textContent = CLOUD_ERROR; });
+      });
+    });
+    $('#clsDelete').addEventListener('click', () => {
+      armButton($('#clsDelete'), '删除班级', '再点一次即可删除', () => {
+        const code = openCode;
+        $('#clsDetailMsg').textContent = '正在删除…';
+        cloudDeleteClass(code).then(() => {
+          openCode = '';
+          $('#clsDetail').hidden = true;
+          $('#createMsg').textContent = '班级已删除。';
+          renderClassList();
+        }, () => { $('#clsDetailMsg').textContent = CLOUD_ERROR; });
+      });
+    });
+    $('#clsCopy').addEventListener('click', () => {
+      const msg = $('#clsDetailMsg');
+      try {
+        navigator.clipboard.writeText(openCode).then(
+          () => { msg.textContent = '代码已复制。'; },
+          () => { msg.textContent = '请选中代码并复制。'; }
+        );
+      } catch (e) {
+        msg.textContent = '请选中代码并复制。';
+      }
+    });
+    $('#clsRefresh').addEventListener('click', loadRoster);
+    $('#joinForm').addEventListener('submit', onJoin);
+    $('#joinedList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-leave]');
+      if (!btn) return;
+      armButton(btn, '退出', '再点一次即可退出', () => {
+        const code = btn.dataset.leave;
+        const msg = $('#joinMsg');
+        const finish = () => {
+          saveJoined(loadJoined().filter((c) => c.code !== code));
+          renderJoined();
+          refreshClassLists();
+          msg.textContent = '你已退出班级。';
+        };
+        if (!cloudReady()) {
+          finish();
+          return;
+        }
+        cloudLeave(code).then(finish, (err) => {
+          if (err.status === 404) finish();
+          else msg.textContent = CLOUD_ERROR;
+        });
+      });
+    });
+    $('#clsSite').value = savedSiteAddress() || thisPageAddress();
+    $('#clsSite').addEventListener('input', () => {
+      rememberSiteAddress($('#clsSite').value.trim());
+      if (!$('#clsQr').hidden) drawClassQr();
+    });
+    $('#clsQrBtn').addEventListener('click', () => showClassQr($('#clsQr').hidden));
+    $('#clsQrCopy').addEventListener('click', copyJoinLink);
+    renderJoined();
+    initClassTools();
+    refreshClassLists();
+    if (!cloudReady()) $('#cloudStatus').textContent = CLOUD_OFF;
+    joinFromLink();
+  }
+
+  /* English practice: word cards, a quiz and short reading for people learning English. The English
+     words and passages stay in English in every language; the meanings and explanations are translated. */
+  const ENGLISH_WORDS = [
+    { word: 'literacy', pos: '名词', level: '中级', meaning: '读写能力。', example: 'Literacy rates have risen in most countries over the last fifty years.' },
+    { word: 'enrol', pos: '动词', level: '初级', meaning: '正式入读学校、学院或课程。', example: 'She will enrol at the local school in September.' },
+    { word: 'dropout', pos: '名词', level: '初级', meaning: '在完成学业前辍学的学生。', example: 'The programme gives extra support to students at risk of becoming dropouts.' },
+    { word: 'scholarship', pos: '名词', level: '初级', meaning: '发给学生用于支付学业费用的钱。', example: 'She won a scholarship to study engineering at university.' },
+    { word: 'out of school', pos: '短语', level: '初级', meaning: '虽已到学龄却没有上学。', example: 'Many children are out of school because their families cannot pay for uniforms or transport.' },
+    { word: 'sustainable', pos: '形容词', level: '初级', meaning: '能够长期持续，不损害人类或地球。', example: "Sustainable development means meeting today's needs without damaging the future." },
+    { word: 'curriculum', pos: '名词', level: '中级', meaning: '学校或课程所教授的科目和课程内容。', example: 'The new curriculum includes more maths and science.' },
+    { word: 'equity', pos: '名词', level: '中级', meaning: '公平，让每个人无论出身如何都有公平的机会。', example: "The government wants equity, so that poor children get the same chances as everyone else." },
+    { word: 'inclusive', pos: '形容词', level: '中级', meaning: '包容所有人，包括残障人士。', example: 'An inclusive school makes sure every child can learn.' },
+    { word: 'tuition', pos: '名词', level: '中级', meaning: '在学校或大学接受教育所需支付的费用。', example: 'Tuition fees have risen sharply in the past ten years.' },
+    { word: 'qualified', pos: '形容词', level: '中级', meaning: '已通过从事某项工作所需的培训或考试。', example: 'Schools need more qualified teachers, especially in rural areas.' },
+    { word: 'vocational training', pos: '短语', level: '高级', meaning: '教授某一职业所需实用技能的教育。', example: 'Vocational training prepares young people to work as electricians or nurses.' },
+    { word: 'completion rate', pos: '短语', level: '高级', meaning: '完成某一教育阶段的学生所占的比例。', example: 'The completion rate for secondary school is still low in some regions.' },
+    { word: 'pre-primary', pos: '形容词', level: '高级', meaning: '小学前教育，通常面向三至五岁的儿童。', example: 'Pre-primary education helps children get ready for their first school year.' },
+    { word: 'lifelong learning', pos: '短语', level: '高级', meaning: '终身学习，不仅限于学校。', example: 'Adults can join evening classes as part of lifelong learning.' },
+    { word: 'gender parity', pos: '短语', level: '高级', meaning: '女童和男童享有同等受教育机会的状况。', example: 'The goal is gender parity at every level of schooling.' }
+  ];
+
+  const ENGLISH_QUIZ = [
+    { level: '初级', q: 'Choose the correct word: She ___ to school by bus every day.', options: ['go', 'goes', 'going', 'gone'], answer: 1, explain: '与 he、she 或 it 搭配时，一般现在时动词要加 -s：she goes。' },
+    { level: '初级', q: 'Choose the correct word: There are ___ students in the class.', options: ['much', 'many', 'a lot', 'few of'], answer: 1, explain: 'many 用于可数名词，如 students；much 用于不可数名词，如 water。' },
+    { level: '初级', q: 'Which word means "the money paid to study at a university"?', options: ['tuition', 'curriculum', 'literacy', 'equity'], answer: 0, explain: 'tuition 指学费，即接受教学所付的钱。curriculum 指学校教授的科目清单。' },
+    { level: '初级', q: 'A student who leaves school before finishing is a …', options: ['dropout', 'graduate', 'teacher', 'scholar'], answer: 0, explain: 'dropout 指在完成学业前离开学校的学生。' },
+    { level: '初级', q: 'Choose the correct form: Yesterday we ___ a long test in maths.', options: ['take', 'took', 'taken', 'taking'], answer: 1, explain: 'yesterday 提示要用一般过去时。took 是 take 的过去式。' },
+    { level: '中级', q: 'Choose the correct form: If I ___ more time, I would learn English faster.', options: ['have', 'had', 'has', 'having'], answer: 1, explain: '表示现在的假设情况时，用 if + 一般过去时（had），后面接 would + 动词原形。' },
+    { level: '中级', q: 'Which sentence is correct?', options: ['I have lived here since 2019.', 'I am living here since 2019.', 'I have live here since 2019.', 'I living here since 2019.'], answer: 0, explain: '与 since 加具体时间点连用时，用现在完成时：I have lived here since 2019。' },
+    { level: '中级', q: 'A school where every child is welcome, including children with disabilities, is …', options: ['inclusive', 'vocational', 'pre-primary', 'tuition-free'], answer: 0, explain: '全纳学校接纳并包容每一个人。' },
+    { level: '中级', q: 'Children do better when they are interested ___ what they learn.', options: ['in', 'at', 'about', 'for'], answer: 0, explain: '形容词 "interested" 后面接 "in"：interested in something。' },
+    { level: '中级', q: 'Choose the correct passive: The teachers ___ by the government last year.', options: ['were trained', 'trained', 'were training', 'have trained'], answer: 0, explain: '被动语态的一般过去时结构是 was 或 were + 过去分词。teachers 是复数，要用 were。' },
+    { level: '中级', q: 'Equity in education means …', options: ['everyone gets a fair chance', 'only the best students get places', 'schools charge the same fees', 'every school has the same building'], answer: 0, explain: 'equity 指公平，即无论出身如何，每个人都有公平的机会。' },
+    { level: '高级', q: 'A "completion rate" measures …', options: ['how many students finish a level of schooling', 'how much a school spends on books', 'how many teachers are qualified', 'how many new schools are built'], answer: 0, explain: '完成率是完成某一教育阶段（例如初中）的学生所占的比例。' },
+    { level: '高级', q: 'Which phrase means learning throughout life, not only at school?', options: ['lifelong learning', 'vocational training', 'gender parity', 'pre-primary education'], answer: 0, explain: '终身学习指在各个年龄段进行的教育和培训，包括成年人的学习。' },
+    { level: '高级', q: 'A course that teaches practical skills for work as an electrician is …', options: ['vocational', 'pre-primary', 'academic', 'literate'], answer: 0, explain: '职业培训教授某一职业所需的实用技能。' },
+    { level: '高级', q: 'What does "gender parity" in education mean?', options: ['boys and girls have equal access to education', 'only girls go to school', 'every school costs the same', 'girls study only maths'], answer: 0, explain: '性别平等指女童和男童享有同等的受教育机会。' },
+    { level: '高级', q: 'Which word is the noun form of "literate"?', options: ['literacy', 'literature', 'literal', 'literally'], answer: 0, explain: 'literacy 指读写能力。literature 指书面作品，如小说和诗歌。' }
+  ];
+
+  const ENGLISH_READING = [
+    {
+      level: '初级',
+      title: 'Amina goes to school',
+      text: "Amina is twelve years old and lives in a small village. Every morning she walks two kilometres to school. Her school has a good library, and she likes reading stories there. Last year she won a scholarship, so her family does not have to pay the school fees. Amina wants to become a doctor one day. She says school is the best thing that has ever happened to her.",
+      questions: [
+        { q: 'How does Amina get to school?', options: ['She takes a bus', 'She walks', 'Her father drives her', 'She rides a bicycle'], answer: 1, explain: '文中说她每天早上步行两公里去学校。' },
+        { q: "Why does Amina's family not pay the school fees?", options: ['The school is free for everyone', 'She won a scholarship', 'She works at the school', 'Her teacher pays for her'], answer: 1, explain: '去年她获得了奖学金，因此家里不必支付学费。' },
+        { q: 'What does Amina want to become?', options: ['a teacher', 'a librarian', 'a doctor', 'a driver'], answer: 2, explain: '文中说她希望将来成为一名医生。' }
+      ]
+    },
+    {
+      level: '中级',
+      title: 'Why girls leave school early',
+      text: 'Many girls in low-income countries leave school before they finish. Sometimes the reason is money: families cannot pay for uniforms, books or transport. In other cases, girls are asked to help at home, or they are married at a young age. Schools can help. Some governments give grants to families who keep their daughters in school, and some schools have toilets for girls, so that they do not miss lessons every month. These small changes can make a big difference to whether girls stay in school.',
+      questions: [
+        { q: 'What is one reason families might not send girls to school?', options: ['Schools are too big', 'They cannot pay for uniforms, books or transport', 'Girls do not want to learn', 'Teachers do not like girls'], answer: 1, explain: '文中说，缺少购买校服、书本或交通费用的钱，可能使女孩无法上学。' },
+        { q: 'According to the text, what can help girls stay in school?', options: ['Longer holidays', 'Grants and toilets at school', 'Fewer lessons', 'Bigger classes'], answer: 1, explain: '文中提到了给家庭的补助金，以及学校为女生设置的厕所。' },
+        { q: 'What do "these small changes" refer to?', options: ['the grants and the toilets', 'the families', 'the lessons', 'the holidays'], answer: 0, explain: '"These small changes"（这些小改变）指的是前一句中提到的补助金和厕所。' }
+      ]
+    },
+    {
+      level: '高级',
+      title: 'Learning does not stop at school',
+      text: 'Education is no longer something that ends when people leave school. In many countries, adults return to classrooms to learn a new language, gain a qualification or retrain for a new job. Vocational courses, online lessons and evening classes make this possible for people who work during the day. Governments and employers increasingly see lifelong learning as essential, because technology and industry change quickly. Yet adults who left school early often find it hardest to return, which is why reaching them remains a challenge.',
+      questions: [
+        { q: 'What is the main idea of the passage?', options: ['Schools should close in the evening', 'Learning continues throughout life and matters more and more', 'Online lessons are always better than classrooms', 'Adults should not retrain for new jobs'], answer: 1, explain: '文章认为，随着工作和技术的变化，终身学习变得越来越重要。' },
+        { q: 'Why is lifelong learning becoming essential?', options: ['Technology and industry change quickly', 'Schools are getting smaller', 'Teachers are retiring', 'Governments are reducing their budgets'], answer: 0, explain: '文中说技术和产业变化很快，所以人们需要不断学习。' },
+        { q: 'Which group often finds it hardest to return to learning?', options: ['Adults who left school early', 'Adults who work in the evening', 'Students who take online lessons', 'Teachers of vocational courses'], answer: 0, explain: '文章说，过早离开学校的成年人往往最难重返课堂。' }
+      ]
+    }
+  ];
+
+  function initEnglish() {
+    initEnglishWords();
+    initEnglishQuiz();
+    renderEnglishReading();
+  }
+
+  // One question with four options. The learner picks once; done(correct) is then called.
+  function englishChoices(item, host, done) {
+    const opts = h('div', 'quiz-options');
+    const fb = h('div', 'quiz-feedback');
+    fb.hidden = true;
+    let locked = false;
+    item.options.forEach((text, j) => {
+      const b = h('button', 'opt');
+      b.type = 'button';
+      b.append(h('span', 'opt-key', 'ABCD'[j]), h('span', 'opt-text', text), h('span', 'opt-mark'));
+      b.addEventListener('click', () => {
+        if (locked) return;
+        locked = true;
+        const correct = j === item.answer;
+        opts.querySelectorAll('.opt').forEach((o, k) => {
+          o.disabled = true;
+          if (k === item.answer) { o.classList.add('is-correct'); drawMark(o.querySelector('.opt-mark'), 'tick'); }
+          else if (k === j) { o.classList.add('is-wrong'); drawMark(o.querySelector('.opt-mark'), 'cross'); }
+          else o.classList.add('is-muted');
+        });
+        Sound.play(correct ? 'correct' : 'wrong');
+        fb.textContent = '';
+        fb.append(h('p', 'fb-verdict', correct ? '正确！' : '不完全正确。答案是 ' + item.options[item.answer] + '.'), h('p', 'fb-text', item.explain));
+        fb.hidden = false;
+        done(correct);
+      });
+      opts.appendChild(b);
+    });
+    host.append(opts, fb);
+  }
+
+  function initEnglishWords() {
+    const total = ENGLISH_WORDS.length;
+    let order = ENGLISH_WORDS.map((w, n) => n);
+    let i = 0;
+    const card = $('#wordCard');
+    const front = $('#wordFront');
+    const back = $('#wordBack');
+
+    function show(turned) {
+      const w = ENGLISH_WORDS[order[i]];
+      $('#wordCount').textContent = fill('第 {0} 个，共 {1} 个', i + 1, total);
+      $('#wordFill').style.width = ((i + 1) / total) * 100 + '%';
+      $('#wordLevel').textContent = w.level;
+      front.textContent = '';
+      front.append(document.createTextNode(w.word), h('span', 'en-pos', w.pos));
+      back.textContent = '';
+      back.append(h('span', 'fa-answer', w.meaning), h('span', 'fa-why', w.example));
+      front.hidden = turned;
+      back.hidden = !turned;
+      card.setAttribute('aria-expanded', String(turned));
+    }
+
+    card.addEventListener('click', () => show(back.hidden));
+    $('#wordPrev').addEventListener('click', () => { i = (i - 1 + total) % total; show(false); });
+    $('#wordNext').addEventListener('click', () => { i = (i + 1) % total; show(false); });
+    $('#wordShuffle').addEventListener('click', () => {
+      order = shuffle(order);
+      i = 0;
+      show(false);
+      Sound.play('tap');
+    });
+    show(false);
+  }
+
+  function initEnglishQuiz() {
+    const size = Math.min(10, ENGLISH_QUIZ.length);
+    let order = [];
+    let i = 0;
+    let right = 0;
+    const bestRecord = () => store.get('sdg4.english.best', null);
+
+    function showBest() {
+      const b = bestRecord();
+      ['#enBest', '#enBestResult'].forEach((sel) => {
+        $(sel).hidden = !b;
+        if (b) $(sel).textContent = fill('目前最高分：{0} / {1}。', b.right, b.total);
+      });
+    }
+
+    function ask() {
+      const item = ENGLISH_QUIZ[order[i]];
+      $('#enProgress').textContent = fill('第 {0} 题，共 {1} 题', i + 1, order.length);
+      $('#enFill').style.width = (i / order.length) * 100 + '%';
+      $('#enLevel').textContent = item.level;
+      $('#enQ').textContent = item.q;
+      const host = $('#enAnswers');
+      host.textContent = '';
+      const next = $('#enNext');
+      next.hidden = true;
+      englishChoices(item, host, (ok) => {
+        if (ok) right += 1;
+        $('#enFill').style.width = ((i + 1) / order.length) * 100 + '%';
+        next.textContent = i === order.length - 1 ? '查看我的分数' : '下一题';
+        next.hidden = false;
+        next.focus({ preventScroll: true });
+      });
+      $('#enQ').focus({ preventScroll: true });
+    }
+
+    function start() {
+      order = shuffle(ENGLISH_QUIZ.map((q, n) => n)).slice(0, size);
+      i = 0;
+      right = 0;
+      $('#enStart').hidden = true;
+      $('#enResult').hidden = true;
+      $('#enPlay').hidden = false;
+      ask();
+      Sound.play('tap');
+    }
+
+    function finish() {
+      const total = order.length;
+      const pct = right / total;
+      $('#enPlay').hidden = true;
+      $('#enResult').hidden = false;
+      $('#enRsScore').textContent = String(right);
+      $('#enRsOf').textContent = '/' + total;
+      $('#enRsTitle').textContent = pct >= 0.8 ? '做得很好！' : pct >= 0.5 ? '进步不小。' : '继续练习。';
+      $('#enRsText').textContent = fill('你答对了 {0} 题，共 {1} 题。', right, total);
+      const best = bestRecord();
+      if (!best || right / total > best.right / best.total) store.set('sdg4.english.best', { right: right, total: total });
+      showBest();
+      Sound.play(pct >= 0.8 ? 'streak' : 'tap');
+      $('#enRsTitle').focus({ preventScroll: true });
+    }
+
+    function backToStart() {
+      $('#enResult').hidden = true;
+      $('#enPlay').hidden = true;
+      $('#enStart').hidden = false;
+      showBest();
+      Sound.play('tap');
+    }
+
+    $('#enStartBtn').addEventListener('click', start);
+    $('#enAgain').addEventListener('click', start);
+    $('#enBack').addEventListener('click', () => {
+      backToStart();
+      $('#enStartBtn').focus({ preventScroll: true });
+    });
+    $('#enQuit').addEventListener('click', backToStart);
+    $('#enNext').addEventListener('click', () => {
+      if (i < order.length - 1) {
+        i += 1;
+        ask();
+      } else {
+        finish();
+      }
+    });
+    // A to D pick an answer while a question is showing, as on the main quiz.
+    document.addEventListener('keydown', (e) => {
+      if ($('#enPlay').hidden || e.altKey || e.ctrlKey || e.metaKey || e.defaultPrevented) return;
+      const t = e.target;
+      const tag = t && t.tagName ? t.tagName.toLowerCase() : '';
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+      const k = e.key.toLowerCase();
+      const pick = k.length === 1 ? 'abcd'.indexOf(k) : -1;
+      if (pick < 0) return;
+      const b = $$('#enAnswers .opt')[pick];
+      if (b && !b.disabled) {
+        e.preventDefault();
+        b.click();
+      }
+    });
+    showBest();
+  }
+
+  function renderEnglishReading() {
+    const host = $('#enReading');
+    ENGLISH_READING.forEach((p) => {
+      const art = h('article', 'en-passage');
+      const head = h('div', 'en-passage-head');
+      head.append(h('span', 'q-cat', p.level), h('h3', 'en-passage-title', p.title));
+      const qs = h('ol', 'en-qs');
+      const score = h('p', 'en-passage-score');
+      score.hidden = true;
+      let answered = 0;
+      let right = 0;
+      p.questions.forEach((item) => {
+        const li = h('li', 'en-q');
+        const answers = h('div', 'en-answers');
+        li.append(h('p', 'en-q-text', item.q), answers);
+        englishChoices(item, answers, (ok) => {
+          answered += 1;
+          if (ok) right += 1;
+          if (answered === p.questions.length) {
+            score.textContent = fill('你答对了 {0} 题，共 {1} 题。', right, answered);
+            score.hidden = false;
+          }
+        });
+        qs.appendChild(li);
+      });
+      art.append(head, h('p', 'en-text', p.text), qs, score);
+      host.appendChild(art);
+    });
+  }
+
   /* Search: pages, targets, facts and quiz questions, found as you type. Press / to open. */
   const SEARCH_PAGES = [
     { title: '事实数据', href: 'facts.html', text: '关于谁失学、谁完成学业、谁在学习以及谁被落下的图表' },
@@ -2950,16 +4780,22 @@
     { title: '学习计时器', href: 'timer.html', text: '以专注时段学习，并穿插短暂休息' },
     { title: '关于', href: 'about.html', text: '关于本学校项目、术语表及所有资料来源' },
     { title: '课堂幻灯片', href: 'slides.html', text: '展示关键数据的全屏幻灯片' },
+    { title: '我的资料', href: 'profile.html', text: '昵称、头像和颜色，用代码加入班级，教师模式' },
+    { title: '学习英语', href: 'english.html', text: '关于教育词汇的单词卡、测验和短文阅读，从初级到高级。' },
     { title: '我的进度', href: 'progress.html', text: '徽章、摘要，以及导出、导入或清除已保存数据' },
     { title: '获取应用', href: 'download.html', text: '下载 Windows、Mac 和 Android 版，或将网站添加到主屏幕' }
   ];
   let searchIndex = null;
 
   function buildSearchIndex() {
-    const items = SEARCH_PAGES.map((p) => ({ kind: '页面', title: p.title, text: p.text, href: p.href }));
-    TARGETS.forEach((t) => items.push({ kind: '目标 ' + t.code, title: t.title, text: t.plain + ' ' + t.action, href: 'targets.html' }));
-    FACTS.forEach((f) => items.push({ kind: '事实', title: f.num, text: f.text, href: 'facts.html' }));
-    QUIZ.forEach((q) => items.push({ kind: '测验题目', title: q.q, text: q.explain, href: 'quiz.html' }));
+    // Pages a teacher has turned off for this student's class are left out of the search.
+    const off = turnedOff();
+    const shown = (file) => !TURNABLE_PAGES.some((t) => t.file === file && off.pages.has(t.slug));
+    const items = SEARCH_PAGES.filter((p) => shown(p.href)).map((p) => ({ kind: '页面', title: p.title, text: p.text, href: p.href }));
+    if (shown('targets.html')) TARGETS.forEach((t) => items.push({ kind: '目标 ' + t.code, title: t.title, text: t.plain + ' ' + t.action, href: 'targets.html' }));
+    if (shown('facts.html')) FACTS.forEach((f) => items.push({ kind: '事实', title: f.num, text: f.text, href: 'facts.html' }));
+    if (shown('quiz.html')) QUIZ.forEach((q) => items.push({ kind: '测验题目', title: q.q, text: q.explain, href: 'quiz.html' }));
+    if (shown('english.html')) ENGLISH_WORDS.forEach((w) => items.push({ kind: '英语单词', title: w.word, text: w.meaning, href: 'english.html' }));
     return items;
   }
 
@@ -3026,15 +4862,31 @@
     quiz: initQuiz,
     timer: initTimer,
     about: initAbout,
-    slides: initSlides
+    slides: initSlides,
+    profile: initProfile,
+    english: initEnglish,
+    assignment: initAssignment
   };
   const siteNode = document.querySelector('.site[data-page]');
   const PAGE = siteNode ? siteNode.dataset.page : '';
+  function startPage() {
+    applyClassRules();
+    if (pageIsOff()) {
+      showOffPage();
+      return;
+    }
+    if (MODULES[PAGE]) MODULES[PAGE]();
+  }
   initChrome();
   initLang();
   if (PAGE !== 'slides') {
     initReadingBar();
     initSearch();
   }
-  if (MODULES[PAGE]) MODULES[PAGE]();
+  if (loadJoined().length && cloudReady()) {
+    // Wait a moment for the teacher's latest settings. If the database is slow, the copy saved on this device is used.
+    Promise.race([refreshClassRules().catch(() => {}), new Promise((resolve) => setTimeout(resolve, 2500))]).then(startPage);
+  } else {
+    startPage();
+  }
 })();

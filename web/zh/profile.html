@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我的资料 · 人人享有优质教育</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="选择昵称、头像和颜色，用代码加入班级，或打开教师模式来创建班级。">
+<meta property="og:title" content="我的资料 · 人人享有优质教育">
+<meta property="og:description" content="选择昵称、头像和颜色，用代码加入班级，或打开教师模式来创建班级。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="人人享有优质教育">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23861A2B'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' text-anchor='middle' fill='white'%3E4%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=ZCOOL+KuaiLe&display=swap">
+<link rel="stylesheet" href="site.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SDG 4">
+</head>
+<body>
+<div class="site" data-page="profile">
+<a class="skip" href="#main">跳到正文</a>
+<header class="site-header" id="siteHeader">
+  <div class="sh-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">4</span>
+      <span class="brand-text">
+        <span class="brand-name">优质教育</span>
+        <span class="brand-sub">人人享有 · 2030年前</span>
+      </span>
+    </a>
+    <nav class="site-nav" id="siteNav" aria-label="主要内容">
+      <a href="facts.html" data-nav="facts">事实</a>
+      <a href="targets.html" data-nav="targets">具体目标</a>
+      <a href="explore.html" data-nav="explore">探索</a>
+      <a href="solutions.html" data-nav="solutions">解决方案</a>
+      <a href="action.html" data-nav="action">行动起来</a>
+      <a href="quiz.html" data-nav="quiz">测验</a>
+      <a href="timer.html" data-nav="timer">学习计时器</a>
+      <a class="nav-extra" href="about.html" data-nav="about">关于</a>
+      <a class="nav-extra" href="slides.html">课堂幻灯片</a>
+      <a class="nav-extra" href="profile.html" data-nav="profile" aria-current="page">我的资料</a>
+      <a class="nav-extra" href="english.html" data-nav="english">学习英语</a>
+      <div class="lang-nav"><span class="lang-nav-label" aria-hidden="true">语言</span><select class="lang-sel" aria-label="语言"><option value="../profile.html" lang="en">English</option><option value="../id/profile.html" lang="id">Bahasa Indonesia</option><option value="../es/profile.html" lang="es">Español</option><option value="../fr/profile.html" lang="fr">Français</option><option value="profile.html" lang="zh-CN" selected>中文</option></select></div>
+    </nav>
+    <div class="sh-actions">
+      <button class="search-btn" type="button" id="searchBtn" aria-haspopup="dialog" title="搜索本站 (/)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <span class="visually-hidden">搜索本站</span>
+      </button>
+      <button class="sound-toggle" type="button" id="soundBtn" aria-pressed="true" title="音效 (M)">
+        <svg class="ic-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        <span class="sound-label" id="soundLabel">声音开启</span>
+      </button>
+      <span class="lang-sel-wrap lang-top"><span class="visually-hidden">语言</span><select class="lang-sel" aria-label="语言"><option value="../profile.html" lang="en">English</option><option value="../id/profile.html" lang="id">Bahasa Indonesia</option><option value="../es/profile.html" lang="es">Español</option><option value="../fr/profile.html" lang="fr">Français</option><option value="profile.html" lang="zh-CN" selected>中文</option></select></span>
+      <a class="btn-present" href="slides.html" title="课堂全屏幻灯片">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2"/><path d="M12 16v3.5M8.5 19.5h7"/></svg>
+        <span>演示</span>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-text">菜单</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="search-dlg" id="searchDlg" aria-labelledby="searchTitle">
+  <div class="sd-inner">
+    <div class="sd-top">
+      <h2 class="sd-title" id="searchTitle">搜索本站</h2>
+      <button class="sd-close" type="button" id="searchClose">关闭</button>
+    </div>
+    <label class="visually-hidden" for="searchInput">搜索词</label>
+    <input class="sd-input" id="searchInput" type="text" role="searchbox" placeholder="试试：女孩、教师、阅读、2030" autocomplete="off">
+    <ol class="sd-results" id="searchResults" aria-live="polite"></ol>
+    <p class="sd-empty" id="searchEmpty" hidden>没有找到结果。请试试其他词语。</p>
+  </div>
+</dialog>
+
+<main id="main" tabindex="-1">
+
+  <header class="page-head ruled">
+    <div class="ph-inner">
+      <p class="ph-kicker">我的资料</p>
+      <div class="ph-main">
+        <h1 class="ph-title">你的资料与班级</h1>
+        <p class="ph-lead">设置你的展示方式，用老师给的代码加入班级，或打开教师模式创建班级。你的测验成绩会发送到你加入的每个班级。</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap section">
+
+    <section class="pf-block" aria-labelledby="profileTitle">
+      <h2 class="section-title" id="profileTitle">你的资料</h2>
+      <p class="block-note">请使用昵称，不要用真实全名。加入班级后，你的昵称、头像、颜色和简介会显示给同学和老师。请不要在简介里写个人信息。</p>
+      <div class="pf-layout">
+        <div class="pf-preview" aria-hidden="true">
+          <span class="pf-avatar" id="pfAvatar"></span>
+          <span class="pf-name" id="pfPreviewName"></span>
+        </div>
+        <form class="pf-form" id="profileForm">
+          <label class="pf-label" for="pfNick">昵称</label>
+          <input class="cert-input" id="pfNick" type="text" maxlength="20" autocomplete="off" placeholder="例如 Maya">
+          <p class="pf-label" id="pfAvatarLabel">头像</p>
+          <div class="pf-choices" id="pfEmojis" role="group" aria-labelledby="pfAvatarLabel"></div>
+          <p class="pf-label" id="pfColourLabel">颜色</p>
+          <div class="pf-choices" id="pfColours" role="group" aria-labelledby="pfColourLabel"></div>
+          <label class="pf-label" for="pfBio">简短简介（可选）</label>
+          <textarea class="cert-input pf-bio" id="pfBio" maxlength="120" rows="3" placeholder="你喜欢学习的内容"></textarea>
+          <div class="data-actions">
+            <button class="btn-primary" type="submit">保存资料</button>
+          </div>
+          <p class="block-note pf-msg" id="pfMsg" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="pf-block" aria-labelledby="teacherTitle">
+      <h2 class="section-title" id="teacherTitle">教师模式</h2>
+      <p class="block-note">打开后即可创建班级并查看学生成绩。学生不需要开启。</p>
+      <label class="pf-toggle">
+        <input class="visually-hidden" type="checkbox" id="pfTeacher">
+        <span class="pf-switch" aria-hidden="true"></span>
+        <span>教师模式当前为 <b id="pfTeacherState">关闭</b></span>
+      </label>
+      <form class="pf-pass" id="teacherPassForm" hidden>
+        <label class="pf-label" for="teacherPass">教师密码</label>
+        <input class="cert-input" id="teacherPass" type="password" autocomplete="off">
+        <p class="block-note">此密码仅供教师使用。</p>
+        <div class="data-actions">
+          <button class="btn-primary" type="submit">开启教师模式</button>
+          <button class="btn-ghost" type="button" id="teacherPassCancel">取消</button>
+        </div>
+        <p class="block-note pf-msg" id="teacherPassMsg" role="status"></p>
+      </form>
+    </section>
+
+    <section class="pf-block" id="teacherPanel" aria-labelledby="classTitle" hidden>
+      <h2 class="section-title" id="classTitle">你的班级</h2>
+      <p class="block-note">创建班级即可获得代码。学生在本页输入该代码即可加入。请使用学生能认出的班级名称。</p>
+      <form class="cert-form" id="createForm">
+        <label class="pf-label" for="clsName">班级名称</label>
+        <input class="cert-input" id="clsName" type="text" maxlength="60" placeholder="例如 八年级科学">
+        <button class="btn-primary" type="submit">创建班级</button>
+      </form>
+      <p class="block-note pf-msg" id="createMsg" role="status"></p>
+      <ul class="cls-list" id="clsList"></ul>
+
+      <div class="cls-detail" id="clsDetail" hidden>
+        <div class="cls-detail-head">
+          <div>
+            <h3 class="cls-detail-name" id="clsDetailName"></h3>
+            <p class="cls-code-row">代码 <b class="cls-code" id="clsDetailCode"></b></p>
+          </div>
+          <div class="cls-actions">
+            <button class="btn-outline" type="button" id="clsCopy">复制代码</button>
+            <button class="btn-outline" type="button" id="clsRefresh">刷新成绩</button>
+            <button class="btn-ghost" type="button" id="clsDelete">删除班级</button>
+          </div>
+        </div>
+        <div class="cls-qr-row">
+          <button class="btn-outline" type="button" id="clsQrBtn" aria-expanded="false" aria-controls="clsQr">显示二维码</button>
+        </div>
+        <div class="cls-qr" id="clsQr" hidden>
+          <div class="cls-qr-box" id="clsQrBox"></div>
+          <div class="cls-qr-info">
+            <p class="block-note">学生用手机摄像头对准这个二维码，即可打开个人资料页面并加入班级。学生需要先保存一个昵称。</p>
+            <label class="pf-label" for="clsSite">网站地址</label>
+            <input class="cert-input cls-site" id="clsSite" type="text" autocomplete="off" spellcheck="false" placeholder="https://your-site.example/profile.html">
+            <p class="cls-link" id="clsLink"></p>
+            <div class="cls-actions">
+              <button class="btn-outline" type="button" id="clsQrCopy">复制链接</button>
+            </div>
+            <p class="block-note pf-msg" id="clsQrMsg" role="status"></p>
+          </div>
+        </div>
+        <p class="block-note pf-msg" id="clsDetailMsg" role="status"></p>
+        <div class="data-table" id="clsRoster"></div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">进度和成绩</h3>
+          <p class="block-note">某位学生在每个章节测验中的最高成绩。作业成绩见上方表格和电子表格。</p>
+          <div class="cls-actions">
+            <button class="btn-outline" type="button" id="clsCsv">下载成绩（CSV）</button>
+          </div>
+          <label class="pf-label" for="clsProgPick">学生</label>
+          <select class="cert-input cls-pick" id="clsProgPick"></select>
+          <ul class="cls-list" id="clsProgOut"></ul>
+        </div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">给班级的留言</h3>
+          <label class="pf-label" for="clsAnnounce">公告</label>
+          <textarea class="cert-input pf-bio" id="clsAnnounce" maxlength="300" rows="3" placeholder="例如：周五有测验。请先阅读识字相关的事实。"></textarea>
+          <div class="cls-actions">
+            <button class="btn-primary" type="button" id="clsAnnounceSave">发布公告</button>
+            <button class="btn-ghost" type="button" id="clsAnnounceClear">删除公告</button>
+          </div>
+        </div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">为本班关闭</h3>
+          <p class="block-note">本班学生看不到你在这里勾选的内容，只会看到一条简短的提示。</p>
+          <p class="pf-label">页面</p>
+          <div class="pick-grid" id="clsOffPages"></div>
+          <details class="pick-details">
+            <summary>Explore 页面中事实机的事实</summary>
+            <div class="pick-list" id="clsOffFacts"></div>
+          </details>
+          <details class="pick-details">
+            <summary>测验题目</summary>
+            <div class="pick-list" id="clsOffQuiz"></div>
+          </details>
+          <div class="cls-actions">
+            <button class="btn-primary" type="button" id="clsRulesSave">保存关闭的内容</button>
+          </div>
+          <p class="block-note pf-msg" id="clsRulesMsg" role="status"></p>
+        </div>
+
+        <div class="cls-tools">
+          <h3 class="cls-tools-title">作业</h3>
+          <p class="block-note">可以用测验的章节出作业，也可以自己写题目。每名学生在个人资料页面完成一次。</p>
+          <form class="cert-form" id="asgForm">
+            <label class="pf-label" for="asgTitle">标题</label>
+            <input class="cert-input" id="asgTitle" type="text" maxlength="80" placeholder="例如：识字小测">
+            <label class="pf-label" for="asgDue">截止日期</label>
+            <input class="cert-input" id="asgDue" type="date">
+            <fieldset class="pick-fieldset">
+              <legend class="pf-label">题目来源</legend>
+              <label class="pick"><input type="radio" name="asgMode" value="chapters" checked> <span>测验的章节</span></label>
+              <label class="pick"><input type="radio" name="asgMode" value="custom"> <span>我自己写的题目</span></label>
+            </fieldset>
+            <div id="asgChapterPart">
+              <p class="pf-label">章节</p>
+              <div class="pick-grid" id="asgChapters"></div>
+              <label class="pf-label" for="asgCount">题目数量</label>
+              <input class="cert-input" id="asgCount" type="number" min="1" max="52" value="10">
+            </div>
+            <div id="asgCustomPart" hidden>
+              <label class="pf-label" for="asgQText">题目</label>
+              <input class="cert-input" id="asgQText" type="text" maxlength="300">
+              <label class="pf-label" for="asgOpt0">选项 A</label>
+              <input class="cert-input" id="asgOpt0" type="text" maxlength="120">
+              <label class="pf-label" for="asgOpt1">选项 B</label>
+              <input class="cert-input" id="asgOpt1" type="text" maxlength="120">
+              <label class="pf-label" for="asgOpt2">选项 C</label>
+              <input class="cert-input" id="asgOpt2" type="text" maxlength="120">
+              <label class="pf-label" for="asgOpt3">选项 D</label>
+              <input class="cert-input" id="asgOpt3" type="text" maxlength="120">
+              <label class="pf-label" for="asgCorrect">正确答案</label>
+              <select class="cert-input" id="asgCorrect">
+                <option value="0">A</option>
+                <option value="1">B</option>
+                <option value="2">C</option>
+                <option value="3">D</option>
+              </select>
+              <label class="pf-label" for="asgExplain">解释（作答后显示）</label>
+              <input class="cert-input" id="asgExplain" type="text" maxlength="300">
+              <div class="cls-actions">
+                <button class="btn-outline" type="button" id="asgAddQ">添加题目</button>
+              </div>
+              <ol class="cls-list" id="asgQList"></ol>
+            </div>
+            <div class="cls-actions">
+              <button class="btn-primary" type="submit" id="asgSave">设置作业</button>
+            </div>
+          </form>
+          <p class="block-note pf-msg" id="asgMsg" role="status"></p>
+          <ul class="cls-list" id="asgList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="pf-block" aria-labelledby="joinTitle">
+      <h2 class="section-title" id="joinTitle">加入班级</h2>
+      <p class="block-note">向老师索取六位代码。加入班级仅在这台设备上有效。</p>
+      <form class="cert-form" id="joinForm">
+        <label class="pf-label" for="joinCode">班级代码</label>
+        <input class="cert-input cls-code-input" id="joinCode" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC123">
+        <button class="btn-primary" type="submit">加入</button>
+      </form>
+      <p class="block-note pf-msg" id="joinMsg" role="status"></p>
+      <ul class="cls-list" id="joinedList"></ul>
+    </section>
+
+    <section class="pf-block" id="asgBlock" aria-labelledby="asgStuTitle" hidden>
+      <h2 class="section-title" id="asgStuTitle">作业</h2>
+      <p class="block-note">来自你班级的作业。每份作业只能在此设备上完成一次。</p>
+      <ul class="cls-list" id="asgStudent"></ul>
+    </section>
+
+    <section class="pf-block" id="mateBlock" aria-labelledby="mateTitle" hidden>
+      <h2 class="section-title" id="mateTitle">同学</h2>
+      <p class="block-note">班级里的每个人都可以看到彼此的昵称、头像、颜色和简介。</p>
+      <div id="classmates"></div>
+    </section>
+
+    <section class="pf-block" aria-labelledby="privacyTitle">
+      <h2 class="section-title" id="privacyTitle">班级与隐私</h2>
+      <p class="block-note">班级功能需要联网。老师可以看到学生的昵称、头像、简介、测验成绩以及上次测验的时间。同学可以看到昵称、头像、颜色和简介。其他内容都不会共享。</p>
+      <p class="block-note">清除本设备上的数据也会忘记这里的教师账户，因此在本设备上创建的班级将无法再管理。</p>
+      <p class="block-note pf-msg" id="cloudStatus" role="status"></p>
+    </section>
+  </div>
+
+  <script src="qr.js"></script>
+</main>
+
+<footer class="site-footer">
+  <div class="sf-inner">
+    <div class="sf-brand">
+      <a class="brand brand--light" href="index.html">
+        <span class="brand-mark" aria-hidden="true">4</span>
+        <span class="brand-text">
+          <span class="brand-name">优质教育</span>
+          <span class="brand-sub">人人享有 · 2030年前</span>
+        </span>
+      </a>
+      <p class="sf-about">一个关于联合国可持续发展目标4的独立学校项目。它并非联合国或联合国教科文组织的官方网站。</p>
+      <p class="sf-count"><b data-days>1,525</b> 天后即2030年底</p>
+    </div>
+    <nav class="sf-cols" aria-label="全部页面">
+      <div class="sf-col">
+        <p class="sf-h">学习</p>
+        <a href="facts.html">事实数据</a>
+        <a href="targets.html">十项具体目标</a>
+        <a href="solutions.html">解决方案</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">游戏</p>
+        <a href="explore.html">探索</a>
+        <a href="quiz.html">测验</a>
+        <a href="english.html">学习英语</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">行动</p>
+        <a href="action.html">行动起来</a>
+        <a href="timer.html">学习计时器</a>
+        <a href="slides.html">课堂幻灯片</a>
+        <a href="profile.html">我的资料</a>
+        <a href="progress.html">我的进度</a>
+        <a href="download.html">获取应用</a>
+      </div>
+      <div class="sf-col">
+        <p class="sf-h">关于</p>
+        <a href="about.html">关于本站</a>
+        <a href="about.html#glossary">术语表</a>
+        <a href="about.html#sources">资料来源</a>
+      </div>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <div class="sf-base-inner">
+      <p>数据于2026年10月28日根据联合国和联合国教科文组织的报告汇编。</p>
+      <p>按 <kbd>M</kbd> 开启或关闭音效，并按 <kbd>?</kbd> 查看所有快捷键。</p>
+      <div class="lang-foot"><span class="lang-foot-label" aria-hidden="true">语言</span><select class="lang-sel" aria-label="语言"><option value="../profile.html" lang="en">English</option><option value="../id/profile.html" lang="id">Bahasa Indonesia</option><option value="../es/profile.html" lang="es">Español</option><option value="../fr/profile.html" lang="fr">Français</option><option value="profile.html" lang="zh-CN" selected>中文</option></select></div>
+    </div>
+  </div>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+<dialog id="shortcuts" aria-labelledby="scTitle">
+  <div class="dlg-head">
+    <h2 class="dlg-title" id="scTitle">键盘快捷键</h2>
+    <button class="dlg-close" type="button" id="scClose" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <dl class="sc-list">
+    <dt><kbd class="k">M</kbd></dt><dd>开启或关闭音效，适用于每个页面</dd>
+    <dt><kbd class="k">←</kbd><kbd class="k">→</kbd></dt><dd>上一个或下一个目标、里程碑或幻灯片</dd>
+    <dt><kbd class="k">A</kbd><span class="sc-to">至</span><kbd class="k">D</kbd></dt><dd>回答测验题目（数字键1至4也可以）</dd>
+    <dt><kbd class="k">Enter</kbd></dt><dd>进入下一道测验题</dd>
+    <dt><kbd class="k">空格键</kbd></dt><dd>开始或暂停学习计时器</dd>
+    <dt><kbd class="k">R</kbd></dt><dd>重置计时器</dd>
+    <dt><kbd class="k">S</kbd></dt><dd>跳到下一个计时时段</dd>
+    <dt><kbd class="k">F</kbd></dt><dd>幻灯片页面全屏显示</dd>
+    <dt><kbd class="k">?</kbd></dt><dd>显示此列表</dd>
+  </dl>
+</dialog>
+
+</div>
+<script>window.SDG4_LOCALES = {"num": "zh-CN", "date": "zh-CN", "short": "zh-CN"};</script>
+<script src="site.js"></script>
+<script>if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>
