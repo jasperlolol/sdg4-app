@@ -385,7 +385,7 @@
     }
   ];
 
-  const QUIZ = [
+  const BASE_QUIZ = [
     // The goal
     { cat: 'El objetivo', q: '¿Para qué año se pretende alcanzar los Objetivos de Desarrollo Sostenible, incluido el ODS 4?', options: ['2025', '2030', '2040', '2050'], answer: 1, explain: 'Todos los Estados miembros de la ONU adoptaron la Agenda 2030 en 2015. Da al mundo hasta 2030 para alcanzar los 17 objetivos.', src: 'Agenda 2030 de la ONU (2015)' },
     { cat: 'El objetivo', q: '¿Cuántos Objetivos de Desarrollo Sostenible hay?', options: ['6', '8', '12', '17'], answer: 3, explain: 'Hay 17 objetivos, y la educación es el número 4. Los Objetivos de Desarrollo del Milenio anteriores eran 8.', src: 'Agenda 2030 de la ONU (2015)' },
@@ -449,8 +449,53 @@
     { cat: 'Inclusión', q: '¿Qué tratado establece el derecho a la educación inclusiva de las personas con discapacidad?', options: ['El Acuerdo de París', 'La Convención sobre los Derechos de las Personas con Discapacidad', 'El Protocolo de Kioto', 'Los Convenios de Ginebra'], answer: 1, explain: 'El artículo 24 de la Convención sobre los Derechos de las Personas con Discapacidad (2006) establece el derecho a la educación inclusiva en todos los niveles.', src: 'CDPD de la ONU (2006), artículo 24' },
     { cat: 'Inclusión', q: '¿Qué es el Día Internacional de la Lengua Materna, que se celebra el 21 de febrero?', options: ['Un día para dejar de enseñar inglés', 'Un día para promover la diversidad lingüística y la educación en lengua materna', 'Un descanso de los exámenes escolares', 'Un día para evaluar a los docentes'], answer: 1, explain: 'La UNESCO creó el Día Internacional de la Lengua Materna para promover la diversidad lingüística y la educación en las lenguas que las personas hablan en casa.', src: 'UNESCO, Día Internacional de la Lengua Materna' },
     { cat: 'Inclusión', q: '¿Por qué aprender en un idioma que los niños no hablan en casa puede ser un obstáculo?', options: ['Hace más difícil el aprendizaje inicial para muchos niños', 'Hace las escuelas más baratas', 'Elimina la necesidad de docentes', 'No afecta al aprendizaje'], answer: 0, explain: 'Los niños aprenden mejor primero en una lengua que entienden. La educación en lengua materna les da una base más sólida para leer y aprender después.', src: 'UNESCO, Día Internacional de la Lengua Materna' },
-    { cat: 'Inclusión', q: 'En el ODS 4, ¿qué significa la educación “inclusiva”?', options: ['Educación solo para familias ricas', 'Educación que llega a todas las personas, incluidas las personas con discapacidad y los grupos marginados', 'Educación solo para adultos', 'Solo aprendizaje en línea'], answer: 1, explain: 'El ODS 4 pide una educación inclusiva: una educación que llegue a todas las personas, incluidas las personas con discapacidad, las niñas y los grupos marginados.', src: 'Agenda 2030 de la ONU (2015)' }
+    { cat: 'Inclusión', q: 'En el ODS 4, ¿qué significa la educación “inclusiva”?', options: ['Educación solo para familias ricas', 'Educación que llega a todas las personas, incluidas las personas con discapacidad y los grupos marginados', 'Educación solo para adultos', 'Solo aprendizaje en línea'], answer: 1, explain: 'El ODS 4 pide una educación inclusiva: una educación que llegue a todas las personas, incluidas las personas con discapacidad, las niñas y los grupos marginados.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Acceso', q: '¿Qué meta dice que todas las niñas y todos los niños deben completar una educación primaria y secundaria gratuita, equitativa y de calidad?', options: ['Meta 4.1', 'Meta 4.3', 'Meta 4.5', 'Meta 4.7'], answer: 0, explain: 'La meta 4.1 pide que todas las niñas y todos los niños completen una educación primaria y secundaria gratuita, equitativa y de calidad, que conduzca a resultados de aprendizaje pertinentes.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Acceso', q: '¿Qué significa una educación “equitativa” en el ODS 4?', options: ['Una educación que cuesta lo mismo en todas partes', 'Una educación que llega a todos por igual, incluidos los grupos desfavorecidos', 'Una educación que solo se imparte en las ciudades', 'Una sola prueba para todos los estudiantes'], answer: 1, explain: 'Una educación equitativa significa que todas las personas tienen una oportunidad justa, incluidos los niños pobres, con discapacidad o que viven en zonas remotas.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Finalización', q: '¿Cuál de estas es una razón común por la que los niños dejan de ir a la escuela?', options: ['Terminan sus lecciones demasiado pronto', 'Las escuelas tienen demasiados libros', 'La pobreza y los costos de la escuela', 'Los maestros son demasiado amables'], answer: 2, explain: 'Los costos, como cuotas, uniformes y transporte, junto con la pobreza, figuran entre las razones más comunes por las que los niños abandonan la escuela.', src: 'UNESCO' },
+    { cat: 'Finalización', q: '¿Qué significa “finalización” en las estadísticas educativas?', options: ['Empezar la escuela por primera vez', 'Aprobar un solo examen', 'Cambiarse a otra escuela', 'Terminar el último grado de un nivel escolar'], answer: 3, explain: 'La finalización significa que un estudiante termina el último grado de un nivel, como la primaria o la secundaria.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Finalización', q: '¿Por qué el ODS 4 pide una educación primaria y secundaria gratuita?', options: ['Para que la pobreza no impida que los niños aprendan', 'Para que el gobierno ahorre dinero', 'Para que los niños puedan trabajar en su lugar', 'Para que las escuelas puedan cerrar antes'], answer: 0, explain: 'La educación gratuita elimina una barrera económica, para que las familias pobres puedan enviar a sus hijos a la escuela.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Finalización', q: 'En la meta 4.1, ¿qué significa “resultados de aprendizaje pertinentes”?', options: ['Aprender solo para los exámenes', 'Aprendizaje útil para la vida y el trabajo', 'Aprender solo en un idioma extranjero', 'Aprender sin deberes'], answer: 1, explain: 'Significa que lo que aprenden los niños debe ser útil para su vida y su trabajo.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Aprendizaje', q: '¿Qué es la “pobreza de aprendizaje”?', options: ['No tener uniforme escolar', 'No saber usar una computadora', 'No poder leer y comprender un texto sencillo hacia los 10 años', 'No tener una bicicleta para ir a la escuela'], answer: 2, explain: 'La pobreza de aprendizaje es la proporción de niños que no pueden leer y comprender un texto sencillo hacia los 10 años. El Banco Mundial la usa para seguir el aprendizaje.', src: 'Banco Mundial, pobreza de aprendizaje' },
+    { cat: 'Aprendizaje', q: '¿Qué son las “habilidades fundamentales” en el aprendizaje temprano?', options: ['Bailar y cantar', 'Reglas deportivas', 'Recetas de cocina', 'Leer, escribir y matemáticas básicas'], answer: 3, explain: 'Las habilidades fundamentales, como leer, escribir y las matemáticas básicas, son la base de todo aprendizaje posterior.', src: 'UNESCO' },
+    { cat: 'Aprendizaje', q: '¿Por qué enseñar en un idioma que los niños entienden les ayuda a aprender?', options: ['Aprenden a leer más rápido en un idioma conocido', 'Las lecciones se vuelven más cortas', 'Ya no hacen falta maestros', 'Los exámenes se vuelven más fáciles de hacer'], answer: 0, explain: 'Los niños aprenden mejor en un idioma que hablan y entienden. Por eso el apoyo en la lengua materna ayuda al aprendizaje temprano.', src: 'UNESCO, Día Internacional de la Lengua Materna' },
+    { cat: 'Aprendizaje', q: '¿Qué significa “evaluación” en educación?', options: ['Construir aulas nuevas', 'Medir lo que los estudiantes han aprendido', 'Pagar los salarios de los maestros', 'Elegir los uniformes escolares'], answer: 1, explain: 'La evaluación mide el aprendizaje, para que los docentes vean qué saben los estudiantes y en qué necesitan ayuda.', src: 'UNESCO' },
+    { cat: 'Aprendizaje', q: '¿Qué condiciones ayudan mejor a los estudiantes a aprender?', options: ['Una sala abarrotada y sin libros', 'Aprender solo de internet', 'Un aula segura y de apoyo, con materiales y maestros capacitados', 'Aprender sin ningún maestro'], answer: 2, explain: 'Las aulas seguras y bien equipadas, con maestros capacitados, dan a los estudiantes la mejor oportunidad de aprender.', src: 'UNESCO' },
+    { cat: 'Docentes', q: '¿Qué es un “maestro capacitado”?', options: ['Cualquiera que lea bien', 'Una persona que se ofrece como voluntaria una sola vez', 'Un estudiante que ayuda con los deberes', 'Alguien que ha completado la formación o certificación docente que exige su país'], answer: 3, explain: 'Un maestro capacitado ha completado la formación o la certificación docente que exige su país.', src: 'Informe mundial sobre los docentes de la UNESCO (2024)' },
+    { cat: 'Docentes', q: '¿Por qué necesitan los maestros un desarrollo profesional continuo?', options: ['Para mantener al día sus habilidades y conocimientos', 'Para evitar dar clases', 'Para tener más vacaciones escolares', 'Solo para convertirse en directores'], answer: 0, explain: 'La formación continua ayuda a los docentes a mantener al día sus conocimientos y métodos de enseñanza.', src: 'Informe mundial sobre los docentes de la UNESCO (2024)' },
+    { cat: 'Docentes', q: '¿Cuál de estas situaciones puede agravar la escasez de docentes?', options: ['Buenos programas de formación', 'Salarios bajos y malas condiciones de trabajo', 'Aulas seguras', 'Trayectorias profesionales claras'], answer: 1, explain: 'Los salarios bajos y las malas condiciones dificultan retener a los docentes, lo que agrava la escasez.', src: 'Informe mundial sobre los docentes de la UNESCO (2024)' },
+    { cat: 'Docentes', q: '¿Qué busca aumentar la meta 4.c, especialmente en los países menos adelantados?', options: ['El número de exámenes', 'El número de almuerzos escolares', 'La oferta de docentes calificados', 'El número de actividades deportivas escolares'], answer: 2, explain: 'La meta 4.c pide un aumento sustancial de la oferta de docentes calificados, especialmente en los países menos adelantados y los pequeños Estados insulares en desarrollo.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Equidad', q: '¿En qué día se celebra el Día Internacional de la Niña?', options: ['8 de marzo', '24 de enero', '5 de octubre', '11 de octubre'], answer: 3, explain: 'Las Naciones Unidas celebran el Día Internacional de la Niña el 11 de octubre.', src: 'Naciones Unidas' },
+    { cat: 'Equidad', q: '¿Qué busca eliminar la meta 4.5?', options: ['Las desigualdades de género y de otro tipo en la educación', 'Las cuotas escolares para los maestros', 'Exámenes para todos los estudiantes', 'Vacaciones escolares'], answer: 0, explain: 'La meta 4.5 busca eliminar las desigualdades de género y garantizar el acceso en igualdad de condiciones a los grupos vulnerables, incluidas las personas con discapacidad.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Equidad', q: '¿Por qué es importante capacitar a los docentes para apoyar a los estudiantes con discapacidad?', options: ['Para que los niños con discapacidad puedan saltarse los exámenes', 'Para que todos los niños puedan aprender en un aula inclusiva', 'Para que las escuelas necesiten menos aulas', 'Para que los maestros trabajen menos'], answer: 1, explain: 'Los docentes capacitados ayudan a los niños con discapacidad a aprender junto a sus compañeros.', src: 'CDPD de la ONU (2006), artículo 24' },
+    { cat: 'Equidad', q: '¿Qué significa “marginado” en educación?', options: ['Maestros jubilados', 'Escuelas cerca del mar', 'Grupos que quedan excluidos o relegados a los márgenes de la sociedad', 'Estudiantes que van primeros en su clase'], answer: 2, explain: 'Los grupos marginados quedan excluidos o en desventaja, como las personas pobres, los niños rurales y las comunidades minoritarias.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Dinero y escuelas', q: '¿Qué sugirió el Marco de Acción de Incheon sobre el gasto en educación?', options: ['El 1 % del PIB', 'El 50 % del gasto público', 'Ninguna cantidad fijada', 'Del 4 al 6 % del PIB y/o del 15 al 20 % del gasto público'], answer: 3, explain: 'El Marco de Acción de Educación 2030 sugiere destinar del 4 al 6 % del PIB y/o del 15 al 20 % del gasto público a la educación.', src: 'Marco de Acción de Incheon (2015)' },
+    { cat: 'Dinero y escuelas', q: '¿Qué significa “gasto público”?', options: ['Dinero que gasta un gobierno en servicios públicos como las escuelas', 'Dinero que gastan las familias en tiendas', 'Dinero que solo aportan los donantes', 'Dinero que prestan los bancos'], answer: 0, explain: 'El gasto público es lo que los gobiernos destinan a servicios como la salud y la educación.', src: 'UNESCO' },
+    { cat: 'Dinero y escuelas', q: '¿Por qué las escuelas necesitan agua limpia, baños y electricidad?', options: ['Para que la escuela parezca más grande', 'Para que los niños aprendan en condiciones sanas y seguras', 'Para que los exámenes sean más fáciles', 'Para que las escuelas puedan cerrar antes'], answer: 1, explain: 'Los servicios básicos ayudan a los niños a seguir en la escuela y a aprender en condiciones sanas y seguras.', src: 'UNESCO' },
+    { cat: 'Competencias', q: '¿Qué son las “habilidades para la vida” en educación?', options: ['Solo habilidades deportivas', 'Solo habilidades culinarias', 'Habilidades para la vida diaria, como tomar decisiones y comunicarse', 'Solo programación informática'], answer: 2, explain: 'Las habilidades para la vida ayudan a las personas a tomar decisiones, comunicarse bien y afrontar los desafíos diarios.', src: 'UNESCO' },
+    { cat: 'Competencias', q: '¿Cuál de estas es una habilidad técnica o profesional?', options: ['Leer poesía', 'Pintar por diversión', 'Cantar', 'Soldadura'], answer: 3, explain: 'Las habilidades técnicas y profesionales, como la soldadura, preparan a las personas para trabajos específicos.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Competencias', q: '¿Qué es la alfabetización digital?', options: ['Usar herramientas digitales e internet de forma segura y eficaz', 'Solo escribir a mano', 'Reparar bicicletas', 'Solo jugar videojuegos'], answer: 0, explain: 'La alfabetización digital significa usar herramientas digitales e internet de forma segura, eficaz y responsable.', src: 'UNESCO' },
+    { cat: 'Competencias', q: '¿Qué meta del ODS 4 trata sobre las habilidades para el empleo y el trabajo decente?', options: ['Meta 4.a', 'Meta 4.4', 'Meta 4.6', 'Meta 4.b'], answer: 1, explain: 'La meta 4.4 trata de que los jóvenes y adultos tengan habilidades pertinentes, incluidas las técnicas y profesionales, para el empleo, el trabajo decente y el emprendimiento.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Competencias', q: '¿Qué es la “educación para la ciudadanía mundial”?', options: ['Aprender solo la historia de un país', 'Aprender a viajar en avión', 'Aprender sobre el mundo y los derechos humanos, y actuar con responsabilidad', 'Aprender solo sobre el dinero extranjero'], answer: 2, explain: 'Enseña a las personas a comprender los problemas globales y a actuar con responsabilidad por un mundo más justo.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Historia', q: '¿Qué objetivo fijó la Conferencia Mundial sobre Educación para Todos de 1990?', options: ['Universidad gratuita para todos', 'Un único examen mundial', 'Uniformes escolares iguales en todo el mundo', 'Educación básica para todos'], answer: 3, explain: 'La conferencia de 1990 en Jomtien fijó el objetivo de la educación básica para todos.', src: 'UNESCO' },
+    { cat: 'Historia', q: '¿Dónde se celebró en 2000 el Foro Mundial sobre la Educación que adoptó el Marco de Dakar?', options: ['Dakar, Senegal', 'Nueva York, Estados Unidos', 'Tokio, Japón', 'Sídney, Australia'], answer: 0, explain: 'El Marco de Acción de Dakar se adoptó en 2000 y renovó los objetivos de Educación para Todos para 2015.', src: 'UNESCO, Foro Mundial sobre la Educación (2000)' },
+    { cat: 'Historia', q: '¿Dónde se celebró el Foro Mundial sobre la Educación de 2015 que adoptó la Declaración de Incheon?', options: ['París, Francia', 'Incheon, República de Corea', 'Nairobi, Kenia', 'Lima, Perú'], answer: 1, explain: 'La Declaración de Incheon se adoptó en el Foro Mundial sobre la Educación celebrado en Incheon (República de Corea) en 2015.', src: 'Foro Mundial sobre la Educación, Declaración de Incheon (2015)' },
+    { cat: 'Historia', q: '¿Qué tratado, adoptado en 1989, pide a los países que hagan gratuita y obligatoria la educación primaria?', options: ['El Convenio de Ginebra', 'El Protocolo de Kioto', 'La Convención sobre los Derechos del Niño', 'El Acuerdo de París'], answer: 2, explain: 'El artículo 28 de la Convención sobre los Derechos del Niño pide a los países que la educación primaria sea obligatoria y gratuita para todos.', src: 'Convención de la ONU sobre los Derechos del Niño (1989), artículo 28' },
+    { cat: 'Historia', q: '¿Qué objetivos reemplazaron a los Objetivos de Desarrollo del Milenio en 2015?', options: ['Los Objetivos Olímpicos', 'Los Objetivos de Kioto', 'Los Objetivos de París', 'Los Objetivos de Desarrollo Sostenible'], answer: 3, explain: 'Los Objetivos de Desarrollo Sostenible, adoptados en 2015, sucedieron a los ODM y se extienden hasta 2030.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Primeros años', q: '¿Qué edades suelen abarcar la atención y la educación de la primera infancia?', options: ['Desde el nacimiento hasta alrededor de los 8 años', 'De 15 a 18 años', 'De 20 a 25 años', 'Solo adultos'], answer: 0, explain: 'La atención y la educación de la primera infancia abarca a los niños desde el nacimiento hasta alrededor de los 8 años.', src: 'UNESCO' },
+    { cat: 'Primeros años', q: '¿Cuál de estas cosas favorece el desarrollo de un niño pequeño?', options: ['Hacer exámenes', 'Aprendizaje basado en el juego y revisiones de salud', 'Pagar cuotas escolares', 'Trabajar en una fábrica'], answer: 1, explain: 'El juego, la atención sanitaria, la nutrición y el aprendizaje temprano apoyan todos el desarrollo de un niño pequeño.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Primeros años', q: '¿Por qué ayuda el aprendizaje temprano a la escolarización posterior?', options: ['Significa que los niños nunca necesitan maestros', 'Elimina la necesidad de la primaria', 'Desarrolla las habilidades que los niños necesitan para la primaria', 'Hace innecesarios los exámenes'], answer: 2, explain: 'Un buen comienzo en el aprendizaje temprano ayuda a los niños a tener éxito en la primaria.', src: 'Agenda 2030 de la ONU (2015)' },
+    { cat: 'Primeros años', q: '¿Qué significa la “nutrición” para los niños pequeños?', options: ['Juegos en el teléfono', 'Uniformes escolares', 'Deberes', 'Comida sana que ayuda al niño a crecer y aprender'], answer: 3, explain: 'Una buena nutrición favorece el crecimiento, la salud y el aprendizaje en la primera infancia.', src: 'UNESCO' },
+    { cat: 'Alfabetización', q: '¿Qué organización se encarga del Día Internacional de la Alfabetización?', options: ['UNESCO', 'OMS', 'UNICEF', 'El Banco Mundial'], answer: 0, explain: 'La UNESCO organiza el Día Internacional de la Alfabetización, que se celebra el 8 de septiembre.', src: 'UNESCO, Día Internacional de la Alfabetización' },
+    { cat: 'Alfabetización', q: '¿Qué es la “alfabetización funcional”?', options: ['Solo leer poesía', 'Habilidades de lectura y escritura necesarias para la vida diaria y el trabajo', 'Hablar muchos idiomas', 'Escribir código informático'], answer: 1, explain: 'La alfabetización funcional significa tener las habilidades de lectura y escritura necesarias para desenvolverse en la vida diaria y en el trabajo.', src: 'UNESCO' },
+    { cat: 'Alfabetización', q: '¿Qué son las habilidades “fundamentales” de lectura y cálculo?', options: ['Matemáticas avanzadas universitarias', 'Solo idiomas extranjeros', 'Lectura, escritura y matemáticas básicas que se aprenden pronto en la escuela', 'Las reglas de los deportes'], answer: 2, explain: 'Estas habilidades básicas son la base de todo aprendizaje posterior.', src: 'UNESCO' },
+    { cat: 'Alfabetización', q: '¿Por qué es importante la alfabetización de adultos?', options: ['Reemplaza la escuela para los niños', 'Significa que los adultos nunca necesitan trabajo', 'Acaba con las cuotas escolares', 'Ayuda a los adultos a apoyar el aprendizaje de sus hijos y a encontrar trabajo'], answer: 3, explain: 'La alfabetización de adultos ayuda a las personas a trabajar, gestionar su dinero y apoyar la educación de sus hijos.', src: 'UNESCO, Día Internacional de la Alfabetización' },
+    { cat: 'Inclusión', q: '¿Qué es un “ajuste razonable” en una escuela?', options: ['Un ajuste que ayuda a un niño con discapacidad a participar', 'Un edificio escolar más grande', 'Un uniforme escolar más barato', 'Unas vacaciones escolares más largas'], answer: 0, explain: 'Es un cambio, como una rampa o un apoyo adicional, que permite a un niño con discapacidad aprender junto a los demás.', src: 'CDPD de la ONU (2006), artículo 24' },
+    { cat: 'Inclusión', q: '¿Por qué es importante la lengua de señas en la educación de los niños sordos?', options: ['Reemplaza la lectura', 'Les da pleno acceso al aprendizaje y a la comunicación', 'Es solo para maestros', 'Hace los exámenes más cortos'], answer: 1, explain: 'La lengua de señas da a los niños sordos un idioma completo para aprender y comunicarse. El artículo 24 de la CDPD lo reconoce.', src: 'CDPD de la ONU (2006), artículo 24' },
+    { cat: 'Inclusión', q: '¿Qué hace que una escuela sea “accesible”?', options: ['Tiene una piscina', 'Está en la montaña', 'Todos, incluidos los niños con discapacidad, pueden entrar y usarla', 'No cobra cuotas'], answer: 2, explain: 'Las escuelas accesibles tienen rampas, baños y materiales de aprendizaje que todos pueden usar.', src: 'CDPD de la ONU (2006), artículo 24' },
+    { cat: 'Inclusión', q: '¿Qué grupo suele quedarse fuera de la escuela por el idioma?', options: ['Niños que viven en ciudades', 'Niños a los que les gusta el deporte', 'Niños que usan gafas', 'Niños que reciben clases en un idioma que no hablan en casa'], answer: 3, explain: 'Los niños que reciben clases en un idioma que no hablan en casa pueden tener dificultades para aprender, por lo que el apoyo en la lengua materna ayuda.', src: 'UNESCO, Día Internacional de la Lengua Materna' },
   ];
+  let QUIZ = BASE_QUIZ;
 
   const MILESTONES = [
     { year: '1948', short: 'Derecho a la educación', title: 'La educación se convierte en un derecho humano', text: 'La Declaración Universal de Derechos Humanos afirma que toda persona tiene derecho a la educación, y que la educación elemental será gratuita y obligatoria (artículo 26).', src: 'Asamblea General de la ONU, 1948' },
@@ -1180,6 +1225,46 @@
     $('#quizStart').hidden = name !== 'start';
     $('#quizPlay').hidden = name !== 'play';
     $('#quizResult').hidden = name !== 'result';
+    renderHelperChips();
+  }
+
+  /* Grades 1 to 12. A grade with a question bank (grades.js) can be played; the others say Coming soon.
+     Grade play is kept apart from the all-grades scores and is not sent to the leaderboard. */
+  const GRADE_KEY = 'sdg4.quiz.grade';
+  let quizGrade = 'all';
+  const gradeBank = (g) => (window.SDG4_GRADES && Array.isArray(window.SDG4_GRADES[g]) ? window.SDG4_GRADES[g] : []);
+  const gradeReady = (g) => gradeBank(g).length > 0;
+
+  function setGrade(g) {
+    quizGrade = g !== 'all' && gradeReady(g) ? String(g) : 'all';
+    QUIZ = quizGrade === 'all' ? BASE_QUIZ : gradeBank(quizGrade).map((row) => ({
+      cat: CHAPTER_ORDER[row.ch], q: row.q, options: row.options, answer: row.answer, explain: row.explain, src: row.src, mix: true
+    }));
+  }
+
+  function renderGrades() {
+    const box = $('#gradeGrid');
+    if (!box) return;
+    box.textContent = '';
+    const choices = [{ key: 'all', label: 'Todos los grados' }];
+    for (let g = 1; g <= 12; g += 1) choices.push({ key: String(g), label: fill('Grado {0}', g) });
+    choices.forEach((c) => {
+      const ready = c.key === 'all' || gradeReady(c.key);
+      const count = c.key === 'all' ? BASE_QUIZ.length : gradeBank(c.key).length;
+      const on = c.key === quizGrade;
+      const b = h('button', 'grade-card' + (on ? ' is-on' : ''));
+      b.type = 'button';
+      b.disabled = !ready;
+      b.setAttribute('aria-pressed', String(on));
+      b.append(h('span', 'gc-name', c.label), h('span', 'gc-note', ready ? fill('{0} preguntas', count) : 'Próximamente'));
+      b.addEventListener('click', () => {
+        Sound.play('tap');
+        setGrade(c.key);
+        store.set(GRADE_KEY, quizGrade);
+        renderModes();
+      });
+      box.appendChild(b);
+    });
   }
 
   function renderModes() {
@@ -1201,6 +1286,9 @@
       grid.appendChild(b);
     });
     $('#bankSize').textContent = String(QUIZ.length);
+    renderGrades();
+    const flash = $('.flash-block');
+    if (flash) flash.hidden = quizGrade !== 'all';
     renderChapters();
     renderBoard();
   }
@@ -1271,6 +1359,51 @@
     qTick();
   }
 
+  // Moon dust: every correct answer clears 5 cm of the moon. A wrong answer clears nothing.
+  function updateMoon(done) {
+    const total = quiz.order.length;
+    $('#moonFill').style.width = (done / total) * 100 + '%';
+    $('#moonText').textContent = done
+      ? fill('{0} cm limpiados = {1} × 5 cm', done * 5, done)
+      : 'Responde bien para limpiar 5 cm de la Luna.';
+    $('#cwCm').textContent = done * 5 + ' cm';
+    moveCleaner(done / total, done === 0);
+  }
+
+  // The small screen: a person wipes the dust off the moon, from left to right.
+  const CW = { cx: 100, cy: 78, r: 50, left: 48, right: 160 };
+  let cwX = CW.left;
+  let cwRaf = 0;
+  function cwSurface(x) {
+    return CW.cy + Math.sqrt(Math.max(0, CW.r * CW.r - (x - CW.cx) * (x - CW.cx)));
+  }
+  function drawCleaner(x) {
+    const clip = $('#cwRect');
+    clip.setAttribute('x', x);
+    clip.setAttribute('width', 200 - x);
+    const px = Math.max(CW.cx - CW.r + 4, x - 10);
+    $('#cwPerson').setAttribute('transform', 'translate(' + px + ' ' + cwSurface(px) + ')');
+  }
+  function moveCleaner(frac, instant) {
+    const to = CW.left + frac * (CW.right - CW.left);
+    cancelAnimationFrame(cwRaf);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (instant || reduce) {
+      cwX = to;
+      drawCleaner(cwX);
+      return;
+    }
+    const from = cwX;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / 700);
+      cwX = from + (to - from) * (1 - Math.pow(1 - t, 3));
+      drawCleaner(cwX);
+      if (t < 1) cwRaf = requestAnimationFrame(step);
+    };
+    cwRaf = requestAnimationFrame(step);
+  }
+
   function renderQuestion() {
     const total = quiz.order.length;
     const q = QUIZ[quiz.order[quiz.i]];
@@ -1278,6 +1411,7 @@
     $('#qpText').textContent = 'Pregunta ' + (quiz.i + 1) + ' de ' + total;
     $('#qpScore').textContent = scoreText();
     $('#qpFill').style.width = (quiz.i / total) * 100 + '%';
+    updateMoon(quiz.correct);
     $('#qCat').textContent = q.cat;
     renderStreak(false);
     if (modeInfo(quiz.mode).lifeline) $('#lifelineBtn').disabled = quiz.lifelineUsed;
@@ -1371,6 +1505,7 @@
       quiz.streak = 0;
     }
     quiz.answers.push({ qi, chosen, correct, timedOut, cat: q.cat });
+    updateMoon(quiz.correct);
 
     buttons.forEach((b, j) => {
       b.disabled = true;
@@ -1418,6 +1553,163 @@
     } else {
       finishQuiz();
     }
+  }
+
+  /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
+     quiz's own explanations, and it never gives an answer before the question has been answered. */
+  const HELPER_KEY = 'sdg4.quiz.helper';
+  const HELP_GREETING = 'Hola, soy el asistente del ODS 4. Puedo dar pistas, explicar las respuestas después de que elijas y mostrar de dónde vienen los datos. Nunca revelo una respuesta antes de que elijas una.';
+  const HELP_CHIPS_PLAY = [
+    { label: 'Pista', intent: 'hint' },
+    { label: 'Explica esto', intent: 'explain' },
+    { label: '¿De dónde viene?', intent: 'source' },
+    { label: '¿Cómo funciona la Luna?', intent: 'moon' }
+  ];
+  const HELP_CHIPS_REST = [
+    { label: '¿Qué es el ODS 4?', intent: 'sdg' },
+    { label: '¿Cómo funcionan los capítulos?', intent: 'chapter' },
+    { label: '¿De dónde vienen los datos?', intent: 'source' },
+    { label: '¿Cómo funciona la Luna?', intent: 'moon' }
+  ];
+  // Each rule lists words in English, Spanish, French, Indonesian and Chinese.
+  const HELP_RULES = [
+    ['hint', /\b(hint|hints|clue|stuck|pista|pistas|astuce|indice|petunjuk)\b|提示|线索/],
+    ['refuse', /\b(the answer|which one|correct one|just tell|tell me the answer|give me the answer|respuesta|reponse|jawaban)\b|答案/],
+    ['explain', /\b(explain|explanation|why|reason|meaning|explica|explique|pourquoi|mengapa|jelaskan)\b|解释|为什么/],
+    ['source', /\b(source|sources|from|proof|where|fuente|fuentes|origen|sumber|dari)\b|来源|出处/],
+    ['moon', /\b(moon|cm|clean|clear|explode|explodes|world|luna|lune|bulan)\b|月球|爆炸/],
+    ['chapter', /\b(chapter|chapters|topic|topics|capitulo|capitulos|chapitre|bab)\b|章节/],
+    ['modes', /\b(mode|modes|classic|challenge|marathon|timer|timed|seconds|points|streak|bonus|modo|modos|temps)\b|模式|计时|连胜/],
+    ['score', /\b(score|scores|leaderboard|board|save|saved|best|puntuacion|classement|skor|papan)\b|分数|排行|保存/],
+    ['flash', /\b(flashcard|flashcards|flash|card|cards|tarjeta|tarjetas|fiche|fiches|kartu)\b|闪卡|卡片/],
+    ['lifeline', /\b(lifeline|50|5050|joker)\b/],
+    ['sound', /\b(sound|mute|aloud|speak|voice|audio|silencio|muet|suara)\b|静音|朗读/],
+    ['sdg', /\b(sdg|sdg4|goal|goals|target|targets|meta|objetivo|objectif|tujuan)\b|目标|指标/],
+    ['help', /\b(hi|hello|hey|help|hola|bonjour|halo|aide|ayuda|bantuan|what can you)\b|你好|帮助/]
+  ];
+  const HELP_STOP = ['what', 'when', 'where', 'which', 'with', 'about', 'from', 'that', 'this', 'does', 'have', 'tell', 'mean', 'please', 'there', 'their', 'they', 'would', 'could', 'should', 'your', 'show', 'give', 'answer', 'question', 'explain', 'anything', 'something', 'know', 'some', 'more'];
+  const helperNorm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const helperOn = () => store.get(HELPER_KEY, true) !== false;
+  // Whole words, with a plain plural ending removed, so that 'targets' matches 'target'.
+  const helperWords = (s) => helperNorm(s).split(/[^a-z0-9]+/).filter((w) => w.length >= 4).map((w) => w.replace(/s$/, ''));
+
+  function applyHelper(on) {
+    const layout = $('#quizLayout');
+    const panel = $('#qhelp');
+    if (!layout || !panel) return;
+    layout.classList.toggle('has-helper', on);
+    panel.hidden = !on;
+    $('#qhelpToggle').setAttribute('aria-checked', String(on));
+    $('#qhelpToggleText').textContent = on ? 'Asistente: activado' : 'Asistente: desactivado';
+  }
+
+  function setHelper(on) {
+    applyHelper(on);
+    store.set(HELPER_KEY, on);
+  }
+
+  function helperSay(text, who) {
+    const log = $('#qhelpLog');
+    if (!log) return;
+    log.appendChild(h('p', 'qh-msg' + (who === 'me' ? ' is-me' : ''), text));
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function renderHelperChips() {
+    const box = $('#qhelpChips');
+    if (!box) return;
+    box.textContent = '';
+    (quiz.state === 'play' ? HELP_CHIPS_PLAY : HELP_CHIPS_REST).forEach((c) => {
+      const b = h('button', 'qh-chip', c.label);
+      b.type = 'button';
+      b.addEventListener('click', () => { Sound.play('tap'); helperAsk(c.label, c.intent); });
+      box.appendChild(b);
+    });
+  }
+
+  // The quiz explanations the helper may quote. During a quiz only questions already answered, so nothing is spoiled.
+  function helperSearch(text) {
+    const words = helperWords(text).filter((w) => HELP_STOP.indexOf(w) < 0);
+    if (!words.length) return null;
+    const pool = quiz.state === 'play' ? quiz.answers.map((a) => a.qi) : QUIZ.map((q, i) => i);
+    let best = null;
+    let bestScore = 0;
+    pool.forEach((qi) => {
+      const q = QUIZ[qi];
+      const hay = new Set(helperWords(q.q + ' ' + q.explain));
+      const score = words.filter((w) => hay.has(w)).length;
+      if (score > bestScore) { best = q; bestScore = score; }
+    });
+    return best;
+  }
+
+  function helperReply(intent, raw) {
+    const playing = quiz.state === 'play' && quiz.order.length > 0;
+    const q = playing ? QUIZ[quiz.order[quiz.i]] : null;
+    const answered = playing && quiz.locked;
+    const open = playing && !quiz.locked;
+    let id = intent;
+    if (!id) {
+      const rule = HELP_RULES.find((r) => r[1].test(helperNorm(raw)));
+      id = rule ? rule[0] : 'search';
+    }
+    if (id === 'refuse') {
+      if (open) return 'No te daré la respuesta antes de que elijas. Prueba la pista o vuelve a leer las opciones.';
+      if (!playing) return 'Primero elige un modo. No daré respuestas antes de que elijas.';
+      id = 'explain';
+    }
+    if (id === 'hint') {
+      if (!playing) return 'Las pistas son para las preguntas del quiz. Empieza un modo y te daré una pista en cada pregunta.';
+      if (answered) id = 'explain';
+      else {
+        const timed = modeInfo(quiz.mode).timed;
+        return fill('Esta pregunta está en el capítulo {0}. Lee cada opción y descarta las que no encajen con el tema.', q.cat) + (timed ? ' ' + 'El reloj sigue corriendo mientras te ayudo.' : '');
+      }
+    }
+    if (id === 'explain') {
+      if (!playing) return 'Elige un modo y responde una pregunta. Te la explico cuando hayas elegido.';
+      if (open) return 'Responde primero. Explico cada pregunta después de que elijas, para que el quiz siga siendo justo.';
+      return q.explain + ' ' + fill('Fuente: {0}', q.src);
+    }
+    if (id === 'source') {
+      if (open) return fill('Esta pregunta está en el capítulo {0}. Te mostraré su fuente cuando hayas respondido.', q.cat);
+      if (answered) return fill('Esta pregunta está en el capítulo {0}. Fuente: {1}.', q.cat, q.src);
+      return fill('Cada respuesta muestra su fuente debajo de la explicación. Por ejemplo: {0}.', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
+    }
+    if (id === 'moon') return 'Cada respuesta correcta limpia 5 cm de la Luna. Las respuestas incorrectas no limpian nada. Para limpiarla del todo, todas las preguntas del quiz deben estar bien. Si la Luna no queda totalmente limpia al terminar el quiz, el mundo explota.';
+    if (id === 'chapter') return fill('Cada capítulo es un tema, con todas las preguntas sobre ese tema. Los capítulos son: {0}.', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return 'Clásico tiene 10 preguntas al azar sin reloj. Desafío tiene 15 preguntas de 20 segundos cada una, bonificaciones por racha y un 50:50. Maratón recorre todo el banco de preguntas.';
+    if (id === 'score') return 'Termina un quiz y guarda tu puntuación en la clasificación con tu nombre. Las puntuaciones se guardan en este navegador, así que la clasificación muestra a quienes jugaron en este dispositivo.';
+    if (id === 'flash') return 'Las tarjetas recorren cada pregunta una a una. Haz clic en una tarjeta para darle la vuelta y ver la respuesta.';
+    if (id === 'lifeline') return 'En Desafío tienes un 50:50. Quita dos respuestas incorrectas y así elegir es más fácil. Puedes usarlo una vez por quiz.';
+    if (id === 'sound') return 'Pulsa M para activar o desactivar el sonido. Leer en voz alta lee la pregunta y sus respuestas.';
+    if (id === 'sdg') return 'El ODS 4 es Educación de Calidad. Busca garantizar una educación de calidad inclusiva y equitativa, y promover oportunidades de aprendizaje permanente para todos. Es uno de los 17 objetivos acordados en 2015 para 2030, y tiene diez metas.';
+    if (id === 'help') return 'Puedo dar pistas, explicar las respuestas después de que elijas, mostrar de dónde vienen los datos y explicar la Luna, los capítulos, los modos, las puntuaciones y las tarjetas. Haz una pregunta o pulsa un botón.';
+    const best = helperSearch(raw);
+    if (best) return fill('Esto puede ayudar: {0}', best.explain);
+    return 'No encontré eso. Prueba a preguntar por la Luna, los capítulos, los modos o el ODS 4, o pulsa Pista en la pregunta.';
+  }
+
+  function helperAsk(text, intent) {
+    const clean = String(text || '').trim().slice(0, 200);
+    if (!clean && !intent) return;
+    helperSay(clean, 'me');
+    helperSay(helperReply(intent || null, clean), 'bot');
+  }
+
+  function initHelper() {
+    if (!$('#qhelp')) return;
+    applyHelper(helperOn());
+    $('#qhelpToggle').addEventListener('click', () => { Sound.play('tap'); setHelper(!helperOn()); });
+    $('#qhelpHide').addEventListener('click', () => { Sound.play('tap'); setHelper(false); $('#qhelpToggle').focus(); });
+    $('#qhelpForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#qhelpInput');
+      helperAsk(input.value, null);
+      input.value = '';
+    });
+    helperSay(HELP_GREETING, 'bot');
+    renderHelperChips();
   }
 
   /* Chapters and the leaderboard. Everything is kept in this browser. */
@@ -1503,6 +1795,10 @@
 
   function setupSaveForm() {
     quiz.saved = false;
+    if (quizGrade !== 'all') {
+      $('#saveScore').hidden = true;
+      return;
+    }
     const input = $('#ssName');
     $('#saveScore').hidden = false;
     input.value = store.get('sdg4.quiz.name', '') || '';
@@ -1644,8 +1940,60 @@
     window.scrollTo(0, 0);
   }
 
+  // When the quiz ends with the moon not fully clean, the world explodes (full screen), then the result shows.
+  function explodeWorld(done) {
+    if (document.querySelector('.boom')) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const box = h('div', 'boom');
+    const stage = h('div', 'boom-stage');
+    stage.append(h('div', 'boom-flash'), h('div', 'boom-ring'), h('div', 'boom-world'));
+    const frags = h('div', 'boom-frags');
+    for (let i = 0; i < 28; i += 1) {
+      const a = (i / 28) * Math.PI * 2 + Math.random() * 0.35;
+      const dist = 260 + Math.random() * 320;
+      const piece = h('span', 'boom-frag');
+      piece.style.setProperty('--dx', Math.round(Math.cos(a) * dist) + 'px');
+      piece.style.setProperty('--dy', Math.round(Math.sin(a) * dist) + 'px');
+      piece.style.setProperty('--rot', Math.round(Math.random() * 720 - 360) + 'deg');
+      piece.style.setProperty('--sz', Math.round(18 + Math.random() * 34) + 'px');
+      frags.append(piece);
+    }
+    stage.append(frags);
+    const text = h('div', 'boom-text');
+    const next = h('button', 'btn-primary boom-next', 'Ver mi puntuación');
+    text.append(
+      h('h2', null, 'El mundo explotó.'),
+      h('p', null, 'La Luna no quedó totalmente limpia. Cada pregunta tenía que responderse bien.'),
+      next
+    );
+    box.append(stage, text);
+    document.body.append(box);
+    Sound.play('wrong');
+    let timer1 = 0;
+    let timer2 = 0;
+    let ended = false;
+    const end = () => {
+      if (ended) return;
+      ended = true;
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      box.remove();
+      done();
+    };
+    timer1 = setTimeout(() => {
+      text.classList.add('is-in');
+      next.focus({ preventScroll: true });
+    }, reduce ? 300 : 2600);
+    timer2 = setTimeout(end, reduce ? 2400 : 6000);
+    next.addEventListener('click', end);
+    box.addEventListener('click', () => { if (text.classList.contains('is-in')) end(); });
+  }
   function finishQuiz() {
     stopQTimer();
+    if (quiz.correct < quiz.order.length) explodeWorld(showQuizResult);
+    else showQuizResult();
+  }
+  function showQuizResult() {
     quizScreen('result');
     const M = modeInfo(quiz.mode);
     const total = quiz.order.length;
@@ -1687,7 +2035,7 @@
     }
     $('#rsTopics').textContent = topics;
 
-    const bestKey = quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode;
+    const bestKey = (quizGrade !== 'all' ? 'grade' + quizGrade + ':' : '') + (quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode);
     const bests = store.get('sdg4.quiz.bests', {}) || {};
     const metric = M.timed ? quiz.points : quiz.correct;
     const isNew = metric > 0 && !(typeof bests[bestKey] === 'number' && bests[bestKey] >= metric);
@@ -2176,6 +2524,8 @@
   }
 
   function initQuiz() {
+    setGrade(store.get(GRADE_KEY, 'all'));
+    initHelper();
     const saved = readBoard();
     if (saved.length) boardGroup = saved[saved.length - 1].group;
     renderModes();
@@ -2219,6 +2569,7 @@
       Sound.play('tap');
     });
     pageKeys = (e, key, onControl) => {
+      if ((key === 'h' || key === 'H') && !onControl) { e.preventDefault(); Sound.play('tap'); setHelper(!helperOn()); return; }
       if (fcState.open) {
         if (key === 'ArrowRight' || key === 'ArrowLeft') {
           e.preventDefault();
@@ -2794,7 +3145,7 @@
         return CHAPTER_ORDER.every((cat) => bests['chapter:' + cat] === chapterTotal(cat));
       }
     },
-    { name: 'Completador de tarjetas', text: 'Da la vuelta a las 52 tarjetas.', earned: () => fcSeen().length >= QUIZ.length },
+    { name: 'Completador de tarjetas', text: 'Da la vuelta a las 96 tarjetas.', earned: () => fcSeen().length >= QUIZ.length },
     { name: 'Lector de metas', text: 'Abre las diez metas.', earned: () => (store.get('sdg4.seen.targets', []) || []).length >= TARGETS.length },
     { name: 'Tomador de notas', text: 'Escribe notas en tres metas.', earned: () => Object.keys(store.get('sdg4.notes', {}) || {}).length >= 3 },
     { name: 'Pregunta del día', text: 'Responde la pregunta del día.', earned: () => !!store.get('sdg4.qotd', null) },
@@ -2888,7 +3239,9 @@
     BADGES.forEach((b) => {
       const got = b.earned();
       const card = h('div', 'badge' + (got ? ' is-earned' : ''));
-      card.append(h('span', 'badge-state', got ? 'Obtenida' : 'Todavía no'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
+      const medal = h('span', 'badge-medal', got ? '★' : '');
+      medal.setAttribute('aria-hidden', 'true');
+      card.append(medal, h('span', 'badge-state', got ? 'Obtenida' : 'Todavía no'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
       grid.appendChild(card);
     });
   }
@@ -3309,7 +3662,7 @@
       due: /^\d{4}-\d{2}-\d{2}$/.test(String(f.due || '')) ? String(f.due) : '',
       mode: f.mode === 'custom' ? 'custom' : 'chapters',
       chapters: clampList(f.chapters, 12).filter((c) => CHAPTER_ORDER.indexOf(c) >= 0),
-      count: Math.min(52, Math.max(1, Number(f.count) || 10)),
+      count: Math.min(QUIZ.length, Math.max(1, Number(f.count) || 10)),
       questions: clampList(f.questions, 60).map(cleanQuestion).filter(Boolean),
       created: String(f.created || '')
     };
@@ -3987,8 +4340,8 @@
         return;
       }
       const count = Math.round(Number($('#asgCount').value));
-      if (!(count >= 1 && count <= 52)) {
-        msg.textContent = 'Elige entre 1 y 52 preguntas.';
+      if (!(count >= 1 && count <= QUIZ.length)) {
+        msg.textContent = fill('Elige entre 1 y {0} preguntas.', QUIZ.length);
         $('#asgCount').focus();
         return;
       }

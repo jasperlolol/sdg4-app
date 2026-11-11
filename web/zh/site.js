@@ -385,7 +385,7 @@
     }
   ];
 
-  const QUIZ = [
+  const BASE_QUIZ = [
     // The goal
     { cat: '目标', q: '可持续发展目标（包括SDG 4）计划在哪一年实现？', options: ['2025', '2030', '2040', '2050'], answer: 1, explain: '所有联合国会员国于2015年通过了《2030年议程》，为世界实现这17项目标设定了2030年的期限。', src: '联合国2030议程（2015年）' },
     { cat: '目标', q: '可持续发展目标共有多少项？', options: ['6', '8', '12', '17'], answer: 3, explain: '共17项目标，教育是第4项。此前的千年发展目标共有8项。', src: '联合国2030议程（2015年）' },
@@ -433,7 +433,7 @@
     { cat: '技能', q: '高等教育包括大学教育。2024年全球高等教育入学率是多少？', options: ['14%', '24%', '34%', '44%'], answer: 3, explain: '44%，从低收入国家的不到15%到高收入国家的超过80%不等。', src: '联合国教科文组织《2026年全球教育监测报告》' },
     // History
     { cat: '历史', mix: true, q: '哪份1948年通过的文件宣布“人人有受教育的权利”？', options: ['《世界人权宣言》', '《巴黎协定》', '《日内瓦公约》', '《奥林匹克宪章》'], answer: 0, explain: '《世界人权宣言》第26条规定，人人有受教育的权利，初等教育应当免费并且是义务教育。', src: '联合国大会（1948年）' },
-    { cat: '历史', mix: true, q: '1990年世界全民教育会议在哪里举行？', options: ['泰国朱提恩', '塞内加尔达喀尔', '韩国仁川', '美国纽约'], answer: 0, explain: '在泰国朱提恩，各国在此设定了普及初等教育的目标。', src: 'UNESCO' },
+    { cat: '历史', mix: true, q: '1990年世界全民教育会议在哪里举行？', options: ['泰国朱提恩', '塞内加尔达喀尔', '韩国仁川', '美国纽约'], answer: 0, explain: '在泰国朱提恩，各国在此设定了普及初等教育的目标。', src: '联合国教科文组织' },
     { cat: '历史', q: '哪项千年发展目标旨在到2015年让每个孩子都完成小学教育？', options: ['千年发展目标1', '千年发展目标2', '千年发展目标4', '千年发展目标8'], answer: 1, explain: '千年发展目标2旨在2015年前普及小学教育。SDG 4则将目标提高到2030年前普及中学教育。', src: '联合国千年发展目标（2000年）' },
     // Early years
     { cat: '幼儿早期', q: '大脑在人生的哪个阶段发育最快？', options: ['出生后的最初几年', '青春期', '成年早期', '老年'], answer: 0, explain: '大脑在生命最初几年生长最快，并形成基本的神经连接，所以早期的照护和学习非常重要。', src: '哈佛大学发展儿童中心' },
@@ -449,8 +449,53 @@
     { cat: '包容', q: '哪项条约规定了残疾人接受全纳教育的权利？', options: ['《巴黎协定》', '《残疾人权利公约》', '《京都议定书》', '《日内瓦公约》'], answer: 1, explain: '《残疾人权利公约》（2006年）第24条规定了各级全纳教育的权利。', src: '联合国《残疾人权利公约》（2006年），第24条' },
     { cat: '包容', q: '2月21日的国际母语日是什么？', options: ['停止教授英语的日子', '促进语言多样性和母语教育的日子', '学校考试假期', '考核教师的日子'], answer: 1, explain: '联合国教科文组织设立国际母语日，以促进语言多样性，并推动以人们在家中使用的语言进行教育。', src: '联合国教科文组织，国际母语日' },
     { cat: '包容', q: '为什么用儿童在家不说的语言学习可能成为障碍？', options: ['这会让许多儿童的早期学习更加困难', '这会让学校费用更低', '这会不再需要教师', '对学习没有影响'], answer: 0, explain: '儿童最好先用他们能理解的语言学习。母语教育能为阅读和之后的学习打下更扎实的基础。', src: '联合国教科文组织，国际母语日' },
-    { cat: '包容', q: '在SDG 4中，“包容性”教育是什么意思？', options: ['只面向富裕家庭的教育', '惠及所有人的教育，包括残疾人和被边缘化的群体', '只面向成年人的教育', '只有在线学习'], answer: 1, explain: 'SDG 4要求提供包容性教育：惠及所有人的教育，包括残疾人、女童和被边缘化的群体。', src: '联合国2030议程（2015年）' }
+    { cat: '包容', q: '在SDG 4中，“包容性”教育是什么意思？', options: ['只面向富裕家庭的教育', '惠及所有人的教育，包括残疾人和被边缘化的群体', '只面向成年人的教育', '只有在线学习'], answer: 1, explain: 'SDG 4要求提供包容性教育：惠及所有人的教育，包括残疾人、女童和被边缘化的群体。', src: '联合国2030议程（2015年）' },
+    { cat: '入学机会', q: '哪一项具体目标要求所有女童和男童都完成免费、公平且优质的小学和中学教育？', options: ['目标4.1', '具体目标4.3', '具体目标4.5', '目标4.7'], answer: 0, explain: '具体目标4.1要求所有女童和男童都完成免费、公平、优质的小学和中学教育，并获得相关的学习成果。', src: '联合国2030议程（2015年）' },
+    { cat: '入学机会', q: '在可持续发展目标4中，“公平”的教育是什么意思？', options: ['在各地费用都相同的教育', '让每个人都公平受益的教育，包括弱势群体', '只在城市开设的教育', '所有学习者只考一次试'], answer: 1, explain: '公平的教育意味着每个人都有公平的机会，包括贫困、残疾或生活在偏远地区的儿童。', src: '联合国2030议程（2015年）' },
+    { cat: '完成率', q: '以下哪一项是儿童辍学的常见原因？', options: ['他们的课程结束得太早', '学校的书太多了', '贫困和上学的费用', '老师太和善了'], answer: 2, explain: '学费、校服和交通等费用，连同贫困，是儿童辍学最常见的原因之一。', src: '联合国教科文组织' },
+    { cat: '完成率', q: '在教育统计中，“完成率”指什么？', options: ['第一次入学', '通过某一次考试', '转到另一所学校', '完成某一学段的最后一个年级'], answer: 3, explain: '完成率指学习者完成某一学段的最后一个年级，例如小学或中学。', src: '联合国2030议程（2015年）' },
+    { cat: '完成率', q: '为什么可持续发展目标4呼吁实行免费的小学和中学教育？', options: ['使贫困不再妨碍儿童学习', '为了让政府节省开支', '为了让儿童转而去工作', '为了让学校能提早放学'], answer: 0, explain: '免费教育消除了费用障碍，使贫困家庭也能送孩子上学。', src: '联合国2030议程（2015年）' },
+    { cat: '完成率', q: '在具体目标4.1中，“相关的学习成果”是什么意思？', options: ['只为考试而学', '对生活和工作有用的学习', '只用外语学习', '没有家庭作业的学习'], answer: 1, explain: '这意味着儿童所学的内容应当对他们的生活和工作有用。', src: '联合国2030议程（2015年）' },
+    { cat: '学习成效', q: '什么是“学习贫困”？', options: ['没有校服', '不会使用电脑', '到大约10岁时仍无法读懂并理解一段简单的文字', '没有自行车上学'], answer: 2, explain: '学习贫困指大约10岁时无法读懂并理解一段简单文字的儿童所占比例。世界银行用它来追踪学习情况。', src: '世界银行，学习贫困' },
+    { cat: '学习成效', q: '早期学习中的“基础技能”指什么？', options: ['跳舞和唱歌', '体育规则', '烹饪食谱', '阅读、写作和基础数学'], answer: 3, explain: '阅读、写作和基础数学等基础技能，是之后所有学习的基础。', src: '联合国教科文组织' },
+    { cat: '学习成效', q: '为什么用儿童能理解的语言教学有助于他们学习？', options: ['用熟悉的语言，他们学习阅读更快', '课程变短了', '不再需要老师', '考试变得更容易作答'], answer: 0, explain: '儿童在自己能说、能听懂的语言中学得最好，因此母语支持有助于早期学习。', src: '联合国教科文组织，国际母语日' },
+    { cat: '学习成效', q: '在教育中，“评估”是什么意思？', options: ['建造新教室', '衡量学生已经学到的内容', '发放教师工资', '挑选校服'], answer: 1, explain: '评估用于衡量学习成果，让教师了解学生掌握了什么，以及需要在哪些方面提供帮助。', src: '联合国教科文组织' },
+    { cat: '学习成效', q: '哪些条件最有助于学生学习？', options: ['没有书籍、挤满人的教室', '只从网络上学习', '安全、有支持性的教室，配有教材和训练有素的教师', '完全没有老师的学习'], answer: 2, explain: '安全、设备齐全的教室加上训练有素的教师，能给学生最好的学习机会。', src: '联合国教科文组织' },
+    { cat: '教师', q: '什么是“受过培训的教师”？', options: ['任何读写能力强的人', '只做过一次志愿服务的人', '帮忙辅导作业的学生', '完成本国规定的教师教育或资格认证的人'], answer: 3, explain: '受过培训的教师已完成本国要求的教师教育或资格认证。', src: '联合国教科文组织《全球教师报告》（2024年）' },
+    { cat: '教师', q: '为什么教师需要持续的专业发展？', options: ['为了保持技能和知识的更新', '为了逃避教学', '为了获得更多假期', '只为了当校长'], answer: 0, explain: '持续的培训有助于教师更新知识和教学方法。', src: '联合国教科文组织《全球教师报告》（2024年）' },
+    { cat: '教师', q: '以下哪一项会加剧教师短缺？', options: ['良好的培训项目', '低工资和恶劣的工作条件', '安全的教室', '清晰的职业发展路径'], answer: 1, explain: '低工资和恶劣的条件让教师难以留任，从而加剧短缺。', src: '联合国教科文组织《全球教师报告》（2024年）' },
+    { cat: '教师', q: '具体目标4.c旨在增加什么，尤其是在最不发达国家？', options: ['考试的数量', '学校午餐的数量', '合格教师的供给', '学校体育活动的数量'], answer: 2, explain: '具体目标4.c要求大幅增加合格教师的供给，尤其是在最不发达国家和小岛屿发展中国家。', src: '联合国2030议程（2015年）' },
+    { cat: '公平性', q: '国际女童日是哪一天？', options: ['3月8日', '1月24日', '10月5日', '10月11日'], answer: 3, explain: '联合国将10月11日定为国际女童日。', src: '联合国' },
+    { cat: '公平性', q: '具体目标4.5旨在消除什么？', options: ['教育中的性别及其他不平等', '教师的学费', '所有学生都要考试', '学校假期'], answer: 0, explain: '具体目标4.5旨在消除性别差距，并确保弱势群体（包括残疾人）平等获得教育。', src: '联合国2030议程（2015年）' },
+    { cat: '公平性', q: '为什么要培训教师支持残疾学生？', options: ['让残疾儿童可以免考', '让每个孩子都能在包容的课堂中学习', '让学校需要的教室更少', '让教师工作量减少'], answer: 1, explain: '受过培训的教师能帮助残疾儿童与同学一起学习。', src: '联合国《残疾人权利公约》（2006年），第24条' },
+    { cat: '公平性', q: '在教育中，“被边缘化”是什么意思？', options: ['已退休的教师', '靠近海边的学校', '被排除在外或被推到社会边缘的群体', '班里成绩最好的学生'], answer: 2, explain: '被边缘化的群体被排除在外或处于劣势，例如贫困人口、农村儿童和少数族裔社区。', src: '联合国2030议程（2015年）' },
+    { cat: '资金与学校', q: '《仁川行动框架》对教育支出提出了什么建议？', options: ['国内生产总值的1%', '公共支出的50%', '没有任何具体数额', '国内生产总值的4%至6%和/或公共支出的15%至20%'], answer: 3, explain: '《2030教育行动框架》建议将国内生产总值的4%至6%和/或公共支出的15%至20%用于教育。', src: '《仁川行动框架》（2015年）' },
+    { cat: '资金与学校', q: '“公共支出”是什么意思？', options: ['政府用于学校等公共服务的资金', '家庭在商店里的花费', '只由捐助者提供的资金', '银行贷出的资金'], answer: 0, explain: '公共支出是政府用于医疗、教育等公共服务的开支。', src: '联合国教科文组织' },
+    { cat: '资金与学校', q: '为什么学校需要清洁的水、厕所和电力？', options: ['让学校看起来更大', '让儿童在健康、安全的条件下学习', '让考试变得更容易', '让学校能提早关闭'], answer: 1, explain: '基本服务有助于儿童留在学校，并在健康、安全的环境中学习。', src: '联合国教科文组织' },
+    { cat: '技能', q: '教育中的“生活技能”指什么？', options: ['只有体育技能', '只有烹饪技能', '用于日常生活的技能，例如决策和沟通', '只有电脑编程'], answer: 2, explain: '生活技能帮助人们做出决定、良好沟通，并应对日常挑战。', src: '联合国教科文组织' },
+    { cat: '技能', q: '以下哪一项是技术或职业技能？', options: ['阅读诗歌', '为了好玩而绘画', '唱歌', '焊接'], answer: 3, explain: '技术和职业技能（例如焊接）能让人们胜任特定的工作。', src: '联合国2030议程（2015年）' },
+    { cat: '技能', q: '什么是数字素养？', options: ['安全有效地使用数字工具和互联网', '只会手写', '修理自行车', '只会玩电子游戏'], answer: 0, explain: '数字素养指安全、有效、负责任地使用数字工具和互联网。', src: '联合国教科文组织' },
+    { cat: '技能', q: '哪一项可持续发展目标4的具体目标涉及就业和体面工作所需的技能？', options: ['具体目标4.a', '具体目标4.4', '目标4.6', '目标4.b'], answer: 1, explain: '具体目标4.4旨在让青年和成年人掌握相关技能，包括技术和职业技能，以获得就业、体面工作和创业机会。', src: '联合国2030议程（2015年）' },
+    { cat: '技能', q: '什么是“全球公民教育”？', options: ['只学习一个国家的历史', '学习如何乘飞机旅行', '了解世界和人权，并负责任地行动', '只学习外币知识'], answer: 2, explain: '它教导人们理解全球性问题，并为建设更公正的世界负责任地行动。', src: '联合国2030议程（2015年）' },
+    { cat: '历史', q: '1990年的世界全民教育大会确定了什么目标？', options: ['人人免费上大学', '全球统一考试', '全球统一校服', '让每个人都能接受基础教育'], answer: 3, explain: '1990年在乔姆蒂恩举行的会议确立了人人接受基础教育的目标。', src: '联合国教科文组织' },
+    { cat: '历史', q: '2000年通过《达喀尔行动纲领》的世界教育论坛在哪里举行？', options: ['塞内加尔达喀尔', '美国纽约', '日本东京', '澳大利亚悉尼'], answer: 0, explain: '《达喀尔行动纲领》于2000年通过，更新了到2015年实现“全民教育”的目标。', src: '联合国教科文组织，世界教育论坛（2000年）' },
+    { cat: '历史', q: '通过《仁川宣言》的2015年世界教育论坛在哪里举行？', options: ['法国巴黎', '韩国仁川', '肯尼亚内罗毕', '秘鲁利马'], answer: 1, explain: '《仁川宣言》于2015年在大韩民国仁川举行的世界教育论坛上通过。', src: '世界教育论坛，《仁川宣言》（2015年）' },
+    { cat: '历史', q: '哪项1989年通过的条约要求各国使小学教育免费且义务化？', options: ['《日内瓦公约》', '《京都议定书》', '《儿童权利公约》', '《巴黎协定》'], answer: 2, explain: '《儿童权利公约》第28条要求各国使小学教育对所有人义务化且免费。', src: '《联合国儿童权利公约》（1989年），第28条' },
+    { cat: '历史', q: '2015年，哪些目标取代了千年发展目标？', options: ['奥运目标', '京都目标', '巴黎目标', '可持续发展目标'], answer: 3, explain: '可持续发展目标于2015年通过，接续千年发展目标，目标期限至2030年。', src: '联合国2030议程（2015年）' },
+    { cat: '幼儿早期', q: '儿童早期照护与教育通常涵盖哪些年龄段？', options: ['从出生到约8岁', '15至18岁', '20至25岁', '只针对成年人'], answer: 0, explain: '儿童早期照护与教育涵盖从出生到约8岁的儿童。', src: '联合国教科文组织' },
+    { cat: '幼儿早期', q: '以下哪一项有助于幼儿的发展？', options: ['参加考试', '以游戏为基础的学习和健康检查', '缴纳学费', '在工厂工作'], answer: 1, explain: '游戏、医疗保健、营养和早期学习都有助于幼儿的发展。', src: '联合国2030议程（2015年）' },
+    { cat: '幼儿早期', q: '为什么早期学习有助于之后的学校教育？', options: ['这意味着儿童永远不需要老师', '这样就不需要上小学了', '培养儿童上小学所需的技能', '这样考试就没有必要了'], answer: 2, explain: '良好的早期学习开端有助于儿童在小学取得成功。', src: '联合国2030议程（2015年）' },
+    { cat: '幼儿早期', q: '“营养”对幼儿意味着什么？', options: ['手机游戏', '校服', '家庭作业', '帮助儿童成长和学习的健康食物'], answer: 3, explain: '良好的营养有助于幼儿期的成长、健康和学习。', src: '联合国教科文组织' },
+    { cat: '识字能力', q: '哪个组织负责举办国际扫盲日活动？', options: ['联合国教科文组织', '世界卫生组织', '联合国儿童基金会', '世界银行'], answer: 0, explain: '联合国教科文组织主办国际扫盲日，该日定于9月8日。', src: '联合国教科文组织，国际扫盲日' },
+    { cat: '识字能力', q: '什么是“功能性识字”？', options: ['只读诗歌', '日常生活和工作所需的读写能力', '会说多种语言', '编写计算机代码'], answer: 1, explain: '功能性识字指具备日常生活和工作所需的读写能力。', src: '联合国教科文组织' },
+    { cat: '识字能力', q: '什么是“基础”读写和算术能力？', options: ['大学高等数学', '只有外语', '在学校早期学会的基本阅读、写作和数学', '体育规则'], answer: 2, explain: '这些基础技能是之后所有学习的基石。', src: '联合国教科文组织' },
+    { cat: '识字能力', q: '为什么成人识字很重要？', options: ['用来代替儿童上学', '这意味着成年人不再需要工作', '取消学费', '帮助成年人辅导子女学习并找到工作'], answer: 3, explain: '成人识字能帮助人们工作、管理财务，并支持子女的教育。', src: '联合国教科文组织，国际扫盲日' },
+    { cat: '包容', q: '学校中的“合理便利”是什么？', options: ['帮助残疾儿童参与其中的调整', '更大的校舍', '更便宜的校服', '更长的假期'], answer: 0, explain: '这是一种调整，例如增设坡道或额外支持，使残疾儿童能与其他人一起学习。', src: '联合国《残疾人权利公约》（2006年），第24条' },
+    { cat: '包容', q: '为什么手语对聋儿的教育很重要？', options: ['可以代替阅读', '让他们充分获得学习和交流的机会', '只供教师使用', '让考试变短'], answer: 1, explain: '手语为聋儿提供了完整的学习和交流语言。《残疾人权利公约》第24条承认了手语的地位。', src: '联合国《残疾人权利公约》（2006年），第24条' },
+    { cat: '包容', q: '什么样的学校才算“无障碍”？', options: ['有游泳池', '位于山区', '每个人（包括残疾儿童）都能进入并使用', '不收费'], answer: 2, explain: '无障碍学校配有坡道、厕所和每个人都能使用的学习材料。', src: '联合国《残疾人权利公约》（2006年），第24条' },
+    { cat: '包容', q: '哪个群体常因语言问题而无法上学？', options: ['生活在城市的儿童', '喜欢运动的儿童', '戴眼镜的儿童', '在学校接受的教学语言并非家中使用语言的儿童'], answer: 3, explain: '在家中不使用的语言中接受教育的儿童可能学习困难，因此母语支持很有帮助。', src: '联合国教科文组织，国际母语日' },
   ];
+  let QUIZ = BASE_QUIZ;
 
   const MILESTONES = [
     { year: '1948', short: '受教育权', title: '教育成为一项人权', text: '《世界人权宣言》规定人人有受教育的权利，初等教育应当免费并且是义务教育（第26条）。', src: '联合国大会，1948年' },
@@ -1180,6 +1225,46 @@
     $('#quizStart').hidden = name !== 'start';
     $('#quizPlay').hidden = name !== 'play';
     $('#quizResult').hidden = name !== 'result';
+    renderHelperChips();
+  }
+
+  /* Grades 1 to 12. A grade with a question bank (grades.js) can be played; the others say Coming soon.
+     Grade play is kept apart from the all-grades scores and is not sent to the leaderboard. */
+  const GRADE_KEY = 'sdg4.quiz.grade';
+  let quizGrade = 'all';
+  const gradeBank = (g) => (window.SDG4_GRADES && Array.isArray(window.SDG4_GRADES[g]) ? window.SDG4_GRADES[g] : []);
+  const gradeReady = (g) => gradeBank(g).length > 0;
+
+  function setGrade(g) {
+    quizGrade = g !== 'all' && gradeReady(g) ? String(g) : 'all';
+    QUIZ = quizGrade === 'all' ? BASE_QUIZ : gradeBank(quizGrade).map((row) => ({
+      cat: CHAPTER_ORDER[row.ch], q: row.q, options: row.options, answer: row.answer, explain: row.explain, src: row.src, mix: true
+    }));
+  }
+
+  function renderGrades() {
+    const box = $('#gradeGrid');
+    if (!box) return;
+    box.textContent = '';
+    const choices = [{ key: 'all', label: '所有年级' }];
+    for (let g = 1; g <= 12; g += 1) choices.push({ key: String(g), label: fill('{0}年级', g) });
+    choices.forEach((c) => {
+      const ready = c.key === 'all' || gradeReady(c.key);
+      const count = c.key === 'all' ? BASE_QUIZ.length : gradeBank(c.key).length;
+      const on = c.key === quizGrade;
+      const b = h('button', 'grade-card' + (on ? ' is-on' : ''));
+      b.type = 'button';
+      b.disabled = !ready;
+      b.setAttribute('aria-pressed', String(on));
+      b.append(h('span', 'gc-name', c.label), h('span', 'gc-note', ready ? fill('{0} 道题', count) : '即将推出'));
+      b.addEventListener('click', () => {
+        Sound.play('tap');
+        setGrade(c.key);
+        store.set(GRADE_KEY, quizGrade);
+        renderModes();
+      });
+      box.appendChild(b);
+    });
   }
 
   function renderModes() {
@@ -1201,6 +1286,9 @@
       grid.appendChild(b);
     });
     $('#bankSize').textContent = String(QUIZ.length);
+    renderGrades();
+    const flash = $('.flash-block');
+    if (flash) flash.hidden = quizGrade !== 'all';
     renderChapters();
     renderBoard();
   }
@@ -1271,6 +1359,51 @@
     qTick();
   }
 
+  // Moon dust: every correct answer clears 5 cm of the moon. A wrong answer clears nothing.
+  function updateMoon(done) {
+    const total = quiz.order.length;
+    $('#moonFill').style.width = (done / total) * 100 + '%';
+    $('#moonText').textContent = done
+      ? fill('已清理 {0} 厘米 = {1} × 5 厘米', done * 5, done)
+      : '答对才能清理月球上的 5 厘米尘埃。';
+    $('#cwCm').textContent = done * 5 + ' cm';
+    moveCleaner(done / total, done === 0);
+  }
+
+  // The small screen: a person wipes the dust off the moon, from left to right.
+  const CW = { cx: 100, cy: 78, r: 50, left: 48, right: 160 };
+  let cwX = CW.left;
+  let cwRaf = 0;
+  function cwSurface(x) {
+    return CW.cy + Math.sqrt(Math.max(0, CW.r * CW.r - (x - CW.cx) * (x - CW.cx)));
+  }
+  function drawCleaner(x) {
+    const clip = $('#cwRect');
+    clip.setAttribute('x', x);
+    clip.setAttribute('width', 200 - x);
+    const px = Math.max(CW.cx - CW.r + 4, x - 10);
+    $('#cwPerson').setAttribute('transform', 'translate(' + px + ' ' + cwSurface(px) + ')');
+  }
+  function moveCleaner(frac, instant) {
+    const to = CW.left + frac * (CW.right - CW.left);
+    cancelAnimationFrame(cwRaf);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (instant || reduce) {
+      cwX = to;
+      drawCleaner(cwX);
+      return;
+    }
+    const from = cwX;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / 700);
+      cwX = from + (to - from) * (1 - Math.pow(1 - t, 3));
+      drawCleaner(cwX);
+      if (t < 1) cwRaf = requestAnimationFrame(step);
+    };
+    cwRaf = requestAnimationFrame(step);
+  }
+
   function renderQuestion() {
     const total = quiz.order.length;
     const q = QUIZ[quiz.order[quiz.i]];
@@ -1278,6 +1411,7 @@
     $('#qpText').textContent = '题目 ' + (quiz.i + 1) + ' / ' + total;
     $('#qpScore').textContent = scoreText();
     $('#qpFill').style.width = (quiz.i / total) * 100 + '%';
+    updateMoon(quiz.correct);
     $('#qCat').textContent = q.cat;
     renderStreak(false);
     if (modeInfo(quiz.mode).lifeline) $('#lifelineBtn').disabled = quiz.lifelineUsed;
@@ -1371,6 +1505,7 @@
       quiz.streak = 0;
     }
     quiz.answers.push({ qi, chosen, correct, timedOut, cat: q.cat });
+    updateMoon(quiz.correct);
 
     buttons.forEach((b, j) => {
       b.disabled = true;
@@ -1418,6 +1553,163 @@
     } else {
       finishQuiz();
     }
+  }
+
+  /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
+     quiz's own explanations, and it never gives an answer before the question has been answered. */
+  const HELPER_KEY = 'sdg4.quiz.helper';
+  const HELP_GREETING = '你好，我是 SDG 4 助手。我可以给出提示，在你选择后解释答案，并说明事实的来源。在你作答之前，我绝不透露答案。';
+  const HELP_CHIPS_PLAY = [
+    { label: '提示', intent: 'hint' },
+    { label: '解释这题', intent: 'explain' },
+    { label: '这题的来源是哪里？', intent: 'source' },
+    { label: '月球是怎么运作的？', intent: 'moon' }
+  ];
+  const HELP_CHIPS_REST = [
+    { label: '什么是 SDG 4？', intent: 'sdg' },
+    { label: '章节是怎么运作的？', intent: 'chapter' },
+    { label: '这些事实来自哪里？', intent: 'source' },
+    { label: '月球是怎么运作的？', intent: 'moon' }
+  ];
+  // Each rule lists words in English, Spanish, French, Indonesian and Chinese.
+  const HELP_RULES = [
+    ['hint', /\b(hint|hints|clue|stuck|pista|pistas|astuce|indice|petunjuk)\b|提示|线索/],
+    ['refuse', /\b(the answer|which one|correct one|just tell|tell me the answer|give me the answer|respuesta|reponse|jawaban)\b|答案/],
+    ['explain', /\b(explain|explanation|why|reason|meaning|explica|explique|pourquoi|mengapa|jelaskan)\b|解释|为什么/],
+    ['source', /\b(source|sources|from|proof|where|fuente|fuentes|origen|sumber|dari)\b|来源|出处/],
+    ['moon', /\b(moon|cm|clean|clear|explode|explodes|world|luna|lune|bulan)\b|月球|爆炸/],
+    ['chapter', /\b(chapter|chapters|topic|topics|capitulo|capitulos|chapitre|bab)\b|章节/],
+    ['modes', /\b(mode|modes|classic|challenge|marathon|timer|timed|seconds|points|streak|bonus|modo|modos|temps)\b|模式|计时|连胜/],
+    ['score', /\b(score|scores|leaderboard|board|save|saved|best|puntuacion|classement|skor|papan)\b|分数|排行|保存/],
+    ['flash', /\b(flashcard|flashcards|flash|card|cards|tarjeta|tarjetas|fiche|fiches|kartu)\b|闪卡|卡片/],
+    ['lifeline', /\b(lifeline|50|5050|joker)\b/],
+    ['sound', /\b(sound|mute|aloud|speak|voice|audio|silencio|muet|suara)\b|静音|朗读/],
+    ['sdg', /\b(sdg|sdg4|goal|goals|target|targets|meta|objetivo|objectif|tujuan)\b|目标|指标/],
+    ['help', /\b(hi|hello|hey|help|hola|bonjour|halo|aide|ayuda|bantuan|what can you)\b|你好|帮助/]
+  ];
+  const HELP_STOP = ['what', 'when', 'where', 'which', 'with', 'about', 'from', 'that', 'this', 'does', 'have', 'tell', 'mean', 'please', 'there', 'their', 'they', 'would', 'could', 'should', 'your', 'show', 'give', 'answer', 'question', 'explain', 'anything', 'something', 'know', 'some', 'more'];
+  const helperNorm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const helperOn = () => store.get(HELPER_KEY, true) !== false;
+  // Whole words, with a plain plural ending removed, so that 'targets' matches 'target'.
+  const helperWords = (s) => helperNorm(s).split(/[^a-z0-9]+/).filter((w) => w.length >= 4).map((w) => w.replace(/s$/, ''));
+
+  function applyHelper(on) {
+    const layout = $('#quizLayout');
+    const panel = $('#qhelp');
+    if (!layout || !panel) return;
+    layout.classList.toggle('has-helper', on);
+    panel.hidden = !on;
+    $('#qhelpToggle').setAttribute('aria-checked', String(on));
+    $('#qhelpToggleText').textContent = on ? '助手：开' : '助手：关';
+  }
+
+  function setHelper(on) {
+    applyHelper(on);
+    store.set(HELPER_KEY, on);
+  }
+
+  function helperSay(text, who) {
+    const log = $('#qhelpLog');
+    if (!log) return;
+    log.appendChild(h('p', 'qh-msg' + (who === 'me' ? ' is-me' : ''), text));
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function renderHelperChips() {
+    const box = $('#qhelpChips');
+    if (!box) return;
+    box.textContent = '';
+    (quiz.state === 'play' ? HELP_CHIPS_PLAY : HELP_CHIPS_REST).forEach((c) => {
+      const b = h('button', 'qh-chip', c.label);
+      b.type = 'button';
+      b.addEventListener('click', () => { Sound.play('tap'); helperAsk(c.label, c.intent); });
+      box.appendChild(b);
+    });
+  }
+
+  // The quiz explanations the helper may quote. During a quiz only questions already answered, so nothing is spoiled.
+  function helperSearch(text) {
+    const words = helperWords(text).filter((w) => HELP_STOP.indexOf(w) < 0);
+    if (!words.length) return null;
+    const pool = quiz.state === 'play' ? quiz.answers.map((a) => a.qi) : QUIZ.map((q, i) => i);
+    let best = null;
+    let bestScore = 0;
+    pool.forEach((qi) => {
+      const q = QUIZ[qi];
+      const hay = new Set(helperWords(q.q + ' ' + q.explain));
+      const score = words.filter((w) => hay.has(w)).length;
+      if (score > bestScore) { best = q; bestScore = score; }
+    });
+    return best;
+  }
+
+  function helperReply(intent, raw) {
+    const playing = quiz.state === 'play' && quiz.order.length > 0;
+    const q = playing ? QUIZ[quiz.order[quiz.i]] : null;
+    const answered = playing && quiz.locked;
+    const open = playing && !quiz.locked;
+    let id = intent;
+    if (!id) {
+      const rule = HELP_RULES.find((r) => r[1].test(helperNorm(raw)));
+      id = rule ? rule[0] : 'search';
+    }
+    if (id === 'refuse') {
+      if (open) return '在你选择之前，我不会给出答案。可以试试提示，或再读一遍选项。';
+      if (!playing) return '请先选择一种模式。在你选择之前，我不会给出答案。';
+      id = 'explain';
+    }
+    if (id === 'hint') {
+      if (!playing) return '提示仅适用于测验题目。开始一种模式，我会为每道题提供提示。';
+      if (answered) id = 'explain';
+      else {
+        const timed = modeInfo(quiz.mode).timed;
+        return fill('这道题属于“{0}”章节。逐一看各选项，排除与主题不符的。', q.cat) + (timed ? ' ' + '我帮你时，计时器仍在继续。' : '');
+      }
+    }
+    if (id === 'explain') {
+      if (!playing) return '选择一种模式并作答。你选择之后，我再来解释。';
+      if (open) return '请先作答。你选择之后我才解释每道题，以保证测验公平。';
+      return q.explain + ' ' + fill('来源：{0}', q.src);
+    }
+    if (id === 'source') {
+      if (open) return fill('这道题属于“{0}”章节。你作答之后，我会显示它的来源。', q.cat);
+      if (answered) return fill('这道题属于“{0}”章节。来源：{1}。', q.cat, q.src);
+      return fill('每道题的解释下方都会显示来源。例如：{0}。', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
+    }
+    if (id === 'moon') return '每答对一题，月球清理 5 厘米。答错不清理。要清理完整，测验中每一题都必须答对。如果测验结束时月球没有完全清理干净，世界就会爆炸。';
+    if (id === 'chapter') return fill('每章是一个主题，包含该主题的全部题目。章节包括：{0}。', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return '经典模式：10 道随机题，无计时。挑战模式：15 道题，每题 20 秒，有连胜加分，并有一次 50:50。马拉松模式：题库全部题目。';
+    if (id === 'score') return '完成测验后，用你的名字把分数保存到排行榜。分数保存在本浏览器中，因此排行榜只显示在本设备上玩过的人。';
+    if (id === 'flash') return '闪卡每次显示一道题。点击卡片翻面即可看到答案。';
+    if (id === 'lifeline') return '挑战模式中你有一次 50:50 机会，可去掉两个错误答案，让选择更容易。每次测验只能用一次。';
+    if (id === 'sound') return '按 M 可开启或关闭声音。朗读会读出题目和各选项。';
+    if (id === 'sdg') return 'SDG 4 是优质教育。它要求确保包容、公平的优质教育，并为所有人促进终身学习机会。它是 2015 年为 2030 年制定的 17 项目标之一，共有十个具体目标。';
+    if (id === 'help') return '我可以给出提示，在你选择后解释答案，说明事实来源，并解释月球、章节、模式、分数和闪卡。请提问或点按按钮。';
+    const best = helperSearch(raw);
+    if (best) return fill('这可能有帮助：{0}', best.explain);
+    return '我没有找到相关内容。可以问月球、章节、模式或 SDG 4，或点按本题的“提示”。';
+  }
+
+  function helperAsk(text, intent) {
+    const clean = String(text || '').trim().slice(0, 200);
+    if (!clean && !intent) return;
+    helperSay(clean, 'me');
+    helperSay(helperReply(intent || null, clean), 'bot');
+  }
+
+  function initHelper() {
+    if (!$('#qhelp')) return;
+    applyHelper(helperOn());
+    $('#qhelpToggle').addEventListener('click', () => { Sound.play('tap'); setHelper(!helperOn()); });
+    $('#qhelpHide').addEventListener('click', () => { Sound.play('tap'); setHelper(false); $('#qhelpToggle').focus(); });
+    $('#qhelpForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#qhelpInput');
+      helperAsk(input.value, null);
+      input.value = '';
+    });
+    helperSay(HELP_GREETING, 'bot');
+    renderHelperChips();
   }
 
   /* Chapters and the leaderboard. Everything is kept in this browser. */
@@ -1503,6 +1795,10 @@
 
   function setupSaveForm() {
     quiz.saved = false;
+    if (quizGrade !== 'all') {
+      $('#saveScore').hidden = true;
+      return;
+    }
     const input = $('#ssName');
     $('#saveScore').hidden = false;
     input.value = store.get('sdg4.quiz.name', '') || '';
@@ -1644,8 +1940,60 @@
     window.scrollTo(0, 0);
   }
 
+  // When the quiz ends with the moon not fully clean, the world explodes (full screen), then the result shows.
+  function explodeWorld(done) {
+    if (document.querySelector('.boom')) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const box = h('div', 'boom');
+    const stage = h('div', 'boom-stage');
+    stage.append(h('div', 'boom-flash'), h('div', 'boom-ring'), h('div', 'boom-world'));
+    const frags = h('div', 'boom-frags');
+    for (let i = 0; i < 28; i += 1) {
+      const a = (i / 28) * Math.PI * 2 + Math.random() * 0.35;
+      const dist = 260 + Math.random() * 320;
+      const piece = h('span', 'boom-frag');
+      piece.style.setProperty('--dx', Math.round(Math.cos(a) * dist) + 'px');
+      piece.style.setProperty('--dy', Math.round(Math.sin(a) * dist) + 'px');
+      piece.style.setProperty('--rot', Math.round(Math.random() * 720 - 360) + 'deg');
+      piece.style.setProperty('--sz', Math.round(18 + Math.random() * 34) + 'px');
+      frags.append(piece);
+    }
+    stage.append(frags);
+    const text = h('div', 'boom-text');
+    const next = h('button', 'btn-primary boom-next', '查看我的分数');
+    text.append(
+      h('h2', null, '世界爆炸了。'),
+      h('p', null, '月球没有完全清理干净。每道题都必须答对。'),
+      next
+    );
+    box.append(stage, text);
+    document.body.append(box);
+    Sound.play('wrong');
+    let timer1 = 0;
+    let timer2 = 0;
+    let ended = false;
+    const end = () => {
+      if (ended) return;
+      ended = true;
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      box.remove();
+      done();
+    };
+    timer1 = setTimeout(() => {
+      text.classList.add('is-in');
+      next.focus({ preventScroll: true });
+    }, reduce ? 300 : 2600);
+    timer2 = setTimeout(end, reduce ? 2400 : 6000);
+    next.addEventListener('click', end);
+    box.addEventListener('click', () => { if (text.classList.contains('is-in')) end(); });
+  }
   function finishQuiz() {
     stopQTimer();
+    if (quiz.correct < quiz.order.length) explodeWorld(showQuizResult);
+    else showQuizResult();
+  }
+  function showQuizResult() {
     quizScreen('result');
     const M = modeInfo(quiz.mode);
     const total = quiz.order.length;
@@ -1687,7 +2035,7 @@
     }
     $('#rsTopics').textContent = topics;
 
-    const bestKey = quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode;
+    const bestKey = (quizGrade !== 'all' ? 'grade' + quizGrade + ':' : '') + (quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode);
     const bests = store.get('sdg4.quiz.bests', {}) || {};
     const metric = M.timed ? quiz.points : quiz.correct;
     const isNew = metric > 0 && !(typeof bests[bestKey] === 'number' && bests[bestKey] >= metric);
@@ -2176,6 +2524,8 @@
   }
 
   function initQuiz() {
+    setGrade(store.get(GRADE_KEY, 'all'));
+    initHelper();
     const saved = readBoard();
     if (saved.length) boardGroup = saved[saved.length - 1].group;
     renderModes();
@@ -2219,6 +2569,7 @@
       Sound.play('tap');
     });
     pageKeys = (e, key, onControl) => {
+      if ((key === 'h' || key === 'H') && !onControl) { e.preventDefault(); Sound.play('tap'); setHelper(!helperOn()); return; }
       if (fcState.open) {
         if (key === 'ArrowRight' || key === 'ArrowLeft') {
           e.preventDefault();
@@ -2794,7 +3145,7 @@
         return CHAPTER_ORDER.every((cat) => bests['chapter:' + cat] === chapterTotal(cat));
       }
     },
-    { name: '记忆卡片达人', text: '翻看全部52张记忆卡片。', earned: () => fcSeen().length >= QUIZ.length },
+    { name: '记忆卡片达人', text: '翻看全部96张记忆卡片。', earned: () => fcSeen().length >= QUIZ.length },
     { name: '目标阅读者', text: '打开全部十项目标。', earned: () => (store.get('sdg4.seen.targets', []) || []).length >= TARGETS.length },
     { name: '笔记达人', text: '为三项目标写下笔记。', earned: () => Object.keys(store.get('sdg4.notes', {}) || {}).length >= 3 },
     { name: '今日一题', text: '回答每日一题。', earned: () => !!store.get('sdg4.qotd', null) },
@@ -2888,7 +3239,9 @@
     BADGES.forEach((b) => {
       const got = b.earned();
       const card = h('div', 'badge' + (got ? ' is-earned' : ''));
-      card.append(h('span', 'badge-state', got ? '已获得' : '尚未获得'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
+      const medal = h('span', 'badge-medal', got ? '★' : '');
+      medal.setAttribute('aria-hidden', 'true');
+      card.append(medal, h('span', 'badge-state', got ? '已获得' : '尚未获得'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
       grid.appendChild(card);
     });
   }
@@ -3309,7 +3662,7 @@
       due: /^\d{4}-\d{2}-\d{2}$/.test(String(f.due || '')) ? String(f.due) : '',
       mode: f.mode === 'custom' ? 'custom' : 'chapters',
       chapters: clampList(f.chapters, 12).filter((c) => CHAPTER_ORDER.indexOf(c) >= 0),
-      count: Math.min(52, Math.max(1, Number(f.count) || 10)),
+      count: Math.min(QUIZ.length, Math.max(1, Number(f.count) || 10)),
       questions: clampList(f.questions, 60).map(cleanQuestion).filter(Boolean),
       created: String(f.created || '')
     };
@@ -3987,8 +4340,8 @@
         return;
       }
       const count = Math.round(Number($('#asgCount').value));
-      if (!(count >= 1 && count <= 52)) {
-        msg.textContent = '请选择 1 到 52 道题。';
+      if (!(count >= 1 && count <= QUIZ.length)) {
+        msg.textContent = fill('请选择 1 到 {0} 道题。', QUIZ.length);
         $('#asgCount').focus();
         return;
       }
