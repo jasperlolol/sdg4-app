@@ -1256,7 +1256,7 @@
       b.type = 'button';
       b.disabled = !ready;
       b.setAttribute('aria-pressed', String(on));
-      b.append(h('span', 'gc-name', c.label), h('span', 'gc-note', ready ? fill('{0} soal', count) : 'Segera hadir'));
+      b.append(h('span', 'gc-name', c.label), h('span', 'gc-note', ready ? fill('{0} pertanyaan', count) : 'Segera hadir'));
       b.addEventListener('click', () => {
         Sound.play('tap');
         setGrade(c.key);
@@ -1403,6 +1403,48 @@
     };
     cwRaf = requestAnimationFrame(step);
   }
+
+  // The moon screen can be dragged anywhere on the page, with a mouse, pen or finger.
+  let cleanDrag = null;
+  function placeCleanScreen(box, left, top) {
+    const maxLeft = Math.max(0, window.innerWidth - box.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - box.offsetHeight);
+    box.style.position = 'fixed';
+    box.style.margin = '0';
+    box.style.right = 'auto';
+    box.style.bottom = 'auto';
+    box.style.left = Math.min(Math.max(left, 0), maxLeft) + 'px';
+    box.style.top = Math.min(Math.max(top, 0), maxTop) + 'px';
+  }
+  document.addEventListener('pointerdown', (e) => {
+    const box = e.target.closest ? e.target.closest('.clean-screen') : null;
+    if (!box || e.button !== 0) return;
+    const r = box.getBoundingClientRect();
+    cleanDrag = { box, dx: e.clientX - r.left, dy: e.clientY - r.top };
+    placeCleanScreen(box, r.left, r.top);
+    box.setPointerCapture(e.pointerId);
+    box.classList.add('is-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!cleanDrag) return;
+    placeCleanScreen(cleanDrag.box, e.clientX - cleanDrag.dx, e.clientY - cleanDrag.dy);
+  });
+  const endCleanDrag = () => {
+    if (!cleanDrag) return;
+    cleanDrag.box.classList.remove('is-dragging');
+    cleanDrag = null;
+  };
+  document.addEventListener('pointerup', endCleanDrag);
+  document.addEventListener('pointercancel', endCleanDrag);
+  // Keep the screen on-screen if the window is resized after it was moved.
+  window.addEventListener('resize', () => {
+    const box = document.querySelector('.clean-screen');
+    if (box && box.style.position === 'fixed') {
+      const r = box.getBoundingClientRect();
+      placeCleanScreen(box, r.left, r.top);
+    }
+  });
 
   function renderQuestion() {
     const total = quiz.order.length;
@@ -1558,7 +1600,7 @@
   /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
      quiz's own explanations, and it never gives an answer before the question has been answered. */
   const HELPER_KEY = 'sdg4.quiz.helper';
-  const HELP_GREETING = 'Hai, saya pembantu SDG 4. Saya bisa memberi petunjuk, menjelaskan jawaban setelah kamu memilih, dan menunjukkan asal faktanya. Saya tidak pernah membocorkan jawaban sebelum kamu memilih.';
+  const HELP_GREETING = 'Halo! Saya pembantu SDG 4 kamu, dan senang kamu ada di sini. Saya bisa memberi petunjuk, menjelaskan jawaban setelah kamu memilih, dan menunjukkan asal faktanya. Saya tidak akan pernah memberi jawaban sebelum kamu memilih, janji!';
   const HELP_CHIPS_PLAY = [
     { label: 'Petunjuk', intent: 'hint' },
     { label: 'Jelaskan ini', intent: 'explain' },
@@ -1654,21 +1696,21 @@
       id = rule ? rule[0] : 'search';
     }
     if (id === 'refuse') {
-      if (open) return 'Saya tidak akan memberi jawabannya sebelum kamu memilih. Coba petunjuknya, atau baca lagi pilihannya.';
-      if (!playing) return 'Pilih mode dulu. Saya tidak akan memberi jawaban sebelum kamu memilih.';
+      if (open) return 'Saya tidak bisa memberi jawaban sebelum kamu memilih, tapi saya siap membantu! Coba petunjuknya, atau baca lagi pilihannya perlahan-lahan.';
+      if (!playing) return 'Pilih mode dulu, lalu saya akan siap membantu! Saya tidak bisa memberi jawaban sebelum kamu memilih.';
       id = 'explain';
     }
     if (id === 'hint') {
-      if (!playing) return 'Petunjuk hanya untuk soal kuis. Mulai satu mode dan saya akan memberi petunjuk untuk setiap soal.';
+      if (!playing) return 'Petunjuk hanya untuk soal kuis! Mulai satu mode dan saya akan memberi petunjuk untuk setiap soal.';
       if (answered) id = 'explain';
       else {
         const timed = modeInfo(quiz.mode).timed;
-        return fill('Soal ini ada di bab {0}. Baca setiap pilihan dan singkirkan yang tidak sesuai dengan topiknya.', q.cat) + (timed ? ' ' + 'Pengatur waktu tetap berjalan selama saya membantu.' : '');
+        return fill('Bagus! Soal ini ada di bab {0}. Baca setiap pilihan dan singkirkan yang tidak sesuai dengan topiknya.', q.cat) + (timed ? ' ' + 'Pengatur waktu tetap berjalan saat saya membantu, jadi cepatlah!' : '');
       }
     }
     if (id === 'explain') {
-      if (!playing) return 'Pilih mode dan jawab satu soal. Saya akan menjelaskannya setelah kamu memilih.';
-      if (open) return 'Jawab dulu. Saya menjelaskan setiap soal setelah kamu memilih, agar kuis tetap adil.';
+      if (!playing) return 'Pilih mode dan jawab satu soal dulu. Saya akan menjelaskannya setelah kamu memilih.';
+      if (open) return 'Jawab dulu, lalu saya jelaskan! Dengan begitu kuisnya tetap adil untuk semua orang.';
       return q.explain + ' ' + fill('Sumber: {0}', q.src);
     }
     if (id === 'source') {
@@ -1676,18 +1718,18 @@
       if (answered) return fill('Soal ini ada di bab {0}. Sumber: {1}.', q.cat, q.src);
       return fill('Setiap jawaban menampilkan sumbernya di bawah penjelasan. Contohnya: {0}.', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
     }
-    if (id === 'moon') return 'Setiap jawaban benar membersihkan 5 cm bulan. Jawaban salah tidak membersihkan apa pun. Untuk membersihkan seluruhnya, setiap soal harus benar. Jika bulan belum sepenuhnya bersih saat kuis selesai, dunia meledak.';
-    if (id === 'chapter') return fill('Setiap bab adalah satu topik, dengan semua soal tentang topik itu. Babnya adalah: {0}.', CHAPTER_ORDER.join(', '));
-    if (id === 'modes') return 'Klasik punya 10 soal acak tanpa waktu. Tantangan punya 15 soal dengan 20 detik per soal, bonus beruntun, dan satu 50:50. Maraton mencakup seluruh bank soal.';
+    if (id === 'moon') return 'Begini cara kerjanya! Setiap jawaban benar membersihkan 5 cm bulan, dan jawaban salah tidak membersihkan apa pun. Untuk membersihkan seluruhnya, setiap soal kuis harus benar. Jika bulan belum sepenuhnya bersih saat kuis selesai, dunia akan meledak, jadi semoga berhasil!';
+    if (id === 'chapter') return fill('Setiap bab adalah satu topik, dengan semua soalnya dikelompokkan bersama. Babnya adalah: {0}.', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return 'Klasik punya 10 soal acak tanpa waktu. Tantangan punya 15 soal dengan 20 detik per soal, bonus beruntun, dan satu 50:50. Maraton mencakup seluruh bank soal. Pilih yang kamu suka!';
     if (id === 'score') return 'Selesaikan kuis dan simpan skormu di papan peringkat dengan namamu. Skor tetap ada di peramban ini, jadi papan hanya menampilkan orang yang bermain di perangkat ini.';
-    if (id === 'flash') return 'Kartu kilat membahas setiap soal satu kartu demi satu. Klik kartu untuk membaliknya dan melihat jawabannya.';
+    if (id === 'flash') return 'Kartu kilat membahas setiap soal satu kartu demi satu. Ketuk kartu untuk membaliknya dan melihat jawabannya. Selamat belajar!';
     if (id === 'lifeline') return 'Di Tantangan kamu mendapat satu 50:50. Ini menghapus dua jawaban salah sehingga pilihannya lebih mudah. Kamu bisa memakainya sekali per kuis.';
     if (id === 'sound') return 'Tekan M untuk menyalakan atau mematikan suara. Baca keras membacakan soal dan jawabannya.';
-    if (id === 'sdg') return 'SDG 4 adalah Pendidikan Berkualitas. Tujuannya memastikan pendidikan berkualitas yang inklusif dan merata serta mendorong kesempatan belajar sepanjang hayat bagi semua. Ini salah satu dari 17 tujuan yang disepakati pada 2015 untuk tahun 2030, dan memiliki sepuluh target.';
-    if (id === 'help') return 'Saya bisa memberi petunjuk, menjelaskan jawaban setelah kamu memilih, menunjukkan asal faktanya, dan menjelaskan bulan, bab, mode, skor, dan kartu kilat. Tanyakan sesuatu atau tekan tombol.';
+    if (id === 'sdg') return 'SDG 4 adalah Pendidikan Berkualitas! Tujuannya meminta dunia memastikan semua orang mendapat pendidikan berkualitas yang inklusif dan adil, serta kesempatan untuk terus belajar sepanjang hidup. Ini salah satu dari 17 tujuan yang disepakati pada 2015 untuk tahun 2030, dan memiliki sepuluh target.';
+    if (id === 'help') return 'Saya bisa memberi petunjuk, menjelaskan jawaban setelah kamu memilih, menunjukkan asal fakta, dan menjelaskan bulan, bab, mode, skor, dan kartu kilat. Tanyakan apa saja atau ketuk tombol!';
     const best = helperSearch(raw);
     if (best) return fill('Ini mungkin membantu: {0}', best.explain);
-    return 'Saya tidak menemukan itu. Coba tanyakan tentang bulan, bab, mode, atau SDG 4, atau tekan Petunjuk pada soal.';
+    return 'Hmm, saya tidak menemukan itu. Coba tanyakan tentang bulan, bab, mode, atau SDG 4, atau ketuk Petunjuk pada soal. Kamu pasti bisa!';
   }
 
   function helperAsk(text, intent) {

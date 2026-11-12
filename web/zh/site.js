@@ -1404,6 +1404,48 @@
     cwRaf = requestAnimationFrame(step);
   }
 
+  // The moon screen can be dragged anywhere on the page, with a mouse, pen or finger.
+  let cleanDrag = null;
+  function placeCleanScreen(box, left, top) {
+    const maxLeft = Math.max(0, window.innerWidth - box.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - box.offsetHeight);
+    box.style.position = 'fixed';
+    box.style.margin = '0';
+    box.style.right = 'auto';
+    box.style.bottom = 'auto';
+    box.style.left = Math.min(Math.max(left, 0), maxLeft) + 'px';
+    box.style.top = Math.min(Math.max(top, 0), maxTop) + 'px';
+  }
+  document.addEventListener('pointerdown', (e) => {
+    const box = e.target.closest ? e.target.closest('.clean-screen') : null;
+    if (!box || e.button !== 0) return;
+    const r = box.getBoundingClientRect();
+    cleanDrag = { box, dx: e.clientX - r.left, dy: e.clientY - r.top };
+    placeCleanScreen(box, r.left, r.top);
+    box.setPointerCapture(e.pointerId);
+    box.classList.add('is-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!cleanDrag) return;
+    placeCleanScreen(cleanDrag.box, e.clientX - cleanDrag.dx, e.clientY - cleanDrag.dy);
+  });
+  const endCleanDrag = () => {
+    if (!cleanDrag) return;
+    cleanDrag.box.classList.remove('is-dragging');
+    cleanDrag = null;
+  };
+  document.addEventListener('pointerup', endCleanDrag);
+  document.addEventListener('pointercancel', endCleanDrag);
+  // Keep the screen on-screen if the window is resized after it was moved.
+  window.addEventListener('resize', () => {
+    const box = document.querySelector('.clean-screen');
+    if (box && box.style.position === 'fixed') {
+      const r = box.getBoundingClientRect();
+      placeCleanScreen(box, r.left, r.top);
+    }
+  });
+
   function renderQuestion() {
     const total = quiz.order.length;
     const q = QUIZ[quiz.order[quiz.i]];
@@ -1558,7 +1600,7 @@
   /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
      quiz's own explanations, and it never gives an answer before the question has been answered. */
   const HELPER_KEY = 'sdg4.quiz.helper';
-  const HELP_GREETING = '你好，我是 SDG 4 助手。我可以给出提示，在你选择后解释答案，并说明事实的来源。在你作答之前，我绝不透露答案。';
+  const HELP_GREETING = '你好呀！我是你的 SDG 4 助手，很高兴你来了。我可以给你提示，在你选好后解释答案，并告诉你事实的来源。在你作答之前，我绝不会给出答案，说话算话！';
   const HELP_CHIPS_PLAY = [
     { label: '提示', intent: 'hint' },
     { label: '解释这题', intent: 'explain' },
@@ -1654,40 +1696,40 @@
       id = rule ? rule[0] : 'search';
     }
     if (id === 'refuse') {
-      if (open) return '在你选择之前，我不会给出答案。可以试试提示，或再读一遍选项。';
-      if (!playing) return '请先选择一种模式。在你选择之前，我不会给出答案。';
+      if (open) return '在你选择之前我不能给出答案，但我会一直帮你！试试提示，或者慢慢再读一遍选项。';
+      if (!playing) return '先选一种模式，然后我就会在这里帮你！在你选择之前，我不能给出答案。';
       id = 'explain';
     }
     if (id === 'hint') {
-      if (!playing) return '提示仅适用于测验题目。开始一种模式，我会为每道题提供提示。';
+      if (!playing) return '提示是用于测验题目的！开始一种模式，我会为每道题给你提示。';
       if (answered) id = 'explain';
       else {
         const timed = modeInfo(quiz.mode).timed;
-        return fill('这道题属于“{0}”章节。逐一看各选项，排除与主题不符的。', q.cat) + (timed ? ' ' + '我帮你时，计时器仍在继续。' : '');
+        return fill('思路不错！这道题属于“{0}”章节。逐一看各选项，排除与主题不符的。', q.cat) + (timed ? ' ' + '我帮你的时候计时器仍在运行，所以要快一点哦！' : '');
       }
     }
     if (id === 'explain') {
-      if (!playing) return '选择一种模式并作答。你选择之后，我再来解释。';
-      if (open) return '请先作答。你选择之后我才解释每道题，以保证测验公平。';
+      if (!playing) return '请先选择一种模式并作答。你选择之后，我再来解释。';
+      if (open) return '先作答，然后我再解释！这样测验对每个人都公平。';
       return q.explain + ' ' + fill('来源：{0}', q.src);
     }
     if (id === 'source') {
-      if (open) return fill('这道题属于“{0}”章节。你作答之后，我会显示它的来源。', q.cat);
+      if (open) return fill('这道题属于“{0}”章节。你作答之后，我会告诉你它的来源。', q.cat);
       if (answered) return fill('这道题属于“{0}”章节。来源：{1}。', q.cat, q.src);
       return fill('每道题的解释下方都会显示来源。例如：{0}。', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
     }
-    if (id === 'moon') return '每答对一题，月球清理 5 厘米。答错不清理。要清理完整，测验中每一题都必须答对。如果测验结束时月球没有完全清理干净，世界就会爆炸。';
-    if (id === 'chapter') return fill('每章是一个主题，包含该主题的全部题目。章节包括：{0}。', CHAPTER_ORDER.join(', '));
-    if (id === 'modes') return '经典模式：10 道随机题，无计时。挑战模式：15 道题，每题 20 秒，有连胜加分，并有一次 50:50。马拉松模式：题库全部题目。';
+    if (id === 'moon') return '原理是这样的！每答对一题，月球就清理 5 厘米，答错则清理不了。要全部清理干净，测验中的每一题都必须答对。如果测验结束时月球没有完全清理干净，世界就会爆炸。祝你好运！';
+    if (id === 'chapter') return fill('每章是一个主题，把该主题的所有题目放在一起。章节包括：{0}。', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return '经典模式：10 道随机题，无计时。挑战模式：15 道题，每题 20 秒，有连胜加分，并有一次 50:50。马拉松模式：题库中的全部题目。选你喜欢的吧！';
     if (id === 'score') return '完成测验后，用你的名字把分数保存到排行榜。分数保存在本浏览器中，因此排行榜只显示在本设备上玩过的人。';
-    if (id === 'flash') return '闪卡每次显示一道题。点击卡片翻面即可看到答案。';
+    if (id === 'flash') return '闪卡会一张一张地过完每道题。点一下卡片即可翻面看答案。祝学习愉快！';
     if (id === 'lifeline') return '挑战模式中你有一次 50:50 机会，可去掉两个错误答案，让选择更容易。每次测验只能用一次。';
     if (id === 'sound') return '按 M 可开启或关闭声音。朗读会读出题目和各选项。';
-    if (id === 'sdg') return 'SDG 4 是优质教育。它要求确保包容、公平的优质教育，并为所有人促进终身学习机会。它是 2015 年为 2030 年制定的 17 项目标之一，共有十个具体目标。';
-    if (id === 'help') return '我可以给出提示，在你选择后解释答案，说明事实来源，并解释月球、章节、模式、分数和闪卡。请提问或点按按钮。';
+    if (id === 'sdg') return 'SDG 4 是优质教育！它要求世界确保人人都能获得包容、公平的优质教育，并拥有终身学习的机会。这是 2015 年为 2030 年制定的 17 项目标之一，共有十个具体目标。';
+    if (id === 'help') return '我可以给你提示，在你选择后解释答案，说明事实来源，并讲解月球、章节、模式、分数和闪卡。随便问我，或者点一下按钮吧！';
     const best = helperSearch(raw);
-    if (best) return fill('这可能有帮助：{0}', best.explain);
-    return '我没有找到相关内容。可以问月球、章节、模式或 SDG 4，或点按本题的“提示”。';
+    if (best) return fill('这或许能帮到你：{0}', best.explain);
+    return '嗯，我没有找到相关内容。你可以问我月球、章节、模式或 SDG 4，或点一下本题的“提示”。你一定可以的！';
   }
 
   function helperAsk(text, intent) {

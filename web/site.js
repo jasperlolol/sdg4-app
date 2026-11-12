@@ -1404,6 +1404,48 @@
     cwRaf = requestAnimationFrame(step);
   }
 
+  // The moon screen can be dragged anywhere on the page, with a mouse, pen or finger.
+  let cleanDrag = null;
+  function placeCleanScreen(box, left, top) {
+    const maxLeft = Math.max(0, window.innerWidth - box.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - box.offsetHeight);
+    box.style.position = 'fixed';
+    box.style.margin = '0';
+    box.style.right = 'auto';
+    box.style.bottom = 'auto';
+    box.style.left = Math.min(Math.max(left, 0), maxLeft) + 'px';
+    box.style.top = Math.min(Math.max(top, 0), maxTop) + 'px';
+  }
+  document.addEventListener('pointerdown', (e) => {
+    const box = e.target.closest ? e.target.closest('.clean-screen') : null;
+    if (!box || e.button !== 0) return;
+    const r = box.getBoundingClientRect();
+    cleanDrag = { box, dx: e.clientX - r.left, dy: e.clientY - r.top };
+    placeCleanScreen(box, r.left, r.top);
+    box.setPointerCapture(e.pointerId);
+    box.classList.add('is-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!cleanDrag) return;
+    placeCleanScreen(cleanDrag.box, e.clientX - cleanDrag.dx, e.clientY - cleanDrag.dy);
+  });
+  const endCleanDrag = () => {
+    if (!cleanDrag) return;
+    cleanDrag.box.classList.remove('is-dragging');
+    cleanDrag = null;
+  };
+  document.addEventListener('pointerup', endCleanDrag);
+  document.addEventListener('pointercancel', endCleanDrag);
+  // Keep the screen on-screen if the window is resized after it was moved.
+  window.addEventListener('resize', () => {
+    const box = document.querySelector('.clean-screen');
+    if (box && box.style.position === 'fixed') {
+      const r = box.getBoundingClientRect();
+      placeCleanScreen(box, r.left, r.top);
+    }
+  });
+
   function renderQuestion() {
     const total = quiz.order.length;
     const q = QUIZ[quiz.order[quiz.i]];
@@ -1558,7 +1600,7 @@
   /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
      quiz's own explanations, and it never gives an answer before the question has been answered. */
   const HELPER_KEY = 'sdg4.quiz.helper';
-  const HELP_GREETING = 'Hi, I am the SDG 4 helper. I can give hints, explain answers after you choose, and show where the facts come from. I never reveal an answer before you choose one.';
+  const HELP_GREETING = 'Hi there! I\'m your SDG 4 helper, and I\'m happy you\'re here. I can give you hints, explain answers once you\'ve picked one, and show where the facts come from. I\'ll never give away an answer before you choose, promise!';
   const HELP_CHIPS_PLAY = [
     { label: 'Hint', intent: 'hint' },
     { label: 'Explain this', intent: 'explain' },
@@ -1654,40 +1696,40 @@
       id = rule ? rule[0] : 'search';
     }
     if (id === 'refuse') {
-      if (open) return 'I will not give the answer before you choose. Try the hint, or read the options again.';
-      if (!playing) return 'Pick a mode first. I will not give answers before you choose.';
+      if (open) return 'I can\'t give the answer before you choose, but I\'m here to help! Try the hint, or read the options again slowly.';
+      if (!playing) return 'Pick a mode first, and then I\'ll be right here to help! I can\'t give answers before you choose.';
       id = 'explain';
     }
     if (id === 'hint') {
-      if (!playing) return 'Hints are for quiz questions. Start a mode and I will give you a hint on each question.';
+      if (!playing) return 'Hints are for quiz questions! Start a mode and I\'ll give you a hint on each one.';
       if (answered) id = 'explain';
       else {
         const timed = modeInfo(quiz.mode).timed;
-        return fill('This question is in the {0} chapter. Read each option and drop the ones that do not fit the topic.', q.cat) + (timed ? ' ' + 'The timer keeps running while I help.' : '');
+        return fill('Good thinking! This question is in the {0} chapter. Read each option and drop the ones that don\'t fit the topic.', q.cat) + (timed ? ' ' + 'The timer keeps running while I help, so be quick!' : '');
       }
     }
     if (id === 'explain') {
-      if (!playing) return 'Pick a mode and answer a question. I explain it once you have chosen.';
-      if (open) return 'Answer first. I explain each question after you choose, so the quiz stays fair.';
+      if (!playing) return 'Pick a mode and answer a question first. I\'ll explain it once you\'ve chosen.';
+      if (open) return 'Answer first, and then I\'ll explain it! That keeps the quiz fair for everyone.';
       return q.explain + ' ' + fill('Source: {0}', q.src);
     }
     if (id === 'source') {
-      if (open) return fill('This question is in the {0} chapter. I will show its source once you have answered.', q.cat);
+      if (open) return fill('This question is in the {0} chapter. I\'ll show you its source once you\'ve answered.', q.cat);
       if (answered) return fill('This question is in the {0} chapter. Source: {1}.', q.cat, q.src);
       return fill('Each answer shows its source under the explanation. For example: {0}.', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
     }
-    if (id === 'moon') return 'Each correct answer clears 5 cm of the moon. Wrong answers clear nothing. To clear all of it, every question in the quiz must be right. If the moon is not fully clean when the quiz ends, the world explodes.';
-    if (id === 'chapter') return fill('Each chapter is one topic, with every question on that topic. The chapters are: {0}.', CHAPTER_ORDER.join(', '));
-    if (id === 'modes') return 'Classic has 10 random questions with no clock. Challenge has 15 questions with 20 seconds each, streak bonuses and one 50:50. Marathon goes through the whole question bank.';
+    if (id === 'moon') return 'Here\'s how it works! Each correct answer cleans 5 cm of the moon, and wrong answers clean nothing. To clean all of it, every question in the quiz must be right. If the moon isn\'t fully clean when the quiz ends, the world explodes, so good luck!';
+    if (id === 'chapter') return fill('Each chapter is one topic, with all of its questions together. The chapters are: {0}.', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return 'Classic has 10 random questions and no clock. Challenge has 15 questions with 20 seconds each, streak bonuses and one 50:50. Marathon goes through the whole question bank. Pick whichever you like!';
     if (id === 'score') return 'Finish a quiz and save your score to the leaderboard with your name. Scores stay in this browser, so the board shows people who played on this device.';
-    if (id === 'flash') return 'Flashcards go through every question one card at a time. Click a card to turn it and see the answer.';
+    if (id === 'flash') return 'Flashcards go through every question one card at a time. Tap a card to flip it and see the answer. Happy studying!';
     if (id === 'lifeline') return 'In Challenge you get one 50:50. It removes two wrong answers, which makes the choice easier. You can use it once per quiz.';
     if (id === 'sound') return 'Press M to turn the sound on or off. Read aloud reads the question and its answers.';
-    if (id === 'sdg') return 'SDG 4 is Quality Education. It asks the world to ensure inclusive and equitable quality education and promote lifelong learning opportunities for all. It is one of 17 goals agreed in 2015 for the year 2030, and it has ten targets.';
-    if (id === 'help') return 'I can give hints, explain answers after you choose, show where facts come from, and explain the moon, chapters, modes, scores and flashcards. Ask a question or tap a button.';
+    if (id === 'sdg') return 'SDG 4 is Quality Education! It asks the world to make sure everyone gets inclusive, fair, quality education and chances to keep learning all their life. It is one of 17 goals agreed in 2015 for the year 2030, and it has ten targets.';
+    if (id === 'help') return 'I can give you hints, explain answers after you choose, show where facts come from, and explain the moon, chapters, modes, scores and flashcards. Ask me anything or tap a button!';
     const best = helperSearch(raw);
-    if (best) return fill('This may help: {0}', best.explain);
-    return 'I did not find that. Try asking about the moon, the chapters, the modes or SDG 4, or tap Hint on the question.';
+    if (best) return fill('Here\'s something that might help: {0}', best.explain);
+    return 'Hmm, I didn\'t find that one. Try asking about the moon, the chapters, the modes or SDG 4, or tap Hint on the question. You\'ve got this!';
   }
 
   function helperAsk(text, intent) {

@@ -1404,6 +1404,48 @@
     cwRaf = requestAnimationFrame(step);
   }
 
+  // The moon screen can be dragged anywhere on the page, with a mouse, pen or finger.
+  let cleanDrag = null;
+  function placeCleanScreen(box, left, top) {
+    const maxLeft = Math.max(0, window.innerWidth - box.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - box.offsetHeight);
+    box.style.position = 'fixed';
+    box.style.margin = '0';
+    box.style.right = 'auto';
+    box.style.bottom = 'auto';
+    box.style.left = Math.min(Math.max(left, 0), maxLeft) + 'px';
+    box.style.top = Math.min(Math.max(top, 0), maxTop) + 'px';
+  }
+  document.addEventListener('pointerdown', (e) => {
+    const box = e.target.closest ? e.target.closest('.clean-screen') : null;
+    if (!box || e.button !== 0) return;
+    const r = box.getBoundingClientRect();
+    cleanDrag = { box, dx: e.clientX - r.left, dy: e.clientY - r.top };
+    placeCleanScreen(box, r.left, r.top);
+    box.setPointerCapture(e.pointerId);
+    box.classList.add('is-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!cleanDrag) return;
+    placeCleanScreen(cleanDrag.box, e.clientX - cleanDrag.dx, e.clientY - cleanDrag.dy);
+  });
+  const endCleanDrag = () => {
+    if (!cleanDrag) return;
+    cleanDrag.box.classList.remove('is-dragging');
+    cleanDrag = null;
+  };
+  document.addEventListener('pointerup', endCleanDrag);
+  document.addEventListener('pointercancel', endCleanDrag);
+  // Keep the screen on-screen if the window is resized after it was moved.
+  window.addEventListener('resize', () => {
+    const box = document.querySelector('.clean-screen');
+    if (box && box.style.position === 'fixed') {
+      const r = box.getBoundingClientRect();
+      placeCleanScreen(box, r.left, r.top);
+    }
+  });
+
   function renderQuestion() {
     const total = quiz.order.length;
     const q = QUIZ[quiz.order[quiz.i]];
@@ -1558,7 +1600,7 @@
   /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
      quiz's own explanations, and it never gives an answer before the question has been answered. */
   const HELPER_KEY = 'sdg4.quiz.helper';
-  const HELP_GREETING = 'Hola, soy el asistente del ODS 4. Puedo dar pistas, explicar las respuestas después de que elijas y mostrar de dónde vienen los datos. Nunca revelo una respuesta antes de que elijas una.';
+  const HELP_GREETING = '¡Hola! Soy tu asistente del ODS 4 y me alegra que estés aquí. Puedo darte pistas, explicar las respuestas una vez que elijas una y mostrarte de dónde vienen los datos. ¡Nunca te daré una respuesta antes de que elijas, te lo prometo!';
   const HELP_CHIPS_PLAY = [
     { label: 'Pista', intent: 'hint' },
     { label: 'Explica esto', intent: 'explain' },
@@ -1654,21 +1696,21 @@
       id = rule ? rule[0] : 'search';
     }
     if (id === 'refuse') {
-      if (open) return 'No te daré la respuesta antes de que elijas. Prueba la pista o vuelve a leer las opciones.';
-      if (!playing) return 'Primero elige un modo. No daré respuestas antes de que elijas.';
+      if (open) return 'No puedo darte la respuesta antes de que elijas, ¡pero aquí estoy para ayudarte! Prueba la pista o vuelve a leer las opciones con calma.';
+      if (!playing) return 'Primero elige un modo y entonces estaré aquí para ayudarte. No puedo dar respuestas antes de que elijas.';
       id = 'explain';
     }
     if (id === 'hint') {
-      if (!playing) return 'Las pistas son para las preguntas del quiz. Empieza un modo y te daré una pista en cada pregunta.';
+      if (!playing) return '¡Las pistas son para las preguntas del quiz! Empieza un modo y te daré una pista en cada una.';
       if (answered) id = 'explain';
       else {
         const timed = modeInfo(quiz.mode).timed;
-        return fill('Esta pregunta está en el capítulo {0}. Lee cada opción y descarta las que no encajen con el tema.', q.cat) + (timed ? ' ' + 'El reloj sigue corriendo mientras te ayudo.' : '');
+        return fill('¡Buen razonamiento! Esta pregunta está en el capítulo {0}. Lee cada opción y descarta las que no encajen con el tema.', q.cat) + (timed ? ' ' + 'El temporizador sigue corriendo mientras te ayudo, ¡así que date prisa!' : '');
       }
     }
     if (id === 'explain') {
-      if (!playing) return 'Elige un modo y responde una pregunta. Te la explico cuando hayas elegido.';
-      if (open) return 'Responde primero. Explico cada pregunta después de que elijas, para que el quiz siga siendo justo.';
+      if (!playing) return 'Primero elige un modo y responde una pregunta. Te la explicaré en cuanto hayas elegido.';
+      if (open) return 'Responde primero y luego te lo explico. Así el quiz es justo para todos.';
       return q.explain + ' ' + fill('Fuente: {0}', q.src);
     }
     if (id === 'source') {
@@ -1676,18 +1718,18 @@
       if (answered) return fill('Esta pregunta está en el capítulo {0}. Fuente: {1}.', q.cat, q.src);
       return fill('Cada respuesta muestra su fuente debajo de la explicación. Por ejemplo: {0}.', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
     }
-    if (id === 'moon') return 'Cada respuesta correcta limpia 5 cm de la Luna. Las respuestas incorrectas no limpian nada. Para limpiarla del todo, todas las preguntas del quiz deben estar bien. Si la Luna no queda totalmente limpia al terminar el quiz, el mundo explota.';
-    if (id === 'chapter') return fill('Cada capítulo es un tema, con todas las preguntas sobre ese tema. Los capítulos son: {0}.', CHAPTER_ORDER.join(', '));
-    if (id === 'modes') return 'Clásico tiene 10 preguntas al azar sin reloj. Desafío tiene 15 preguntas de 20 segundos cada una, bonificaciones por racha y un 50:50. Maratón recorre todo el banco de preguntas.';
+    if (id === 'moon') return '¡Así funciona! Cada respuesta correcta limpia 5 cm de la Luna, y las incorrectas no limpian nada. Para limpiarla del todo, todas las preguntas del quiz deben estar bien. Si la Luna no queda completamente limpia al terminar el quiz, ¡el mundo explota! ¡Mucha suerte!';
+    if (id === 'chapter') return fill('Cada capítulo es un tema, con todas sus preguntas juntas. Los capítulos son: {0}.', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return 'Clásico tiene 10 preguntas al azar y sin reloj. Desafío tiene 15 preguntas de 20 segundos cada una, bonificaciones por racha y un 50:50. Maratón recorre todo el banco de preguntas. ¡Elige el que más te guste!';
     if (id === 'score') return 'Termina un quiz y guarda tu puntuación en la clasificación con tu nombre. Las puntuaciones se guardan en este navegador, así que la clasificación muestra a quienes jugaron en este dispositivo.';
-    if (id === 'flash') return 'Las tarjetas recorren cada pregunta una a una. Haz clic en una tarjeta para darle la vuelta y ver la respuesta.';
+    if (id === 'flash') return 'Las tarjetas recorren cada pregunta, una a la vez. Toca una tarjeta para darle la vuelta y ver la respuesta. ¡Feliz estudio!';
     if (id === 'lifeline') return 'En Desafío tienes un 50:50. Quita dos respuestas incorrectas y así elegir es más fácil. Puedes usarlo una vez por quiz.';
     if (id === 'sound') return 'Pulsa M para activar o desactivar el sonido. Leer en voz alta lee la pregunta y sus respuestas.';
-    if (id === 'sdg') return 'El ODS 4 es Educación de Calidad. Busca garantizar una educación de calidad inclusiva y equitativa, y promover oportunidades de aprendizaje permanente para todos. Es uno de los 17 objetivos acordados en 2015 para 2030, y tiene diez metas.';
-    if (id === 'help') return 'Puedo dar pistas, explicar las respuestas después de que elijas, mostrar de dónde vienen los datos y explicar la Luna, los capítulos, los modos, las puntuaciones y las tarjetas. Haz una pregunta o pulsa un botón.';
+    if (id === 'sdg') return '¡El ODS 4 es Educación de Calidad! Pide al mundo asegurar que todas las personas reciban una educación de calidad, inclusiva y equitativa, y oportunidades para seguir aprendiendo toda la vida. Es uno de los 17 objetivos acordados en 2015 para 2030, y tiene diez metas.';
+    if (id === 'help') return 'Puedo darte pistas, explicar las respuestas después de que elijas, mostrar de dónde vienen los datos y explicarte la Luna, los capítulos, los modos, las puntuaciones y las tarjetas. ¡Pregúntame lo que quieras o pulsa un botón!';
     const best = helperSearch(raw);
-    if (best) return fill('Esto puede ayudar: {0}', best.explain);
-    return 'No encontré eso. Prueba a preguntar por la Luna, los capítulos, los modos o el ODS 4, o pulsa Pista en la pregunta.';
+    if (best) return fill('Esto podría ayudarte: {0}', best.explain);
+    return 'Hmm, no encontré eso. Prueba a preguntar por la Luna, los capítulos, los modos o el ODS 4, o pulsa Pista en la pregunta. ¡Tú puedes!';
   }
 
   function helperAsk(text, intent) {

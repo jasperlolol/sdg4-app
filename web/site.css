@@ -754,7 +754,8 @@ main:focus{outline:none}
 .moon-track span{display:block;height:100%;width:0;border-radius:999px;background:var(--red-700);transition:width .4s var(--ease)}
 .moon-text{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 /* The cleaning screen sits bottom right; on phones it moves into the page so it never covers an answer. */
-.clean-screen{position:fixed;right:16px;bottom:16px;z-index:80;width:188px;padding:8px;border-radius:20px;background:#15111f;border:3px solid #2b2238;box-shadow:0 10px 26px rgba(36,21,24,.3)}
+.clean-screen{position:fixed;right:16px;bottom:16px;z-index:80;width:188px;padding:8px;border-radius:20px;background:#15111f;border:3px solid #2b2238;box-shadow:0 10px 26px rgba(36,21,24,.3);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.clean-screen.is-dragging{cursor:grabbing;box-shadow:0 16px 36px rgba(36,21,24,.4)}
 .clean-svg{display:block;width:100%;height:auto;border-radius:12px;overflow:hidden}
 @media (max-width:640px){.clean-screen{position:static;width:112px;margin:10px 0 0 auto;padding:6px;border-width:2px;border-radius:16px;box-shadow:none}}
 @media (prefers-reduced-motion:reduce){.mode-card,.opt{transition:none}.mode-card:hover,.mode-card:active,.opt:hover:not(:disabled),.opt:active:not(:disabled){transform:none}}
