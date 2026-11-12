@@ -1,4 +1,5 @@
 node_modules/
 release/
 android/
+ios/
 .DS_Store

@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Quiz · Éducation de qualité pour tous</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Un quiz ODD 4 de 52 questions avec trois modes, des séries et des effets sonores.">
+<meta name="description" content="Un quiz ODD 4 de 96 questions avec trois modes, des séries et des effets sonores.">
 <meta property="og:title" content="Quiz · Éducation de qualité pour tous">
-<meta property="og:description" content="Un quiz ODD 4 de 52 questions avec trois modes, des séries et des effets sonores.">
+<meta property="og:description" content="Un quiz ODD 4 de 96 questions avec trois modes, des séries et des effets sonores.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Éducation de qualité pour tous">
 <meta name="twitter:card" content="summary">
@@ -91,13 +91,27 @@
       <p class="ph-kicker">Quiz</p>
       <div class="ph-main">
         <h1 class="ph-title">Que savez-vous de l’ODD 4 ?</h1>
-        <p class="ph-lead"><span id="bankSize">52</span> questions sur l’objectif, ses cibles, les dernières données et leur histoire. Chaque réponse est accompagnée du fait qui la justifie.</p>
+        <p class="ph-lead"><span id="bankSize">96</span> questions sur l’objectif, ses cibles, les dernières données et leur histoire. Chaque réponse est accompagnée du fait qui la justifie.</p>
       </div>
     </div>
   </header>
 
   <div class="wrap section quiz-wrap">
+    <div class="qh-bar">
+      <button class="qh-switch" type="button" id="qhelpToggle" role="switch" aria-checked="true" aria-controls="qhelp">
+        <span class="qh-track" aria-hidden="true"><span class="qh-knob"></span></span>
+        <span id="qhelpToggleText">Assistant : activé</span>
+      </button>
+      <span class="qh-keys">Appuyez sur H pour l’afficher ou le masquer</span>
+    </div>
+    <div class="quiz-layout" id="quizLayout">
+    <div class="quiz-main">
     <div id="quizStart">
+      <section class="grade-block" aria-labelledby="gradeTitle">
+        <h2 class="section-title" id="gradeTitle">Choose a grade</h2>
+        <p class="block-note">Each grade has its own questions. Grade 1 starts with the simplest ones.</p>
+        <div class="grade-grid" id="gradeGrid"></div>
+      </section>
       <h2 class="section-title">Choisissez un mode</h2>
       <div class="mode-grid" id="modeGrid"></div>
       <p class="mode-hint">Répondez avec les touches A à D, appuyez sur Entrée pour la question suivante et sur M pour couper le son. Vos meilleurs scores sont enregistrés dans ce navigateur.</p>
@@ -110,8 +124,8 @@
 
       <section class="flash-block" aria-labelledby="flashTitle">
         <h2 class="section-title" id="flashTitle">Cartes mémoire</h2>
-        <p class="block-note">Parcourez les 52 questions, une carte à la fois. Chaque carte montre la réponse et le fait qui la sous-tend.</p>
-        <button class="btn-outline flash-open" type="button" id="flashOpen">Étudiez les 52 cartes</button>
+        <p class="block-note">Parcourez les 96 questions, une carte à la fois. Chaque carte montre la réponse et le fait qui la sous-tend.</p>
+        <button class="btn-outline flash-open" type="button" id="flashOpen">Étudiez les 96 cartes</button>
       </section>
 
       <section class="board-block" aria-labelledby="boardTitle">
@@ -127,7 +141,7 @@
     <div id="flashPlay" hidden>
       <div class="flash-top">
         <button class="btn-ghost" type="button" id="flashBack">Retour au quiz</button>
-        <p class="flash-count" id="flashCount" aria-live="polite">1 sur 52</p>
+        <p class="flash-count" id="flashCount" aria-live="polite">1 sur 96</p>
         <button class="btn-ghost" type="button" id="flashShuffle">Mélanger</button>
       </div>
       <div class="flash-track" aria-hidden="true"><span id="flashFill"></span></div>
@@ -151,6 +165,44 @@
           <span class="streak" id="streakBadge" hidden></span>
           <p class="qp-score" id="qpScore">Score 0</p>
         </div>
+      </div>
+      <div class="moon">
+        <div class="moon-track" aria-hidden="true"><span id="moonFill"></span></div>
+        <p class="moon-text" id="moonText"></p>
+      </div>
+      <div class="clean-screen" aria-hidden="true">
+        <svg class="clean-svg" viewBox="0 0 200 150" focusable="false">
+          <defs>
+            <clipPath id="cwClip"><rect id="cwRect" x="48" y="0" width="152" height="150"/></clipPath>
+            <pattern id="cwSpeck" width="7" height="7" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.1" fill="#8f877b"/>
+              <circle cx="5.5" cy="5" r="0.8" fill="#b1aa9e"/>
+            </pattern>
+          </defs>
+          <rect width="200" height="150" fill="#1a1528"/>
+          <g fill="#ffffff" opacity=".7">
+            <circle cx="14" cy="18" r=".8"/><circle cx="40" cy="10" r=".6"/><circle cx="180" cy="22" r=".9"/>
+            <circle cx="168" cy="60" r=".6"/><circle cx="22" cy="62" r=".7"/><circle cx="186" cy="120" r=".6"/>
+          </g>
+          <circle cx="100" cy="78" r="50" fill="#efe9de"/>
+          <g fill="#d9d1c3">
+            <circle cx="78" cy="62" r="8"/><circle cx="124" cy="96" r="11"/>
+            <circle cx="90" cy="110" r="5"/><circle cx="132" cy="58" r="5"/>
+          </g>
+          <g clip-path="url(#cwClip)">
+            <circle cx="100" cy="78" r="50" fill="#cfc7b8"/>
+            <circle cx="100" cy="78" r="50" fill="url(#cwSpeck)"/>
+          </g>
+          <g id="cwPerson" transform="translate(54 98)"><g transform="scale(1.6)">
+            <path d="M0 0 L-3.5 -9 M0 0 L3.5 -9" stroke="#2b2238" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+            <path d="M0 -9 L0 -20" stroke="#ff7a8a" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="0" cy="-25" r="4.2" fill="#f2c9a0"/>
+            <path d="M0 -18 L9 -12" stroke="#2b2238" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M9 -12 L22 4" stroke="#8d6e4d" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M18 4 L27 4 L28 9 L17 9 Z" fill="#c9a227"/>
+          </g></g>
+          <text id="cwCm" x="10" y="144" font-size="11" font-weight="700" fill="#f4ecff">0 cm</text>
+        </svg>
       </div>
       <div class="q-timer" id="qTimer" hidden>
         <div class="qt-track" aria-hidden="true"><span id="qtFill"></span></div>
@@ -199,8 +251,31 @@
       <p class="share-msg" id="shareMsg" role="status" hidden></p>
       <ol class="review" id="quizReview" hidden></ol>
     </div>
+    </div>
+
+    <aside class="qhelp" id="qhelp" aria-labelledby="qhelpTitle">
+      <div class="qh-head">
+        <span class="qh-avatar" aria-hidden="true">
+          <svg viewBox="0 0 40 40" focusable="false"><path d="M20 6v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="5" r="2.2" fill="currentColor"/><rect x="8" y="11" width="24" height="20" rx="7" fill="currentColor"/><circle cx="15.5" cy="20" r="2.8" fill="#fff"/><circle cx="24.5" cy="20" r="2.8" fill="#fff"/><path d="M16 26q4 3 8 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+        </span>
+        <div class="qh-titles">
+          <p class="qh-title" id="qhelpTitle">Assistant ODD 4</p>
+          <p class="qh-sub">Astuces, faits et réponses. Il ne donne jamais la réponse avant votre choix.</p>
+        </div>
+        <button class="qh-close" type="button" id="qhelpHide" aria-label="Masquer l’assistant">×</button>
+      </div>
+      <div class="qh-log" id="qhelpLog" role="log" aria-live="polite"></div>
+      <div class="qh-chips" id="qhelpChips"></div>
+      <form class="qh-form" id="qhelpForm">
+        <label class="qh-label" for="qhelpInput">Posez une question à l’assistant</label>
+        <input id="qhelpInput" type="text" maxlength="200" autocomplete="off" placeholder="Posez une question sur le quiz ou l’ODD 4">
+        <button class="btn-primary qh-send" type="submit">Demander</button>
+      </form>
+    </aside>
+    </div>
   </div>
 
+<script src="grades.js"></script>
 </main>
 
 <footer class="site-footer">

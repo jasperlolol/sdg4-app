@@ -385,7 +385,7 @@
     }
   ];
 
-  const QUIZ = [
+  const BASE_QUIZ = [
     // The goal
     { cat: 'Tujuannya', q: 'Pada tahun berapa Tujuan Pembangunan Berkelanjutan, termasuk SDG 4, dimaksudkan untuk dicapai?', options: ['2025', '2030', '2040', '2050'], answer: 1, explain: 'Semua negara anggota PBB mengadopsi Agenda 2030 pada 2015. Agenda ini memberi dunia waktu hingga 2030 untuk mencapai 17 tujuan.', src: 'Agenda PBB 2030 (2015)' },
     { cat: 'Tujuannya', q: 'Berapa banyak Tujuan Pembangunan Berkelanjutan yang ada?', options: ['6', '8', '12', '17'], answer: 3, explain: 'Ada 17 tujuan, dan pendidikan adalah nomor 4. Tujuan Pembangunan Milenium sebelumnya berjumlah 8.', src: 'Agenda PBB 2030 (2015)' },
@@ -449,8 +449,53 @@
     { cat: 'Inklusi', q: 'Perjanjian apa yang mengatur hak atas pendidikan inklusif bagi penyandang disabilitas?', options: ['Perjanjian Paris', 'Konvensi tentang Hak-Hak Penyandang Disabilitas', 'Protokol Kyoto', 'Konvensi Jenewa'], answer: 1, explain: 'Pasal 24 Konvensi tentang Hak-Hak Penyandang Disabilitas (2006) mengatur hak atas pendidikan inklusif di semua jenjang.', src: 'Konvensi PBB CRPD (2006), Pasal 24' },
     { cat: 'Inklusi', q: 'Apa itu Hari Bahasa Ibu Internasional, yang dirayakan pada 21 Februari?', options: ['Hari untuk berhenti mengajarkan bahasa Inggris', 'Hari untuk mendorong keberagaman bahasa dan pendidikan bahasa ibu', 'Libur dari ujian sekolah', 'Hari untuk menguji guru'], answer: 1, explain: 'UNESCO menetapkan Hari Bahasa Ibu Internasional untuk mendorong keberagaman bahasa dan pendidikan dalam bahasa yang dipakai orang di rumah.', src: 'UNESCO, Hari Bahasa Ibu Internasional' },
     { cat: 'Inklusi', q: 'Mengapa belajar dengan bahasa yang tidak dipakai anak di rumah bisa menjadi hambatan?', options: ['Membuat belajar awal lebih sulit bagi banyak anak', 'Membuat sekolah lebih murah', 'Menghilangkan kebutuhan akan guru', 'Tidak berpengaruh pada belajar'], answer: 0, explain: 'Anak paling mudah belajar lebih dulu dalam bahasa yang mereka pahami. Pendidikan bahasa ibu memberi dasar yang lebih kuat untuk membaca dan belajar selanjutnya.', src: 'UNESCO, Hari Bahasa Ibu Internasional' },
-    { cat: 'Inklusi', q: 'Dalam SDG 4, apa arti pendidikan “inklusif”?', options: ['Pendidikan hanya untuk keluarga kaya', 'Pendidikan yang menjangkau semua orang, termasuk penyandang disabilitas dan kelompok terpinggirkan', 'Pendidikan hanya untuk orang dewasa', 'Hanya pembelajaran daring'], answer: 1, explain: 'SDG 4 menuntut pendidikan inklusif: pendidikan yang menjangkau semua orang, termasuk penyandang disabilitas, anak perempuan, dan kelompok terpinggirkan.', src: 'Agenda PBB 2030 (2015)' }
+    { cat: 'Inklusi', q: 'Dalam SDG 4, apa arti pendidikan “inklusif”?', options: ['Pendidikan hanya untuk keluarga kaya', 'Pendidikan yang menjangkau semua orang, termasuk penyandang disabilitas dan kelompok terpinggirkan', 'Pendidikan hanya untuk orang dewasa', 'Hanya pembelajaran daring'], answer: 1, explain: 'SDG 4 menuntut pendidikan inklusif: pendidikan yang menjangkau semua orang, termasuk penyandang disabilitas, anak perempuan, dan kelompok terpinggirkan.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Akses', q: 'Target mana yang menyatakan setiap anak perempuan dan laki-laki harus menyelesaikan pendidikan dasar dan menengah yang gratis, setara, dan berkualitas?', options: ['Target 4.1', 'Target 4.3', 'Target 4.5', 'Target 4.7'], answer: 0, explain: 'Target 4.1 meminta agar semua anak perempuan dan laki-laki menyelesaikan pendidikan dasar dan menengah yang gratis, setara, dan berkualitas, yang menghasilkan hasil belajar yang relevan.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Akses', q: 'Apa arti pendidikan yang “setara” dalam SDG 4?', options: ['Pendidikan yang biayanya sama di mana-mana', 'Pendidikan yang menjangkau semua orang secara adil, termasuk kelompok yang kurang beruntung', 'Pendidikan yang hanya diajarkan di kota', 'Satu ujian untuk setiap pelajar'], answer: 1, explain: 'Pendidikan yang setara berarti setiap orang mendapat kesempatan yang adil, termasuk anak-anak yang miskin, penyandang disabilitas, atau tinggal di daerah terpencil.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Penyelesaian', q: 'Manakah dari berikut ini yang merupakan alasan umum anak berhenti sekolah?', options: ['Mereka menyelesaikan pelajaran terlalu cepat', 'Sekolah punya terlalu banyak buku', 'Kemiskinan dan biaya sekolah', 'Guru terlalu baik hati'], answer: 2, explain: 'Biaya seperti uang sekolah, seragam, dan transportasi, bersama kemiskinan, termasuk alasan paling umum anak-anak putus sekolah.', src: 'UNESCO' },
+    { cat: 'Penyelesaian', q: 'Apa arti “penyelesaian” dalam statistik pendidikan?', options: ['Mulai bersekolah untuk pertama kali', 'Lulus satu ujian saja', 'Pindah ke sekolah lain', 'Menyelesaikan kelas terakhir dari satu jenjang sekolah'], answer: 3, explain: 'Penyelesaian berarti seorang pelajar menyelesaikan kelas terakhir dari satu jenjang, seperti sekolah dasar atau menengah.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Penyelesaian', q: 'Mengapa SDG 4 menyerukan pendidikan dasar dan menengah yang gratis?', options: ['Agar kemiskinan tidak menghalangi anak-anak untuk belajar', 'Agar pemerintah bisa menghemat uang', 'Agar anak-anak bisa bekerja sebagai gantinya', 'Agar sekolah bisa tutup lebih awal'], answer: 0, explain: 'Pendidikan gratis menghilangkan hambatan biaya, sehingga keluarga miskin dapat menyekolahkan anak-anak mereka.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Penyelesaian', q: 'Dalam Target 4.1, apa arti “hasil belajar yang relevan”?', options: ['Belajar hanya untuk ujian', 'Belajar yang berguna untuk kehidupan dan pekerjaan', 'Belajar hanya dalam bahasa asing', 'Belajar tanpa pekerjaan rumah'], answer: 1, explain: 'Artinya apa yang dipelajari anak-anak harus berguna bagi kehidupan dan pekerjaan mereka.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Belajar', q: 'Apa itu “kemiskinan belajar”?', options: ['Tidak memiliki seragam sekolah', 'Tidak bisa menggunakan komputer', 'Tidak mampu membaca dan memahami teks sederhana pada usia sekitar 10 tahun', 'Tidak punya sepeda untuk pergi ke sekolah'], answer: 2, explain: 'Kemiskinan belajar adalah proporsi anak yang tidak dapat membaca dan memahami teks sederhana pada usia sekitar 10 tahun. Bank Dunia menggunakannya untuk memantau pembelajaran.', src: 'Bank Dunia, kemiskinan belajar' },
+    { cat: 'Belajar', q: 'Apa itu “keterampilan dasar” dalam pembelajaran usia dini?', options: ['Menari dan bernyanyi', 'Aturan olahraga', 'Resep masakan', 'Membaca, menulis, dan matematika dasar'], answer: 3, explain: 'Keterampilan dasar seperti membaca, menulis, dan berhitung adalah fondasi bagi semua pembelajaran berikutnya.', src: 'UNESCO' },
+    { cat: 'Belajar', q: 'Mengapa mengajar dengan bahasa yang dipahami anak membantu mereka belajar?', options: ['Mereka belajar membaca lebih cepat dalam bahasa yang familiar', 'Pelajaran menjadi lebih singkat', 'Guru tidak lagi dibutuhkan', 'Ujian menjadi lebih mudah dikerjakan'], answer: 0, explain: 'Anak-anak belajar paling baik dalam bahasa yang mereka gunakan dan pahami. Itulah sebabnya dukungan bahasa ibu membantu pembelajaran dini.', src: 'UNESCO, Hari Bahasa Ibu Internasional' },
+    { cat: 'Belajar', q: 'Apa arti “penilaian” dalam pendidikan?', options: ['Membangun ruang kelas baru', 'Mengukur apa yang telah dipelajari siswa', 'Membayar gaji guru', 'Memilih seragam sekolah'], answer: 1, explain: 'Penilaian mengukur pembelajaran, sehingga guru dapat melihat apa yang diketahui siswa dan di mana mereka membutuhkan bantuan.', src: 'UNESCO' },
+    { cat: 'Belajar', q: 'Kondisi apa yang paling membantu siswa belajar?', options: ['Ruangan penuh sesak tanpa buku', 'Belajar hanya dari internet', 'Ruang kelas yang aman dan mendukung, dengan bahan ajar dan guru terlatih', 'Belajar tanpa guru sama sekali'], answer: 2, explain: 'Ruang kelas yang aman dan lengkap dengan guru terlatih memberi siswa peluang terbaik untuk belajar.', src: 'UNESCO' },
+    { cat: 'Guru', q: 'Apa itu “guru terlatih”?', options: ['Siapa pun yang bisa membaca dengan baik', 'Orang yang menjadi relawan sekali saja', 'Siswa yang membantu mengerjakan pekerjaan rumah', 'Seseorang yang telah menyelesaikan pendidikan atau sertifikasi guru yang disyaratkan negaranya'], answer: 3, explain: 'Guru terlatih telah menyelesaikan pendidikan atau sertifikasi guru yang disyaratkan negaranya.', src: 'Laporan Global tentang Guru UNESCO (2024)' },
+    { cat: 'Guru', q: 'Mengapa guru perlu pengembangan profesional berkelanjutan?', options: ['Agar keterampilan dan pengetahuan mereka tetap mutakhir', 'Untuk menghindari mengajar', 'Agar mendapat lebih banyak libur sekolah', 'Hanya agar menjadi kepala sekolah'], answer: 0, explain: 'Pelatihan berkelanjutan membantu guru menjaga pengetahuan dan metode mengajar mereka tetap mutakhir.', src: 'Laporan Global tentang Guru UNESCO (2024)' },
+    { cat: 'Guru', q: 'Manakah dari berikut ini yang bisa memperburuk kekurangan guru?', options: ['Program pelatihan yang baik', 'Gaji rendah dan kondisi kerja yang buruk', 'Ruang kelas yang aman', 'Jenjang karier yang jelas'], answer: 1, explain: 'Gaji rendah dan kondisi yang buruk membuat guru sulit dipertahankan, sehingga kekurangan guru semakin parah.', src: 'Laporan Global tentang Guru UNESCO (2024)' },
+    { cat: 'Guru', q: 'Apa yang ingin ditingkatkan oleh Target 4.c, terutama di negara-negara kurang berkembang?', options: ['Jumlah ujian', 'Jumlah makan siang sekolah', 'Jumlah guru yang berkualifikasi', 'Jumlah olahraga sekolah'], answer: 2, explain: 'Target 4.c meminta peningkatan besar dalam jumlah guru berkualifikasi, terutama di negara-negara kurang berkembang dan negara kepulauan kecil berkembang.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Kesetaraan', q: 'Pada tanggal berapa Hari Anak Perempuan Internasional diperingati?', options: ['8 Maret', '24 Januari', '5 Oktober', '11 Oktober'], answer: 3, explain: 'Perserikatan Bangsa-Bangsa memperingati Hari Anak Perempuan Internasional pada 11 Oktober.', src: 'Perserikatan Bangsa-Bangsa' },
+    { cat: 'Kesetaraan', q: 'Apa yang ingin dihapus oleh Target 4.5?', options: ['Kesenjangan gender dan kesenjangan lain dalam pendidikan', 'Biaya sekolah untuk guru', 'Ujian untuk semua siswa', 'Libur sekolah'], answer: 0, explain: 'Target 4.5 bertujuan menghapus kesenjangan gender dan memastikan akses yang setara bagi kelompok rentan, termasuk penyandang disabilitas.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Kesetaraan', q: 'Mengapa penting melatih guru untuk mendukung siswa penyandang disabilitas?', options: ['Agar anak penyandang disabilitas bisa melewatkan ujian', 'Agar setiap anak bisa belajar di kelas yang inklusif', 'Agar sekolah membutuhkan lebih sedikit ruang kelas', 'Agar guru bisa bekerja lebih sedikit'], answer: 1, explain: 'Guru terlatih membantu anak penyandang disabilitas belajar bersama teman-teman sekelas mereka.', src: 'Konvensi PBB CRPD (2006), Pasal 24' },
+    { cat: 'Kesetaraan', q: 'Apa arti “terpinggirkan” dalam pendidikan?', options: ['Guru yang sudah pensiun', 'Sekolah di dekat laut', 'Kelompok yang disisihkan atau terdorong ke pinggiran masyarakat', 'Siswa yang berada di peringkat teratas di kelasnya'], answer: 2, explain: 'Kelompok terpinggirkan adalah mereka yang tersisih atau kurang beruntung, seperti masyarakat miskin, anak-anak pedesaan, dan komunitas minoritas.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Uang dan sekolah', q: 'Apa yang disarankan Kerangka Aksi Incheon untuk belanja pendidikan?', options: ['1% dari PDB', '50% dari belanja publik', 'Tidak ada jumlah yang ditetapkan sama sekali', '4 hingga 6% dari PDB dan/atau 15 hingga 20% dari belanja publik'], answer: 3, explain: 'Kerangka Aksi Pendidikan 2030 menyarankan belanja pendidikan sebesar 4 hingga 6% dari PDB dan/atau 15 hingga 20% dari belanja publik.', src: 'Kerangka Aksi Incheon (2015)' },
+    { cat: 'Uang dan sekolah', q: 'Apa arti “belanja publik”?', options: ['Uang yang dibelanjakan pemerintah untuk layanan publik seperti sekolah', 'Uang yang dibelanjakan keluarga di toko', 'Uang yang hanya diberikan oleh para donatur', 'Uang yang dipinjamkan bank'], answer: 0, explain: 'Belanja publik adalah dana yang dibelanjakan pemerintah untuk layanan seperti kesehatan dan pendidikan.', src: 'UNESCO' },
+    { cat: 'Uang dan sekolah', q: 'Mengapa sekolah membutuhkan air bersih, toilet, dan listrik?', options: ['Agar sekolah terlihat lebih besar', 'Agar anak-anak bisa belajar dalam kondisi yang sehat dan aman', 'Agar ujian menjadi lebih mudah', 'Agar sekolah bisa tutup lebih awal'], answer: 1, explain: 'Layanan dasar membantu anak-anak tetap bersekolah dan belajar dalam kondisi yang sehat dan aman.', src: 'UNESCO' },
+    { cat: 'Keterampilan', q: 'Apa itu “keterampilan hidup” dalam pendidikan?', options: ['Hanya keterampilan olahraga', 'Hanya keterampilan memasak', 'Keterampilan untuk kehidupan sehari-hari, seperti pengambilan keputusan dan komunikasi', 'Hanya pemrograman komputer'], answer: 2, explain: 'Keterampilan hidup membantu orang mengambil keputusan, berkomunikasi dengan baik, dan menghadapi tantangan sehari-hari.', src: 'UNESCO' },
+    { cat: 'Keterampilan', q: 'Manakah dari berikut ini yang merupakan keterampilan teknis atau vokasi?', options: ['Membaca puisi', 'Melukis untuk bersenang-senang', 'Bernyanyi', 'Pengelasan'], answer: 3, explain: 'Keterampilan teknis dan vokasi, seperti pengelasan, mempersiapkan orang untuk pekerjaan tertentu.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Keterampilan', q: 'Apa itu literasi digital?', options: ['Menggunakan alat digital dan internet secara aman dan efektif', 'Hanya menulis dengan tangan', 'Memperbaiki sepeda', 'Hanya bermain video game'], answer: 0, explain: 'Literasi digital berarti menggunakan alat digital dan internet secara aman, efektif, dan bertanggung jawab.', src: 'UNESCO' },
+    { cat: 'Keterampilan', q: 'Target SDG 4 yang mana membahas keterampilan untuk pekerjaan dan pekerjaan yang layak?', options: ['Target 4.a', 'Target 4.4', 'Target 4.6', 'Target 4.b'], answer: 1, explain: 'Target 4.4 membahas tentang kaum muda dan orang dewasa yang memiliki keterampilan relevan, termasuk keterampilan teknis dan vokasi, untuk pekerjaan, pekerjaan yang layak, dan kewirausahaan.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Keterampilan', q: 'Apa itu “pendidikan kewarganegaraan global”?', options: ['Hanya belajar sejarah satu negara', 'Belajar cara bepergian dengan pesawat', 'Belajar tentang dunia dan hak asasi manusia, serta bertindak secara bertanggung jawab', 'Hanya belajar tentang uang asing'], answer: 2, explain: 'Ini mengajarkan orang untuk memahami isu global dan bertindak bertanggung jawab demi dunia yang lebih adil.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Sejarah', q: 'Tujuan apa yang ditetapkan oleh Konferensi Dunia tentang Pendidikan untuk Semua tahun 1990?', options: ['Universitas gratis untuk semua', 'Satu ujian untuk seluruh dunia', 'Seragam sekolah yang sama di seluruh dunia', 'Pendidikan dasar untuk semua orang'], answer: 3, explain: 'Konferensi 1990 di Jomtien menetapkan tujuan pendidikan dasar untuk semua orang.', src: 'UNESCO' },
+    { cat: 'Sejarah', q: 'Di mana Forum Pendidikan Dunia yang mengadopsi Kerangka Dakar tahun 2000 diselenggarakan?', options: ['Dakar, Senegal', 'New York, AS', 'Tokyo, Jepang', 'Sydney, Australia'], answer: 0, explain: 'Kerangka Aksi Dakar diadopsi pada 2000 dan memperbarui tujuan Pendidikan untuk Semua hingga 2015.', src: 'UNESCO, Forum Pendidikan Dunia (2000)' },
+    { cat: 'Sejarah', q: 'Di mana Forum Pendidikan Dunia 2015 yang mengadopsi Deklarasi Incheon diselenggarakan?', options: ['Paris, Prancis', 'Incheon, Republik Korea', 'Nairobi, Kenya', 'Lima, Peru'], answer: 1, explain: 'Deklarasi Incheon diadopsi pada Forum Pendidikan Dunia di Incheon, Republik Korea, pada 2015.', src: 'Forum Pendidikan Dunia, Deklarasi Incheon (2015)' },
+    { cat: 'Sejarah', q: 'Perjanjian mana yang diadopsi pada 1989 yang meminta negara-negara menjadikan pendidikan dasar gratis dan wajib?', options: ['Konvensi Jenewa', 'Protokol Kyoto', 'Konvensi tentang Hak-Hak Anak', 'Perjanjian Paris'], answer: 2, explain: 'Pasal 28 Konvensi tentang Hak-Hak Anak meminta negara-negara menjadikan pendidikan dasar wajib dan gratis bagi semua orang.', src: 'Konvensi PBB tentang Hak-Hak Anak (1989), Pasal 28' },
+    { cat: 'Sejarah', q: 'Tujuan apa yang menggantikan Tujuan Pembangunan Milenium pada 2015?', options: ['Tujuan Olimpiade', 'Tujuan Kyoto', 'Tujuan Paris', 'Tujuan Pembangunan Berkelanjutan'], answer: 3, explain: 'Tujuan Pembangunan Berkelanjutan, yang diadopsi pada 2015, menggantikan MDGs dan berlaku hingga 2030.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Tahun-tahun awal', q: 'Usia berapa yang biasanya mencakup pengasuhan dan pendidikan anak usia dini?', options: ['Dari lahir hingga sekitar usia 8 tahun', 'Usia 15 hingga 18 tahun', 'Usia 20 hingga 25 tahun', 'Hanya orang dewasa'], answer: 0, explain: 'Pengasuhan dan pendidikan anak usia dini mencakup anak sejak lahir hingga sekitar usia 8 tahun.', src: 'UNESCO' },
+    { cat: 'Tahun-tahun awal', q: 'Manakah dari berikut ini yang mendukung perkembangan anak usia dini?', options: ['Mengikuti ujian', 'Pembelajaran berbasis bermain dan pemeriksaan kesehatan', 'Membayar biaya sekolah', 'Bekerja di pabrik'], answer: 1, explain: 'Bermain, perawatan kesehatan, gizi, dan pembelajaran dini semuanya mendukung perkembangan anak usia dini.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Tahun-tahun awal', q: 'Mengapa pembelajaran dini membantu pendidikan di tahap selanjutnya?', options: ['Artinya anak tidak pernah membutuhkan guru', 'Ini menghapus kebutuhan akan sekolah dasar', 'Ini membangun keterampilan yang dibutuhkan anak untuk sekolah dasar', 'Ini membuat ujian tidak diperlukan'], answer: 2, explain: 'Awal yang kuat dalam pembelajaran dini membantu anak-anak berhasil di sekolah dasar.', src: 'Agenda PBB 2030 (2015)' },
+    { cat: 'Tahun-tahun awal', q: 'Apa arti “gizi” bagi anak usia dini?', options: ['Permainan di ponsel', 'Seragam sekolah', 'Pekerjaan rumah', 'Makanan sehat yang membantu anak tumbuh dan belajar'], answer: 3, explain: 'Gizi yang baik mendukung pertumbuhan, kesehatan, dan pembelajaran pada masa kanak-kanak usia dini.', src: 'UNESCO' },
+    { cat: 'Literasi', q: 'Organisasi mana yang menyelenggarakan Hari Aksara Internasional?', options: ['UNESCO', 'WHO', 'UNICEF', 'Bank Dunia'], answer: 0, explain: 'UNESCO menyelenggarakan Hari Aksara Internasional, yang diperingati pada 8 September.', src: 'UNESCO, Hari Aksara Internasional' },
+    { cat: 'Literasi', q: 'Apa itu “literasi fungsional”?', options: ['Hanya membaca puisi', 'Keterampilan membaca dan menulis yang dibutuhkan untuk kehidupan sehari-hari dan pekerjaan', 'Menguasai banyak bahasa', 'Menulis kode komputer'], answer: 1, explain: 'Literasi fungsional berarti memiliki keterampilan membaca dan menulis yang dibutuhkan untuk berfungsi dalam kehidupan sehari-hari dan di tempat kerja.', src: 'UNESCO' },
+    { cat: 'Literasi', q: 'Apa itu keterampilan literasi dan numerasi “dasar”?', options: ['Matematika tingkat lanjut di universitas', 'Hanya bahasa asing', 'Membaca, menulis, dan berhitung dasar yang dipelajari sejak dini di sekolah', 'Aturan olahraga'], answer: 2, explain: 'Keterampilan dasar ini adalah fondasi bagi semua pembelajaran berikutnya.', src: 'UNESCO' },
+    { cat: 'Literasi', q: 'Mengapa literasi orang dewasa itu penting?', options: ['Ini menggantikan sekolah untuk anak-anak', 'Artinya orang dewasa tidak pernah membutuhkan pekerjaan', 'Ini menghapus biaya sekolah', 'Ini membantu orang dewasa mendukung belajar anak-anak mereka dan mendapatkan pekerjaan'], answer: 3, explain: 'Literasi orang dewasa membantu orang bekerja, mengelola uang, dan mendukung pendidikan anak-anak mereka.', src: 'UNESCO, Hari Aksara Internasional' },
+    { cat: 'Inklusi', q: 'Apa itu “akomodasi yang wajar” di sekolah?', options: ['Penyesuaian yang membantu anak penyandang disabilitas untuk ikut serta', 'Gedung sekolah yang lebih besar', 'Seragam sekolah yang lebih murah', 'Libur sekolah yang lebih panjang'], answer: 0, explain: 'Ini adalah perubahan, seperti jalur landai atau dukungan tambahan, yang memungkinkan anak penyandang disabilitas belajar bersama yang lain.', src: 'Konvensi PBB CRPD (2006), Pasal 24' },
+    { cat: 'Inklusi', q: 'Mengapa bahasa isyarat penting dalam pendidikan anak tunarungu?', options: ['Ini menggantikan membaca', 'Ini memberi mereka akses penuh ke pembelajaran dan komunikasi', 'Ini hanya untuk guru', 'Ini membuat ujian lebih singkat'], answer: 1, explain: 'Bahasa isyarat memberi anak tunarungu bahasa lengkap untuk belajar dan berkomunikasi. Pasal 24 CRPD mengakuinya.', src: 'Konvensi PBB CRPD (2006), Pasal 24' },
+    { cat: 'Inklusi', q: 'Apa yang membuat sekolah “ramah akses”?', options: ['Ada kolam renang', 'Berada di pegunungan', 'Semua orang, termasuk anak penyandang disabilitas, dapat masuk dan menggunakannya', 'Tidak memungut biaya'], answer: 2, explain: 'Sekolah yang ramah akses memiliki jalur landai, toilet, dan bahan ajar yang dapat digunakan semua orang.', src: 'Konvensi PBB CRPD (2006), Pasal 24' },
+    { cat: 'Inklusi', q: 'Kelompok mana yang sering tidak bersekolah karena bahasa?', options: ['Anak yang tinggal di kota', 'Anak yang suka olahraga', 'Anak yang memakai kacamata', 'Anak yang diajar dalam bahasa yang tidak mereka gunakan di rumah'], answer: 3, explain: 'Anak yang diajar dalam bahasa yang tidak mereka gunakan di rumah bisa kesulitan belajar, sehingga dukungan bahasa ibu membantu.', src: 'UNESCO, Hari Bahasa Ibu Internasional' },
   ];
+  let QUIZ = BASE_QUIZ;
 
   const MILESTONES = [
     { year: '1948', short: 'Hak atas pendidikan', title: 'Pendidikan menjadi hak asasi manusia', text: 'Deklarasi Universal Hak Asasi Manusia menyatakan bahwa setiap orang berhak atas pendidikan, dan bahwa pendidikan dasar harus gratis dan wajib (Pasal 26).', src: 'Majelis Umum PBB, 1948' },
@@ -1180,6 +1225,46 @@
     $('#quizStart').hidden = name !== 'start';
     $('#quizPlay').hidden = name !== 'play';
     $('#quizResult').hidden = name !== 'result';
+    renderHelperChips();
+  }
+
+  /* Grades 1 to 12. A grade with a question bank (grades.js) can be played; the others say Coming soon.
+     Grade play is kept apart from the all-grades scores and is not sent to the leaderboard. */
+  const GRADE_KEY = 'sdg4.quiz.grade';
+  let quizGrade = 'all';
+  const gradeBank = (g) => (window.SDG4_GRADES && Array.isArray(window.SDG4_GRADES[g]) ? window.SDG4_GRADES[g] : []);
+  const gradeReady = (g) => gradeBank(g).length > 0;
+
+  function setGrade(g) {
+    quizGrade = g !== 'all' && gradeReady(g) ? String(g) : 'all';
+    QUIZ = quizGrade === 'all' ? BASE_QUIZ : gradeBank(quizGrade).map((row) => ({
+      cat: CHAPTER_ORDER[row.ch], q: row.q, options: row.options, answer: row.answer, explain: row.explain, src: row.src, mix: true
+    }));
+  }
+
+  function renderGrades() {
+    const box = $('#gradeGrid');
+    if (!box) return;
+    box.textContent = '';
+    const choices = [{ key: 'all', label: 'Semua kelas' }];
+    for (let g = 1; g <= 12; g += 1) choices.push({ key: String(g), label: fill('Kelas {0}', g) });
+    choices.forEach((c) => {
+      const ready = c.key === 'all' || gradeReady(c.key);
+      const count = c.key === 'all' ? BASE_QUIZ.length : gradeBank(c.key).length;
+      const on = c.key === quizGrade;
+      const b = h('button', 'grade-card' + (on ? ' is-on' : ''));
+      b.type = 'button';
+      b.disabled = !ready;
+      b.setAttribute('aria-pressed', String(on));
+      b.append(h('span', 'gc-name', c.label), h('span', 'gc-note', ready ? fill('{0} pertanyaan', count) : 'Segera hadir'));
+      b.addEventListener('click', () => {
+        Sound.play('tap');
+        setGrade(c.key);
+        store.set(GRADE_KEY, quizGrade);
+        renderModes();
+      });
+      box.appendChild(b);
+    });
   }
 
   function renderModes() {
@@ -1201,6 +1286,9 @@
       grid.appendChild(b);
     });
     $('#bankSize').textContent = String(QUIZ.length);
+    renderGrades();
+    const flash = $('.flash-block');
+    if (flash) flash.hidden = quizGrade !== 'all';
     renderChapters();
     renderBoard();
   }
@@ -1271,6 +1359,93 @@
     qTick();
   }
 
+  // Moon dust: every correct answer clears 5 cm of the moon. A wrong answer clears nothing.
+  function updateMoon(done) {
+    const total = quiz.order.length;
+    $('#moonFill').style.width = (done / total) * 100 + '%';
+    $('#moonText').textContent = done
+      ? fill('{0} cm dibersihkan = {1} × 5 cm', done * 5, done)
+      : 'Jawab benar untuk membersihkan 5 cm debu bulan.';
+    $('#cwCm').textContent = done * 5 + ' cm';
+    moveCleaner(done / total, done === 0);
+  }
+
+  // The small screen: a person wipes the dust off the moon, from left to right.
+  const CW = { cx: 100, cy: 78, r: 50, left: 48, right: 160 };
+  let cwX = CW.left;
+  let cwRaf = 0;
+  function cwSurface(x) {
+    return CW.cy + Math.sqrt(Math.max(0, CW.r * CW.r - (x - CW.cx) * (x - CW.cx)));
+  }
+  function drawCleaner(x) {
+    const clip = $('#cwRect');
+    clip.setAttribute('x', x);
+    clip.setAttribute('width', 200 - x);
+    const px = Math.max(CW.cx - CW.r + 4, x - 10);
+    $('#cwPerson').setAttribute('transform', 'translate(' + px + ' ' + cwSurface(px) + ')');
+  }
+  function moveCleaner(frac, instant) {
+    const to = CW.left + frac * (CW.right - CW.left);
+    cancelAnimationFrame(cwRaf);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (instant || reduce) {
+      cwX = to;
+      drawCleaner(cwX);
+      return;
+    }
+    const from = cwX;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / 700);
+      cwX = from + (to - from) * (1 - Math.pow(1 - t, 3));
+      drawCleaner(cwX);
+      if (t < 1) cwRaf = requestAnimationFrame(step);
+    };
+    cwRaf = requestAnimationFrame(step);
+  }
+
+  // The moon screen can be dragged anywhere on the page, with a mouse, pen or finger.
+  let cleanDrag = null;
+  function placeCleanScreen(box, left, top) {
+    const maxLeft = Math.max(0, window.innerWidth - box.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - box.offsetHeight);
+    box.style.position = 'fixed';
+    box.style.margin = '0';
+    box.style.right = 'auto';
+    box.style.bottom = 'auto';
+    box.style.left = Math.min(Math.max(left, 0), maxLeft) + 'px';
+    box.style.top = Math.min(Math.max(top, 0), maxTop) + 'px';
+  }
+  document.addEventListener('pointerdown', (e) => {
+    const box = e.target.closest ? e.target.closest('.clean-screen') : null;
+    if (!box || e.button !== 0) return;
+    const r = box.getBoundingClientRect();
+    cleanDrag = { box, dx: e.clientX - r.left, dy: e.clientY - r.top };
+    placeCleanScreen(box, r.left, r.top);
+    box.setPointerCapture(e.pointerId);
+    box.classList.add('is-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!cleanDrag) return;
+    placeCleanScreen(cleanDrag.box, e.clientX - cleanDrag.dx, e.clientY - cleanDrag.dy);
+  });
+  const endCleanDrag = () => {
+    if (!cleanDrag) return;
+    cleanDrag.box.classList.remove('is-dragging');
+    cleanDrag = null;
+  };
+  document.addEventListener('pointerup', endCleanDrag);
+  document.addEventListener('pointercancel', endCleanDrag);
+  // Keep the screen on-screen if the window is resized after it was moved.
+  window.addEventListener('resize', () => {
+    const box = document.querySelector('.clean-screen');
+    if (box && box.style.position === 'fixed') {
+      const r = box.getBoundingClientRect();
+      placeCleanScreen(box, r.left, r.top);
+    }
+  });
+
   function renderQuestion() {
     const total = quiz.order.length;
     const q = QUIZ[quiz.order[quiz.i]];
@@ -1278,6 +1453,7 @@
     $('#qpText').textContent = 'Soal ' + (quiz.i + 1) + ' dari ' + total;
     $('#qpScore').textContent = scoreText();
     $('#qpFill').style.width = (quiz.i / total) * 100 + '%';
+    updateMoon(quiz.correct);
     $('#qCat').textContent = q.cat;
     renderStreak(false);
     if (modeInfo(quiz.mode).lifeline) $('#lifelineBtn').disabled = quiz.lifelineUsed;
@@ -1371,6 +1547,7 @@
       quiz.streak = 0;
     }
     quiz.answers.push({ qi, chosen, correct, timedOut, cat: q.cat });
+    updateMoon(quiz.correct);
 
     buttons.forEach((b, j) => {
       b.disabled = true;
@@ -1418,6 +1595,163 @@
     } else {
       finishQuiz();
     }
+  }
+
+  /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
+     quiz's own explanations, and it never gives an answer before the question has been answered. */
+  const HELPER_KEY = 'sdg4.quiz.helper';
+  const HELP_GREETING = 'Halo! Saya pembantu SDG 4 kamu, dan senang kamu ada di sini. Saya bisa memberi petunjuk, menjelaskan jawaban setelah kamu memilih, dan menunjukkan asal faktanya. Saya tidak akan pernah memberi jawaban sebelum kamu memilih, janji!';
+  const HELP_CHIPS_PLAY = [
+    { label: 'Petunjuk', intent: 'hint' },
+    { label: 'Jelaskan ini', intent: 'explain' },
+    { label: 'Dari mana asalnya?', intent: 'source' },
+    { label: 'Bagaimana cara kerja bulan?', intent: 'moon' }
+  ];
+  const HELP_CHIPS_REST = [
+    { label: 'Apa itu SDG 4?', intent: 'sdg' },
+    { label: 'Bagaimana cara kerja bab?', intent: 'chapter' },
+    { label: 'Dari mana asal faktanya?', intent: 'source' },
+    { label: 'Bagaimana cara kerja bulan?', intent: 'moon' }
+  ];
+  // Each rule lists words in English, Spanish, French, Indonesian and Chinese.
+  const HELP_RULES = [
+    ['hint', /\b(hint|hints|clue|stuck|pista|pistas|astuce|indice|petunjuk)\b|提示|线索/],
+    ['refuse', /\b(the answer|which one|correct one|just tell|tell me the answer|give me the answer|respuesta|reponse|jawaban)\b|答案/],
+    ['explain', /\b(explain|explanation|why|reason|meaning|explica|explique|pourquoi|mengapa|jelaskan)\b|解释|为什么/],
+    ['source', /\b(source|sources|from|proof|where|fuente|fuentes|origen|sumber|dari)\b|来源|出处/],
+    ['moon', /\b(moon|cm|clean|clear|explode|explodes|world|luna|lune|bulan)\b|月球|爆炸/],
+    ['chapter', /\b(chapter|chapters|topic|topics|capitulo|capitulos|chapitre|bab)\b|章节/],
+    ['modes', /\b(mode|modes|classic|challenge|marathon|timer|timed|seconds|points|streak|bonus|modo|modos|temps)\b|模式|计时|连胜/],
+    ['score', /\b(score|scores|leaderboard|board|save|saved|best|puntuacion|classement|skor|papan)\b|分数|排行|保存/],
+    ['flash', /\b(flashcard|flashcards|flash|card|cards|tarjeta|tarjetas|fiche|fiches|kartu)\b|闪卡|卡片/],
+    ['lifeline', /\b(lifeline|50|5050|joker)\b/],
+    ['sound', /\b(sound|mute|aloud|speak|voice|audio|silencio|muet|suara)\b|静音|朗读/],
+    ['sdg', /\b(sdg|sdg4|goal|goals|target|targets|meta|objetivo|objectif|tujuan)\b|目标|指标/],
+    ['help', /\b(hi|hello|hey|help|hola|bonjour|halo|aide|ayuda|bantuan|what can you)\b|你好|帮助/]
+  ];
+  const HELP_STOP = ['what', 'when', 'where', 'which', 'with', 'about', 'from', 'that', 'this', 'does', 'have', 'tell', 'mean', 'please', 'there', 'their', 'they', 'would', 'could', 'should', 'your', 'show', 'give', 'answer', 'question', 'explain', 'anything', 'something', 'know', 'some', 'more'];
+  const helperNorm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const helperOn = () => store.get(HELPER_KEY, true) !== false;
+  // Whole words, with a plain plural ending removed, so that 'targets' matches 'target'.
+  const helperWords = (s) => helperNorm(s).split(/[^a-z0-9]+/).filter((w) => w.length >= 4).map((w) => w.replace(/s$/, ''));
+
+  function applyHelper(on) {
+    const layout = $('#quizLayout');
+    const panel = $('#qhelp');
+    if (!layout || !panel) return;
+    layout.classList.toggle('has-helper', on);
+    panel.hidden = !on;
+    $('#qhelpToggle').setAttribute('aria-checked', String(on));
+    $('#qhelpToggleText').textContent = on ? 'Pembantu: aktif' : 'Pembantu: nonaktif';
+  }
+
+  function setHelper(on) {
+    applyHelper(on);
+    store.set(HELPER_KEY, on);
+  }
+
+  function helperSay(text, who) {
+    const log = $('#qhelpLog');
+    if (!log) return;
+    log.appendChild(h('p', 'qh-msg' + (who === 'me' ? ' is-me' : ''), text));
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function renderHelperChips() {
+    const box = $('#qhelpChips');
+    if (!box) return;
+    box.textContent = '';
+    (quiz.state === 'play' ? HELP_CHIPS_PLAY : HELP_CHIPS_REST).forEach((c) => {
+      const b = h('button', 'qh-chip', c.label);
+      b.type = 'button';
+      b.addEventListener('click', () => { Sound.play('tap'); helperAsk(c.label, c.intent); });
+      box.appendChild(b);
+    });
+  }
+
+  // The quiz explanations the helper may quote. During a quiz only questions already answered, so nothing is spoiled.
+  function helperSearch(text) {
+    const words = helperWords(text).filter((w) => HELP_STOP.indexOf(w) < 0);
+    if (!words.length) return null;
+    const pool = quiz.state === 'play' ? quiz.answers.map((a) => a.qi) : QUIZ.map((q, i) => i);
+    let best = null;
+    let bestScore = 0;
+    pool.forEach((qi) => {
+      const q = QUIZ[qi];
+      const hay = new Set(helperWords(q.q + ' ' + q.explain));
+      const score = words.filter((w) => hay.has(w)).length;
+      if (score > bestScore) { best = q; bestScore = score; }
+    });
+    return best;
+  }
+
+  function helperReply(intent, raw) {
+    const playing = quiz.state === 'play' && quiz.order.length > 0;
+    const q = playing ? QUIZ[quiz.order[quiz.i]] : null;
+    const answered = playing && quiz.locked;
+    const open = playing && !quiz.locked;
+    let id = intent;
+    if (!id) {
+      const rule = HELP_RULES.find((r) => r[1].test(helperNorm(raw)));
+      id = rule ? rule[0] : 'search';
+    }
+    if (id === 'refuse') {
+      if (open) return 'Saya tidak bisa memberi jawaban sebelum kamu memilih, tapi saya siap membantu! Coba petunjuknya, atau baca lagi pilihannya perlahan-lahan.';
+      if (!playing) return 'Pilih mode dulu, lalu saya akan siap membantu! Saya tidak bisa memberi jawaban sebelum kamu memilih.';
+      id = 'explain';
+    }
+    if (id === 'hint') {
+      if (!playing) return 'Petunjuk hanya untuk soal kuis! Mulai satu mode dan saya akan memberi petunjuk untuk setiap soal.';
+      if (answered) id = 'explain';
+      else {
+        const timed = modeInfo(quiz.mode).timed;
+        return fill('Bagus! Soal ini ada di bab {0}. Baca setiap pilihan dan singkirkan yang tidak sesuai dengan topiknya.', q.cat) + (timed ? ' ' + 'Pengatur waktu tetap berjalan saat saya membantu, jadi cepatlah!' : '');
+      }
+    }
+    if (id === 'explain') {
+      if (!playing) return 'Pilih mode dan jawab satu soal dulu. Saya akan menjelaskannya setelah kamu memilih.';
+      if (open) return 'Jawab dulu, lalu saya jelaskan! Dengan begitu kuisnya tetap adil untuk semua orang.';
+      return q.explain + ' ' + fill('Sumber: {0}', q.src);
+    }
+    if (id === 'source') {
+      if (open) return fill('Soal ini ada di bab {0}. Saya akan menunjukkan sumbernya setelah kamu menjawab.', q.cat);
+      if (answered) return fill('Soal ini ada di bab {0}. Sumber: {1}.', q.cat, q.src);
+      return fill('Setiap jawaban menampilkan sumbernya di bawah penjelasan. Contohnya: {0}.', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
+    }
+    if (id === 'moon') return 'Begini cara kerjanya! Setiap jawaban benar membersihkan 5 cm bulan, dan jawaban salah tidak membersihkan apa pun. Untuk membersihkan seluruhnya, setiap soal kuis harus benar. Jika bulan belum sepenuhnya bersih saat kuis selesai, dunia akan meledak, jadi semoga berhasil!';
+    if (id === 'chapter') return fill('Setiap bab adalah satu topik, dengan semua soalnya dikelompokkan bersama. Babnya adalah: {0}.', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return 'Klasik punya 10 soal acak tanpa waktu. Tantangan punya 15 soal dengan 20 detik per soal, bonus beruntun, dan satu 50:50. Maraton mencakup seluruh bank soal. Pilih yang kamu suka!';
+    if (id === 'score') return 'Selesaikan kuis dan simpan skormu di papan peringkat dengan namamu. Skor tetap ada di peramban ini, jadi papan hanya menampilkan orang yang bermain di perangkat ini.';
+    if (id === 'flash') return 'Kartu kilat membahas setiap soal satu kartu demi satu. Ketuk kartu untuk membaliknya dan melihat jawabannya. Selamat belajar!';
+    if (id === 'lifeline') return 'Di Tantangan kamu mendapat satu 50:50. Ini menghapus dua jawaban salah sehingga pilihannya lebih mudah. Kamu bisa memakainya sekali per kuis.';
+    if (id === 'sound') return 'Tekan M untuk menyalakan atau mematikan suara. Baca keras membacakan soal dan jawabannya.';
+    if (id === 'sdg') return 'SDG 4 adalah Pendidikan Berkualitas! Tujuannya meminta dunia memastikan semua orang mendapat pendidikan berkualitas yang inklusif dan adil, serta kesempatan untuk terus belajar sepanjang hidup. Ini salah satu dari 17 tujuan yang disepakati pada 2015 untuk tahun 2030, dan memiliki sepuluh target.';
+    if (id === 'help') return 'Saya bisa memberi petunjuk, menjelaskan jawaban setelah kamu memilih, menunjukkan asal fakta, dan menjelaskan bulan, bab, mode, skor, dan kartu kilat. Tanyakan apa saja atau ketuk tombol!';
+    const best = helperSearch(raw);
+    if (best) return fill('Ini mungkin membantu: {0}', best.explain);
+    return 'Hmm, saya tidak menemukan itu. Coba tanyakan tentang bulan, bab, mode, atau SDG 4, atau ketuk Petunjuk pada soal. Kamu pasti bisa!';
+  }
+
+  function helperAsk(text, intent) {
+    const clean = String(text || '').trim().slice(0, 200);
+    if (!clean && !intent) return;
+    helperSay(clean, 'me');
+    helperSay(helperReply(intent || null, clean), 'bot');
+  }
+
+  function initHelper() {
+    if (!$('#qhelp')) return;
+    applyHelper(helperOn());
+    $('#qhelpToggle').addEventListener('click', () => { Sound.play('tap'); setHelper(!helperOn()); });
+    $('#qhelpHide').addEventListener('click', () => { Sound.play('tap'); setHelper(false); $('#qhelpToggle').focus(); });
+    $('#qhelpForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#qhelpInput');
+      helperAsk(input.value, null);
+      input.value = '';
+    });
+    helperSay(HELP_GREETING, 'bot');
+    renderHelperChips();
   }
 
   /* Chapters and the leaderboard. Everything is kept in this browser. */
@@ -1503,6 +1837,10 @@
 
   function setupSaveForm() {
     quiz.saved = false;
+    if (quizGrade !== 'all') {
+      $('#saveScore').hidden = true;
+      return;
+    }
     const input = $('#ssName');
     $('#saveScore').hidden = false;
     input.value = store.get('sdg4.quiz.name', '') || '';
@@ -1644,8 +1982,60 @@
     window.scrollTo(0, 0);
   }
 
+  // When the quiz ends with the moon not fully clean, the world explodes (full screen), then the result shows.
+  function explodeWorld(done) {
+    if (document.querySelector('.boom')) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const box = h('div', 'boom');
+    const stage = h('div', 'boom-stage');
+    stage.append(h('div', 'boom-flash'), h('div', 'boom-ring'), h('div', 'boom-world'));
+    const frags = h('div', 'boom-frags');
+    for (let i = 0; i < 28; i += 1) {
+      const a = (i / 28) * Math.PI * 2 + Math.random() * 0.35;
+      const dist = 260 + Math.random() * 320;
+      const piece = h('span', 'boom-frag');
+      piece.style.setProperty('--dx', Math.round(Math.cos(a) * dist) + 'px');
+      piece.style.setProperty('--dy', Math.round(Math.sin(a) * dist) + 'px');
+      piece.style.setProperty('--rot', Math.round(Math.random() * 720 - 360) + 'deg');
+      piece.style.setProperty('--sz', Math.round(18 + Math.random() * 34) + 'px');
+      frags.append(piece);
+    }
+    stage.append(frags);
+    const text = h('div', 'boom-text');
+    const next = h('button', 'btn-primary boom-next', 'Lihat skorku');
+    text.append(
+      h('h2', null, 'Dunia meledak.'),
+      h('p', null, 'Bulan belum sepenuhnya bersih. Setiap soal harus dijawab dengan benar.'),
+      next
+    );
+    box.append(stage, text);
+    document.body.append(box);
+    Sound.play('wrong');
+    let timer1 = 0;
+    let timer2 = 0;
+    let ended = false;
+    const end = () => {
+      if (ended) return;
+      ended = true;
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      box.remove();
+      done();
+    };
+    timer1 = setTimeout(() => {
+      text.classList.add('is-in');
+      next.focus({ preventScroll: true });
+    }, reduce ? 300 : 2600);
+    timer2 = setTimeout(end, reduce ? 2400 : 6000);
+    next.addEventListener('click', end);
+    box.addEventListener('click', () => { if (text.classList.contains('is-in')) end(); });
+  }
   function finishQuiz() {
     stopQTimer();
+    if (quiz.correct < quiz.order.length) explodeWorld(showQuizResult);
+    else showQuizResult();
+  }
+  function showQuizResult() {
     quizScreen('result');
     const M = modeInfo(quiz.mode);
     const total = quiz.order.length;
@@ -1687,7 +2077,7 @@
     }
     $('#rsTopics').textContent = topics;
 
-    const bestKey = quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode;
+    const bestKey = (quizGrade !== 'all' ? 'grade' + quizGrade + ':' : '') + (quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode);
     const bests = store.get('sdg4.quiz.bests', {}) || {};
     const metric = M.timed ? quiz.points : quiz.correct;
     const isNew = metric > 0 && !(typeof bests[bestKey] === 'number' && bests[bestKey] >= metric);
@@ -2176,6 +2566,8 @@
   }
 
   function initQuiz() {
+    setGrade(store.get(GRADE_KEY, 'all'));
+    initHelper();
     const saved = readBoard();
     if (saved.length) boardGroup = saved[saved.length - 1].group;
     renderModes();
@@ -2219,6 +2611,7 @@
       Sound.play('tap');
     });
     pageKeys = (e, key, onControl) => {
+      if ((key === 'h' || key === 'H') && !onControl) { e.preventDefault(); Sound.play('tap'); setHelper(!helperOn()); return; }
       if (fcState.open) {
         if (key === 'ArrowRight' || key === 'ArrowLeft') {
           e.preventDefault();
@@ -2794,7 +3187,7 @@
         return CHAPTER_ORDER.every((cat) => bests['chapter:' + cat] === chapterTotal(cat));
       }
     },
-    { name: 'Penyelesai kartu belajar', text: 'Balik semua 52 kartu belajar.', earned: () => fcSeen().length >= QUIZ.length },
+    { name: 'Penyelesai kartu belajar', text: 'Balik semua 96 kartu belajar.', earned: () => fcSeen().length >= QUIZ.length },
     { name: 'Pembaca target', text: 'Buka kesepuluh target.', earned: () => (store.get('sdg4.seen.targets', []) || []).length >= TARGETS.length },
     { name: 'Pencatat', text: 'Tulis catatan di tiga target.', earned: () => Object.keys(store.get('sdg4.notes', {}) || {}).length >= 3 },
     { name: 'Pertanyaan hari ini', text: 'Jawab pertanyaan hari ini.', earned: () => !!store.get('sdg4.qotd', null) },
@@ -2888,7 +3281,9 @@
     BADGES.forEach((b) => {
       const got = b.earned();
       const card = h('div', 'badge' + (got ? ' is-earned' : ''));
-      card.append(h('span', 'badge-state', got ? 'Diraih' : 'Belum'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
+      const medal = h('span', 'badge-medal', got ? '★' : '');
+      medal.setAttribute('aria-hidden', 'true');
+      card.append(medal, h('span', 'badge-state', got ? 'Diraih' : 'Belum'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
       grid.appendChild(card);
     });
   }
@@ -3309,7 +3704,7 @@
       due: /^\d{4}-\d{2}-\d{2}$/.test(String(f.due || '')) ? String(f.due) : '',
       mode: f.mode === 'custom' ? 'custom' : 'chapters',
       chapters: clampList(f.chapters, 12).filter((c) => CHAPTER_ORDER.indexOf(c) >= 0),
-      count: Math.min(52, Math.max(1, Number(f.count) || 10)),
+      count: Math.min(QUIZ.length, Math.max(1, Number(f.count) || 10)),
       questions: clampList(f.questions, 60).map(cleanQuestion).filter(Boolean),
       created: String(f.created || '')
     };
@@ -3987,8 +4382,8 @@
         return;
       }
       const count = Math.round(Number($('#asgCount').value));
-      if (!(count >= 1 && count <= 52)) {
-        msg.textContent = 'Pilih antara 1 dan 52 pertanyaan.';
+      if (!(count >= 1 && count <= QUIZ.length)) {
+        msg.textContent = fill('Pilih antara 1 dan {0} pertanyaan.', QUIZ.length);
         $('#asgCount').focus();
         return;
       }

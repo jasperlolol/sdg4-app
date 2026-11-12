@@ -92,6 +92,12 @@ main:focus{outline:none}
 .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 28px;border:0;border-radius:999px;background:var(--red-700);color:var(--on-dark);font-size:16px;font-weight:600;text-decoration:none;transition:background .15s,transform .15s}
 .btn-primary:hover{background:var(--red-800)}
 .btn-primary:active{transform:translateY(1px)}
+/* A pressable button: a solid lower edge that sinks when pressed. */
+.btn-primary{box-shadow:0 4px 0 var(--red-900);transition:background .15s,transform .12s,box-shadow .12s}
+.btn-primary:hover{box-shadow:0 5px 0 var(--red-900);transform:translateY(-1px)}
+.btn-primary:active{box-shadow:0 1px 0 var(--red-900);transform:translateY(3px)}
+.btn-primary:disabled{box-shadow:none;transform:none}
+.btn-primary:focus-visible{outline:3px solid var(--red-300);outline-offset:3px}
 .btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 18px;border:1px solid var(--rule-2);border-radius:999px;background:var(--paper);color:var(--ink);font-size:14.5px;font-weight:500;text-decoration:none;transition:border-color .15s,color .15s,background .15s}
 .btn-outline:hover{border-color:var(--red-300);color:var(--red-700)}
 .btn-outline svg{width:18px;height:18px}
@@ -723,6 +729,36 @@ main:focus{outline:none}
 @media (max-width:1060px){.prog-summary{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:900px){.badge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.prog-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.badge-grid{grid-template-columns:minmax(0,1fr)}}
+/* Badges are stickers: earned ones are filled and tilted, locked ones are empty slots. */
+.badge{padding:20px 18px 18px}
+.badge-medal{display:grid;place-items:center;width:60px;height:60px;margin-bottom:14px;border-radius:50%;border:2px dashed var(--rule-2);background:var(--track);color:var(--ink-3);font-size:28px;line-height:1}
+.badge.is-earned{border:2px solid var(--red-700);box-shadow:0 4px 0 var(--red-200)}
+.badge.is-earned .badge-medal{border:0;background:var(--red-700);color:var(--on-dark);box-shadow:0 4px 0 var(--red-900);transform:rotate(-8deg)}
+/* Kickers in sentence case: friendlier than tracked capitals. */
+.eyebrow,.ph-kicker,.sf-h,.pp-h,.pc-tag,.toc-h,.rs-chapter,.sd-kind,.badge-toast-kicker,.dl-os,.sl-kicker,.cert-kicker,.lang-nav-label,.page-head--margin .ph-kicker{text-transform:none;letter-spacing:.01em}
+/* Pass 2: heavier headings, cards and answers with a physical edge, and gentle press states. */
+.ph-title,h2{font-weight:600;letter-spacing:-.015em}
+.mode-card{box-shadow:0 4px 0 var(--rule-2);transition:border-color .15s,background .15s,transform .12s,box-shadow .12s}
+.mode-card:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--rule-2)}
+.mode-card:active{transform:translateY(3px);box-shadow:0 1px 0 var(--rule-2)}
+.mode-card.is-featured{box-shadow:0 4px 0 var(--red-900)}
+.mode-card.is-featured:hover{box-shadow:0 6px 0 var(--red-900)}
+.prog-stat{box-shadow:0 3px 0 var(--rule-2)}
+.opt{box-shadow:0 3px 0 var(--rule-2);transition:border-color .15s,background .15s,transform .12s,box-shadow .12s}
+.opt:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 0 var(--rule-2)}
+.opt:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 var(--rule-2)}
+.opt.is-correct{box-shadow:0 3px 0 var(--red-900)}
+/* Moon dust meter: each question answered clears 5 cm of the moon. */
+.moon{margin-top:14px}
+.moon-track{height:14px;border-radius:999px;background:repeating-linear-gradient(90deg,var(--rule-2) 0 6px,var(--track) 6px 8px);overflow:hidden}
+.moon-track span{display:block;height:100%;width:0;border-radius:999px;background:var(--red-700);transition:width .4s var(--ease)}
+.moon-text{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+/* The cleaning screen sits bottom right; on phones it moves into the page so it never covers an answer. */
+.clean-screen{position:fixed;right:16px;bottom:16px;z-index:80;width:188px;padding:8px;border-radius:20px;background:#15111f;border:3px solid #2b2238;box-shadow:0 10px 26px rgba(36,21,24,.3);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.clean-screen.is-dragging{cursor:grabbing;box-shadow:0 16px 36px rgba(36,21,24,.4)}
+.clean-svg{display:block;width:100%;height:auto;border-radius:12px;overflow:hidden}
+@media (max-width:640px){.clean-screen{position:static;width:112px;margin:10px 0 0 auto;padding:6px;border-width:2px;border-radius:16px;box-shadow:none}}
+@media (prefers-reduced-motion:reduce){.mode-card,.opt{transition:none}.mode-card:hover,.mode-card:active,.opt:hover:not(:disabled),.opt:active:not(:disabled){transform:none}}
 
 /* Notes on targets */
 .td-note{display:block;width:100%;min-height:110px;margin-top:10px;padding:14px 16px;border:1px solid var(--rule-2);border-radius:14px;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.55;resize:vertical}
@@ -1271,3 +1307,81 @@ html[lang="zh-CN"] body *{letter-spacing:normal!important}
 .asg-status{font-size:14px;font-weight:600;color:var(--ink-2);white-space:nowrap}
 .cls-list a.btn-primary{text-decoration:none}
 @media (max-width:640px){.pick-grid{grid-template-columns:minmax(0,1fr)}.cls-tools{margin-top:26px}}
+
+/* Quiz: the world explodes when the moon is not fully clean. Full-screen cutscene. */
+.boom{position:fixed;inset:0;z-index:2000;background:#05060c;display:grid;place-items:center;overflow:hidden;cursor:pointer}
+.boom-stage{position:absolute;inset:-14px;animation:boom-shake .25s linear 0s 14}
+.boom-flash{position:absolute;inset:0;background:#fff;opacity:0;animation:boom-flash 1s ease-out .3s forwards}
+.boom-ring{position:absolute;left:50%;top:50%;width:40vmin;height:40vmin;margin:-20vmin 0 0 -20vmin;border-radius:50%;border:6px solid #ffb86b;box-shadow:0 0 60px #ff7a3d;opacity:0;animation:boom-ring 1.5s ease-out .3s forwards}
+.boom-world{position:absolute;left:50%;top:50%;width:46vmin;height:46vmin;margin:-23vmin 0 0 -23vmin;border-radius:50%;background:radial-gradient(circle at 35% 30%,#8fd0ff,#2b6fb3 55%,#143a66);animation:boom-world 1s ease-in forwards}
+.boom-frags{position:absolute;inset:0;pointer-events:none}
+.boom-frag{position:absolute;left:50%;top:50%;width:var(--sz);height:calc(var(--sz) * .42);border-radius:3px;background:linear-gradient(135deg,#c6e7ff,#3c7fc2);opacity:0;animation:boom-frag 2.6s cubic-bezier(.1,.7,.3,1) .9s forwards}
+.boom-text{position:relative;z-index:2;text-align:center;color:#fff;padding:24px;max-width:min(90vw,30rem);opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.boom-text.is-in{opacity:1;transform:none}
+.boom-text h2{font-family:var(--serif);font-size:clamp(2.2rem,8vw,3.6rem);line-height:1.05;margin:0 0 .4em;color:#fff}
+.boom-text p{font-size:1.05rem;line-height:1.5;color:#c9d6ea;margin:0 0 1.4em}
+.boom-next{min-width:12rem}
+@keyframes boom-flash{0%{opacity:0}10%{opacity:1}100%{opacity:0}}
+@keyframes boom-ring{0%{transform:scale(.1);opacity:1}100%{transform:scale(6);opacity:0}}
+@keyframes boom-world{0%{transform:scale(1);filter:brightness(1)}60%{transform:scale(1.06);filter:brightness(2.4)}100%{transform:scale(.15);opacity:0;filter:brightness(4)}}
+@keyframes boom-frag{0%{opacity:1;transform:translate(-50%,-50%) rotate(0)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot))}}
+@keyframes boom-shake{0%{transform:translate(0,0)}20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-4px)}60%{transform:translate(-3px,-5px)}80%{transform:translate(4px,2px)}100%{transform:translate(0,0)}}
+@media (prefers-reduced-motion:reduce){.boom-stage,.boom-flash,.boom-ring,.boom-world,.boom-frag{animation:none!important}.boom-world,.boom-ring,.boom-frag{opacity:0}}
+
+/* The SDG 4 helper beside the quiz. On wide screens it sits to the right; on a phone it stacks under the quiz. */
+.qh-bar{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.qh-keys{font-size:12.5px;color:var(--ink-3)}
+.qh-switch{display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:0 16px 0 9px;border:1px solid var(--rule);border-radius:999px;background:var(--paper);color:var(--ink-2);font-size:14px;font-weight:600;transition:background .15s}
+.qh-switch:hover{background:var(--red-50)}
+.qh-track{position:relative;flex:none;width:38px;height:22px;border-radius:999px;background:var(--rule);transition:background .15s}
+.qh-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .15s}
+.qh-switch[aria-checked="true"] .qh-track{background:var(--red-800)}
+.qh-switch[aria-checked="true"] .qh-knob{transform:translateX(16px)}
+.quiz-layout{display:block}
+.qhelp{margin-top:28px;display:flex;flex-direction:column;gap:12px;padding:18px;border:1px solid var(--rule);border-radius:18px;background:var(--paper)}
+.qhelp[hidden]{display:none}
+.qh-head{display:flex;align-items:center;gap:12px}
+.qh-avatar{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:var(--red-50);color:var(--red-800)}
+.qh-avatar svg{width:28px;height:28px}
+.qh-titles{flex:1;min-width:0}
+.qh-title{font-weight:700;font-size:15px;color:var(--ink)}
+.qh-sub{font-size:12.5px;line-height:1.4;color:var(--ink-3);margin-top:2px}
+.qh-close{flex:none;width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--ink-3);font-size:24px;line-height:1}
+.qh-close:hover{background:var(--red-50);color:var(--red-800)}
+.qh-log{display:flex;flex-direction:column;gap:8px;min-height:120px;max-height:320px;overflow-y:auto;padding-right:4px}
+.qh-msg{margin:0;max-width:92%;padding:10px 13px;border-radius:14px;border:1px solid var(--rule);background:var(--red-50);color:var(--ink-2);font-size:14.5px;line-height:1.5;align-self:flex-start;overflow-wrap:anywhere}
+.qh-msg.is-me{align-self:flex-end;background:var(--paper);color:var(--ink)}
+.qh-chips{display:flex;flex-wrap:wrap;gap:8px}
+.qh-chip{min-height:34px;padding:0 12px;border:1px solid var(--rule);border-radius:999px;background:var(--paper);color:var(--red-800);font-size:13px;font-weight:600}
+.qh-chip:hover{background:var(--red-50)}
+.qh-form{display:flex;gap:8px;align-items:stretch}
+.qh-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.qh-form input{flex:1;min-width:0;height:44px;padding:0 14px;border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;font-size:15px}
+.qh-send{height:44px;padding:0 18px}
+@media (min-width:1024px){
+  .quiz-layout.has-helper{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:40px;align-items:start}
+  .quiz-layout.has-helper .qhelp{margin-top:0;position:sticky;top:96px}
+  .quiz-layout.has-helper .qh-log{max-height:calc(100vh - 330px)}
+}
+
+/* The grade picker on the quiz start screen. */
+.grade-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px;margin-top:14px}
+.grade-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:68px;padding:12px 14px;border:1px solid var(--rule);border-radius:16px;background:var(--paper);color:var(--ink);text-align:left;transition:background .15s,border-color .15s}
+.grade-card:hover:not(:disabled){background:var(--red-50)}
+.grade-card.is-on{border-color:var(--red-800);box-shadow:inset 0 0 0 1px var(--red-800)}
+.grade-card:disabled{opacity:.55;cursor:default}
+.gc-name{font-weight:700;font-size:15px}
+.gc-note{font-size:12.5px;color:var(--ink-3)}
+.grade-block{margin:0 0 40px}
+@media (max-width:600px){.qh-keys{display:none}}
+
+/* On a phone the timeline runs down the page instead of across it. */
+@media (max-width:700px){
+  .timeline-wrap{overflow-x:visible;padding:0}
+  .timeline{grid-template-columns:minmax(0,1fr);min-width:0}
+  .timeline li::before{top:24px;bottom:0;left:7px;right:auto;width:2px;height:auto}
+  .tl-pin{display:grid;grid-template-columns:16px minmax(0,1fr);column-gap:14px;row-gap:6px;align-items:start;padding:0 0 22px}
+  .tl-dot{grid-column:1;grid-row:1 / span 3;margin-top:5px}
+  .tl-year,.tl-short,.tl-now{grid-column:2}
+  .tl-now{justify-self:start}
+}

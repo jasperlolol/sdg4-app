@@ -385,7 +385,7 @@
     }
   ];
 
-  const QUIZ = [
+  const BASE_QUIZ = [
     // The goal
     { cat: 'The goal', q: 'By what year are the Sustainable Development Goals, including SDG 4, meant to be achieved?', options: ['2025', '2030', '2040', '2050'], answer: 1, explain: 'All UN member states adopted the 2030 Agenda in 2015. It gives the world until 2030 to reach the 17 goals.', src: 'UN 2030 Agenda (2015)' },
     { cat: 'The goal', q: 'How many Sustainable Development Goals are there?', options: ['6', '8', '12', '17'], answer: 3, explain: 'There are 17 goals, and education is number 4. The earlier Millennium Development Goals had 8.', src: 'UN 2030 Agenda (2015)' },
@@ -449,8 +449,53 @@
     { cat: 'Inclusion', q: 'Which treaty sets out the right to inclusive education for people with disabilities?', options: ['The Paris Agreement', 'The Convention on the Rights of Persons with Disabilities', 'The Kyoto Protocol', 'The Geneva Conventions'], answer: 1, explain: 'Article 24 of the Convention on the Rights of Persons with Disabilities (2006) sets out the right to inclusive education at all levels.', src: 'UN CRPD (2006), Article 24' },
     { cat: 'Inclusion', q: 'What is International Mother Language Day, celebrated on 21 February?', options: ['A day to stop teaching English', 'A day to promote language diversity and mother-tongue education', 'A holiday from school exams', 'A day to test teachers'], answer: 1, explain: 'UNESCO created International Mother Language Day to promote linguistic diversity and education in the languages people speak at home.', src: 'UNESCO, International Mother Language Day' },
     { cat: 'Inclusion', q: 'Why can learning in a language children do not speak at home be a barrier?', options: ['It makes early learning harder for many children', 'It makes schools cheaper', 'It removes the need for teachers', 'It has no effect on learning'], answer: 0, explain: 'Children learn best first in a language they understand. Mother-tongue education gives them a stronger base for reading and later learning.', src: 'UNESCO, International Mother Language Day' },
-    { cat: 'Inclusion', q: 'In SDG 4, what does “inclusive” education mean?', options: ['Education only for rich families', 'Education that reaches everyone, including people with disabilities and marginalised groups', 'Education for adults only', 'Online learning only'], answer: 1, explain: 'SDG 4 asks for inclusive education: education that reaches everyone, including people with disabilities, girls and marginalised groups.', src: 'UN 2030 Agenda (2015)' }
+    { cat: 'Inclusion', q: 'In SDG 4, what does “inclusive” education mean?', options: ['Education only for rich families', 'Education that reaches everyone, including people with disabilities and marginalised groups', 'Education for adults only', 'Online learning only'], answer: 1, explain: 'SDG 4 asks for inclusive education: education that reaches everyone, including people with disabilities, girls and marginalised groups.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Access', q: 'Which target says every girl and boy should complete free, equitable and quality primary and secondary education?', options: ['Target 4.1', 'Target 4.3', 'Target 4.5', 'Target 4.7'], answer: 0, explain: 'Target 4.1 asks that all girls and boys complete free, equitable and quality primary and secondary education that leads to relevant learning outcomes.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Access', q: 'What does “equitable” education mean in SDG 4?', options: ['Education that costs the same everywhere', 'Education that reaches everyone fairly, including disadvantaged groups', 'Education taught only in cities', 'One test for every learner'], answer: 1, explain: 'Equitable education means everyone gets a fair chance, including children who are poor, disabled or live in remote places.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Completion', q: 'Which of these is a common reason children stop going to school?', options: ['They finish their lessons too early', 'Schools have too many books', 'Poverty and the costs of school', 'Teachers are too kind'], answer: 2, explain: 'Costs such as fees, uniforms and transport, together with poverty, are among the most common reasons children drop out.', src: 'UNESCO' },
+    { cat: 'Completion', q: 'What does “completion” mean in education statistics?', options: ['Starting school for the first time', 'Passing one single exam', 'Changing to a different school', 'Finishing the last grade of a school level'], answer: 3, explain: 'Completion means a learner finishes the last grade of a level, such as primary or secondary school.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Completion', q: 'Why does SDG 4 call for free primary and secondary education?', options: ['So that poverty does not stop children from learning', 'So that the government saves money', 'So that children can work instead', 'So that schools can close earlier'], answer: 0, explain: 'Free education removes a cost barrier, so poor families can send their children to school.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Completion', q: 'In Target 4.1, what does “relevant learning outcomes” mean?', options: ['Learning only for exams', 'Learning that is useful for life and work', 'Learning only in a foreign language', 'Learning with no homework'], answer: 1, explain: 'It means what children learn should be useful for their lives and for work.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Learning', q: 'What is “learning poverty”?', options: ['Not owning a school uniform', 'Not being able to use a computer', 'Not being able to read and understand a simple text by about age 10', 'Not having a bicycle to get to school'], answer: 2, explain: 'Learning poverty is the share of children who cannot read and understand a simple text by about age 10. The World Bank uses it to track learning.', src: 'World Bank, learning poverty' },
+    { cat: 'Learning', q: 'What are “foundational skills” in early learning?', options: ['Dancing and singing', 'Sports rules', 'Cooking recipes', 'Reading, writing and basic maths'], answer: 3, explain: 'Foundational skills such as reading, writing and basic maths are the base for all later learning.', src: 'UNESCO' },
+    { cat: 'Learning', q: 'Why does teaching in a language children understand help them learn?', options: ['They learn to read faster in a familiar language', 'Lessons become shorter', 'Teachers are no longer needed', 'Exams become easier to write'], answer: 0, explain: 'Children learn best in a language they speak and understand. That is why mother-tongue support helps early learning.', src: 'UNESCO, International Mother Language Day' },
+    { cat: 'Learning', q: 'What does “assessment” mean in education?', options: ['Building new classrooms', 'Measuring what students have learned', 'Paying teachers their salaries', 'Choosing school uniforms'], answer: 1, explain: 'Assessment measures learning, so teachers can see what students know and where they need help.', src: 'UNESCO' },
+    { cat: 'Learning', q: 'Which conditions help students learn best?', options: ['A crowded room with no books', 'Learning only from the internet', 'A safe, supportive classroom with materials and trained teachers', 'Learning with no teacher at all'], answer: 2, explain: 'Safe, well-equipped classrooms with trained teachers give students the best chance to learn.', src: 'UNESCO' },
+    { cat: 'Teachers', q: 'What is a “trained teacher”?', options: ['Anyone who can read well', 'A person who volunteers once', 'A student who helps with homework', 'Someone who has completed the teacher education or certification their country requires'], answer: 3, explain: 'A trained teacher has completed the teacher education or certification that their country requires.', src: 'UNESCO Global Report on Teachers (2024)' },
+    { cat: 'Teachers', q: 'Why do teachers need ongoing professional development?', options: ['To keep their skills and knowledge up to date', 'To avoid teaching', 'To earn more school holidays', 'To become head teachers only'], answer: 0, explain: 'Ongoing training helps teachers keep their knowledge and teaching methods up to date.', src: 'UNESCO Global Report on Teachers (2024)' },
+    { cat: 'Teachers', q: 'Which of these can make a teacher shortage worse?', options: ['Good training programmes', 'Low pay and poor working conditions', 'Safe classrooms', 'Clear career paths'], answer: 1, explain: 'Low pay and poor conditions make it hard to keep teachers, which deepens shortages.', src: 'UNESCO Global Report on Teachers (2024)' },
+    { cat: 'Teachers', q: 'What does Target 4.c aim to increase, especially in the least developed countries?', options: ['The number of exams', 'The number of school lunches', 'The supply of qualified teachers', 'The number of school sports'], answer: 2, explain: 'Target 4.c asks for a substantial increase in the supply of qualified teachers, especially in the least developed countries and small island developing states.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Equity', q: 'On which day is the International Day of the Girl celebrated?', options: ['8 March', '24 January', '5 October', '11 October'], answer: 3, explain: 'The United Nations marks the International Day of the Girl on 11 October.', src: 'United Nations' },
+    { cat: 'Equity', q: 'What does Target 4.5 aim to eliminate?', options: ['Gender and other disparities in education', 'School fees for teachers', 'Exams for all students', 'School holidays'], answer: 0, explain: 'Target 4.5 aims to eliminate gender disparities and ensure equal access for vulnerable groups, including persons with disabilities.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Equity', q: 'Why is it important to train teachers to support students with disabilities?', options: ['So disabled children can skip exams', 'So every child can learn in an inclusive classroom', 'So schools need fewer classrooms', 'So teachers can work less'], answer: 1, explain: 'Trained teachers help children with disabilities learn alongside their classmates.', src: 'UN CRPD (2006), Article 24' },
+    { cat: 'Equity', q: 'What does “marginalised” mean in education?', options: ['Teachers who have retired', 'Schools near the sea', 'Groups that are left out or pushed to the edges of society', 'Students at the top of their class'], answer: 2, explain: 'Marginalised groups are left out or disadvantaged, such as the poor, rural children and minority communities.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Money and schools', q: 'What did the Incheon Framework for Action suggest for education spending?', options: ['1% of GDP', '50% of public spending', 'No set amount at all', '4 to 6% of GDP and/or 15 to 20% of public spending'], answer: 3, explain: 'The Education 2030 Framework for Action suggests spending 4 to 6% of GDP and/or 15 to 20% of public expenditure on education.', src: 'Incheon Framework for Action (2015)' },
+    { cat: 'Money and schools', q: 'What does “public expenditure” mean?', options: ['Money a government spends on public services such as schools', 'Money families spend at shops', 'Money that only donors give', 'Money that banks lend'], answer: 0, explain: 'Public expenditure is what governments spend on services such as health and education.', src: 'UNESCO' },
+    { cat: 'Money and schools', q: 'Why do schools need clean water, toilets and electricity?', options: ['So the school looks bigger', 'So children can learn in healthy and safe conditions', 'So exams become easier', 'So schools can close early'], answer: 1, explain: 'Basic services help children stay in school and learn in healthy, safe conditions.', src: 'UNESCO' },
+    { cat: 'Skills', q: 'What are “life skills” in education?', options: ['Only sports skills', 'Only cooking skills', 'Skills for everyday life, such as decision-making and communication', 'Only computer coding'], answer: 2, explain: 'Life skills help people make decisions, communicate well and cope with daily challenges.', src: 'UNESCO' },
+    { cat: 'Skills', q: 'Which of these is a technical or vocational skill?', options: ['Reading poetry', 'Painting for fun', 'Singing', 'Welding'], answer: 3, explain: 'Technical and vocational skills, such as welding, prepare people for specific jobs.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Skills', q: 'What is digital literacy?', options: ['Using digital tools and the internet safely and effectively', 'Writing by hand only', 'Repairing bicycles', 'Playing video games only'], answer: 0, explain: 'Digital literacy means using digital tools and the internet safely, effectively and responsibly.', src: 'UNESCO' },
+    { cat: 'Skills', q: 'Which SDG 4 target is about skills for employment and decent jobs?', options: ['Target 4.a', 'Target 4.4', 'Target 4.6', 'Target 4.b'], answer: 1, explain: 'Target 4.4 is about young people and adults having relevant skills, including technical and vocational skills, for employment, decent jobs and entrepreneurship.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Skills', q: 'What is “global citizenship education”?', options: ['Learning only the history of one country', 'Learning how to travel by plane', 'Learning about the world and human rights, and acting responsibly', 'Learning only about foreign money'], answer: 2, explain: 'It teaches people to understand global issues and to act responsibly for a fairer world.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'History', q: 'What goal did the 1990 World Conference on Education for All set?', options: ['Free university for all', 'One world exam', 'Matching school uniforms worldwide', 'Basic education for everyone'], answer: 3, explain: 'The 1990 conference in Jomtien set the goal of basic education for everyone.', src: 'UNESCO' },
+    { cat: 'History', q: 'Where was the World Education Forum that adopted the Dakar Framework held in 2000?', options: ['Dakar, Senegal', 'New York, USA', 'Tokyo, Japan', 'Sydney, Australia'], answer: 0, explain: 'The Dakar Framework for Action was adopted in 2000 and renewed the Education for All goals for 2015.', src: 'UNESCO, World Education Forum (2000)' },
+    { cat: 'History', q: 'Where was the 2015 World Education Forum that adopted the Incheon Declaration held?', options: ['Paris, France', 'Incheon, Republic of Korea', 'Nairobi, Kenya', 'Lima, Peru'], answer: 1, explain: 'The Incheon Declaration was adopted at the World Education Forum in Incheon, Republic of Korea, in 2015.', src: 'World Education Forum, Incheon Declaration (2015)' },
+    { cat: 'History', q: 'Which treaty, adopted in 1989, asks countries to make primary education free and compulsory?', options: ['The Geneva Convention', 'The Kyoto Protocol', 'The Convention on the Rights of the Child', 'The Paris Agreement'], answer: 2, explain: 'Article 28 of the Convention on the Rights of the Child asks countries to make primary education compulsory and free for all.', src: 'UN Convention on the Rights of the Child (1989), Article 28' },
+    { cat: 'History', q: 'Which goals replaced the Millennium Development Goals in 2015?', options: ['The Olympic Goals', 'The Kyoto Goals', 'The Paris Goals', 'The Sustainable Development Goals'], answer: 3, explain: 'The Sustainable Development Goals, adopted in 2015, followed the MDGs and run until 2030.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Early years', q: 'What ages does early childhood care and education usually cover?', options: ['From birth to about age 8', 'Ages 15 to 18', 'Ages 20 to 25', 'Only adults'], answer: 0, explain: 'Early childhood care and education covers children from birth up to around age 8.', src: 'UNESCO' },
+    { cat: 'Early years', q: 'Which of these supports a young child’s development?', options: ['Taking exams', 'Play-based learning and health checks', 'Paying school fees', 'Working in a factory'], answer: 1, explain: 'Play, health care, nutrition and early learning all support a young child’s development.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Early years', q: 'Why does early learning help later schooling?', options: ['It means children never need teachers', 'It removes the need for primary school', 'It builds the skills children need for primary school', 'It makes exams unnecessary'], answer: 2, explain: 'A strong start in early learning helps children succeed in primary school.', src: 'UN 2030 Agenda (2015)' },
+    { cat: 'Early years', q: 'What does “nutrition” mean for young children?', options: ['Games on a phone', 'School uniforms', 'Homework', 'Healthy food that helps a child grow and learn'], answer: 3, explain: 'Good nutrition supports growth, health and learning in early childhood.', src: 'UNESCO' },
+    { cat: 'Literacy', q: 'Which organisation runs International Literacy Day?', options: ['UNESCO', 'WHO', 'UNICEF', 'The World Bank'], answer: 0, explain: 'UNESCO organises International Literacy Day, which is celebrated on 8 September.', src: 'UNESCO, International Literacy Day' },
+    { cat: 'Literacy', q: 'What is “functional literacy”?', options: ['Reading only poetry', 'Reading and writing skills needed for everyday life and work', 'Speaking many languages', 'Writing computer code'], answer: 1, explain: 'Functional literacy means having the reading and writing skills needed to function in daily life and at work.', src: 'UNESCO' },
+    { cat: 'Literacy', q: 'What are “foundational” literacy and numeracy skills?', options: ['Advanced university maths', 'Foreign languages only', 'Basic reading, writing and maths learned early in school', 'The rules of sports'], answer: 2, explain: 'These basic skills are the foundation for all later learning.', src: 'UNESCO' },
+    { cat: 'Literacy', q: 'Why is adult literacy important?', options: ['It replaces school for children', 'It means adults never need jobs', 'It ends school fees', 'It helps adults support their children’s learning and find work'], answer: 3, explain: 'Adult literacy helps people work, manage money and support their children’s education.', src: 'UNESCO, International Literacy Day' },
+    { cat: 'Inclusion', q: 'What is a “reasonable accommodation” in a school?', options: ['An adjustment that helps a child with a disability take part', 'A bigger school building', 'A cheaper school uniform', 'A longer school holiday'], answer: 0, explain: 'It is a change, such as a ramp or extra support, that lets a disabled child learn alongside others.', src: 'UN CRPD (2006), Article 24' },
+    { cat: 'Inclusion', q: 'Why is sign language important in education for deaf children?', options: ['It replaces reading', 'It gives them full access to learning and communication', 'It is only for teachers', 'It makes exams shorter'], answer: 1, explain: 'Sign language gives deaf children a complete language for learning and communication. Article 24 of the CRPD recognises it.', src: 'UN CRPD (2006), Article 24' },
+    { cat: 'Inclusion', q: 'What makes a school “accessible”?', options: ['It has a swimming pool', 'It is in the mountains', 'Everyone, including disabled children, can enter and use it', 'It charges no fees'], answer: 2, explain: 'Accessible schools have ramps, toilets and learning materials that everyone can use.', src: 'UN CRPD (2006), Article 24' },
+    { cat: 'Inclusion', q: 'Which group is often left out of school because of language?', options: ['Children who live in cities', 'Children who like sports', 'Children who wear glasses', 'Children taught in a language they do not speak at home'], answer: 3, explain: 'Children taught in a language they do not speak at home can struggle to learn, so mother-tongue support helps.', src: 'UNESCO, International Mother Language Day' },
   ];
+  let QUIZ = BASE_QUIZ;
 
   const MILESTONES = [
     { year: '1948', short: 'Right to education', title: 'Education becomes a human right', text: 'The Universal Declaration of Human Rights says that everyone has the right to education, and that elementary education shall be free and compulsory (Article 26).', src: 'UN General Assembly, 1948' },
@@ -1180,6 +1225,46 @@
     $('#quizStart').hidden = name !== 'start';
     $('#quizPlay').hidden = name !== 'play';
     $('#quizResult').hidden = name !== 'result';
+    renderHelperChips();
+  }
+
+  /* Grades 1 to 12. A grade with a question bank (grades.js) can be played; the others say Coming soon.
+     Grade play is kept apart from the all-grades scores and is not sent to the leaderboard. */
+  const GRADE_KEY = 'sdg4.quiz.grade';
+  let quizGrade = 'all';
+  const gradeBank = (g) => (window.SDG4_GRADES && Array.isArray(window.SDG4_GRADES[g]) ? window.SDG4_GRADES[g] : []);
+  const gradeReady = (g) => gradeBank(g).length > 0;
+
+  function setGrade(g) {
+    quizGrade = g !== 'all' && gradeReady(g) ? String(g) : 'all';
+    QUIZ = quizGrade === 'all' ? BASE_QUIZ : gradeBank(quizGrade).map((row) => ({
+      cat: CHAPTER_ORDER[row.ch], q: row.q, options: row.options, answer: row.answer, explain: row.explain, src: row.src, mix: true
+    }));
+  }
+
+  function renderGrades() {
+    const box = $('#gradeGrid');
+    if (!box) return;
+    box.textContent = '';
+    const choices = [{ key: 'all', label: 'All grades' }];
+    for (let g = 1; g <= 12; g += 1) choices.push({ key: String(g), label: fill('Grade {0}', g) });
+    choices.forEach((c) => {
+      const ready = c.key === 'all' || gradeReady(c.key);
+      const count = c.key === 'all' ? BASE_QUIZ.length : gradeBank(c.key).length;
+      const on = c.key === quizGrade;
+      const b = h('button', 'grade-card' + (on ? ' is-on' : ''));
+      b.type = 'button';
+      b.disabled = !ready;
+      b.setAttribute('aria-pressed', String(on));
+      b.append(h('span', 'gc-name', c.label), h('span', 'gc-note', ready ? fill('{0} questions', count) : 'Coming soon'));
+      b.addEventListener('click', () => {
+        Sound.play('tap');
+        setGrade(c.key);
+        store.set(GRADE_KEY, quizGrade);
+        renderModes();
+      });
+      box.appendChild(b);
+    });
   }
 
   function renderModes() {
@@ -1201,6 +1286,9 @@
       grid.appendChild(b);
     });
     $('#bankSize').textContent = String(QUIZ.length);
+    renderGrades();
+    const flash = $('.flash-block');
+    if (flash) flash.hidden = quizGrade !== 'all';
     renderChapters();
     renderBoard();
   }
@@ -1271,6 +1359,93 @@
     qTick();
   }
 
+  // Moon dust: every correct answer clears 5 cm of the moon. A wrong answer clears nothing.
+  function updateMoon(done) {
+    const total = quiz.order.length;
+    $('#moonFill').style.width = (done / total) * 100 + '%';
+    $('#moonText').textContent = done
+      ? fill('{0} cm cleared = {1} × 5 cm', done * 5, done)
+      : 'Answer correctly to clear 5 cm of the moon.';
+    $('#cwCm').textContent = done * 5 + ' cm';
+    moveCleaner(done / total, done === 0);
+  }
+
+  // The small screen: a person wipes the dust off the moon, from left to right.
+  const CW = { cx: 100, cy: 78, r: 50, left: 48, right: 160 };
+  let cwX = CW.left;
+  let cwRaf = 0;
+  function cwSurface(x) {
+    return CW.cy + Math.sqrt(Math.max(0, CW.r * CW.r - (x - CW.cx) * (x - CW.cx)));
+  }
+  function drawCleaner(x) {
+    const clip = $('#cwRect');
+    clip.setAttribute('x', x);
+    clip.setAttribute('width', 200 - x);
+    const px = Math.max(CW.cx - CW.r + 4, x - 10);
+    $('#cwPerson').setAttribute('transform', 'translate(' + px + ' ' + cwSurface(px) + ')');
+  }
+  function moveCleaner(frac, instant) {
+    const to = CW.left + frac * (CW.right - CW.left);
+    cancelAnimationFrame(cwRaf);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (instant || reduce) {
+      cwX = to;
+      drawCleaner(cwX);
+      return;
+    }
+    const from = cwX;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / 700);
+      cwX = from + (to - from) * (1 - Math.pow(1 - t, 3));
+      drawCleaner(cwX);
+      if (t < 1) cwRaf = requestAnimationFrame(step);
+    };
+    cwRaf = requestAnimationFrame(step);
+  }
+
+  // The moon screen can be dragged anywhere on the page, with a mouse, pen or finger.
+  let cleanDrag = null;
+  function placeCleanScreen(box, left, top) {
+    const maxLeft = Math.max(0, window.innerWidth - box.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - box.offsetHeight);
+    box.style.position = 'fixed';
+    box.style.margin = '0';
+    box.style.right = 'auto';
+    box.style.bottom = 'auto';
+    box.style.left = Math.min(Math.max(left, 0), maxLeft) + 'px';
+    box.style.top = Math.min(Math.max(top, 0), maxTop) + 'px';
+  }
+  document.addEventListener('pointerdown', (e) => {
+    const box = e.target.closest ? e.target.closest('.clean-screen') : null;
+    if (!box || e.button !== 0) return;
+    const r = box.getBoundingClientRect();
+    cleanDrag = { box, dx: e.clientX - r.left, dy: e.clientY - r.top };
+    placeCleanScreen(box, r.left, r.top);
+    box.setPointerCapture(e.pointerId);
+    box.classList.add('is-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!cleanDrag) return;
+    placeCleanScreen(cleanDrag.box, e.clientX - cleanDrag.dx, e.clientY - cleanDrag.dy);
+  });
+  const endCleanDrag = () => {
+    if (!cleanDrag) return;
+    cleanDrag.box.classList.remove('is-dragging');
+    cleanDrag = null;
+  };
+  document.addEventListener('pointerup', endCleanDrag);
+  document.addEventListener('pointercancel', endCleanDrag);
+  // Keep the screen on-screen if the window is resized after it was moved.
+  window.addEventListener('resize', () => {
+    const box = document.querySelector('.clean-screen');
+    if (box && box.style.position === 'fixed') {
+      const r = box.getBoundingClientRect();
+      placeCleanScreen(box, r.left, r.top);
+    }
+  });
+
   function renderQuestion() {
     const total = quiz.order.length;
     const q = QUIZ[quiz.order[quiz.i]];
@@ -1278,6 +1453,7 @@
     $('#qpText').textContent = 'Question ' + (quiz.i + 1) + ' of ' + total;
     $('#qpScore').textContent = scoreText();
     $('#qpFill').style.width = (quiz.i / total) * 100 + '%';
+    updateMoon(quiz.correct);
     $('#qCat').textContent = q.cat;
     renderStreak(false);
     if (modeInfo(quiz.mode).lifeline) $('#lifelineBtn').disabled = quiz.lifelineUsed;
@@ -1371,6 +1547,7 @@
       quiz.streak = 0;
     }
     quiz.answers.push({ qi, chosen, correct, timedOut, cat: q.cat });
+    updateMoon(quiz.correct);
 
     buttons.forEach((b, j) => {
       b.disabled = true;
@@ -1418,6 +1595,163 @@
     } else {
       finishQuiz();
     }
+  }
+
+  /* The SDG 4 helper: hints, facts and answers beside the quiz. It works without the internet, from the
+     quiz's own explanations, and it never gives an answer before the question has been answered. */
+  const HELPER_KEY = 'sdg4.quiz.helper';
+  const HELP_GREETING = 'Hi there! I\'m your SDG 4 helper, and I\'m happy you\'re here. I can give you hints, explain answers once you\'ve picked one, and show where the facts come from. I\'ll never give away an answer before you choose, promise!';
+  const HELP_CHIPS_PLAY = [
+    { label: 'Hint', intent: 'hint' },
+    { label: 'Explain this', intent: 'explain' },
+    { label: 'Where is it from?', intent: 'source' },
+    { label: 'How does the moon work?', intent: 'moon' }
+  ];
+  const HELP_CHIPS_REST = [
+    { label: 'What is SDG 4?', intent: 'sdg' },
+    { label: 'How do the chapters work?', intent: 'chapter' },
+    { label: 'Where do the facts come from?', intent: 'source' },
+    { label: 'How does the moon work?', intent: 'moon' }
+  ];
+  // Each rule lists words in English, Spanish, French, Indonesian and Chinese.
+  const HELP_RULES = [
+    ['hint', /\b(hint|hints|clue|stuck|pista|pistas|astuce|indice|petunjuk)\b|提示|线索/],
+    ['refuse', /\b(the answer|which one|correct one|just tell|tell me the answer|give me the answer|respuesta|reponse|jawaban)\b|答案/],
+    ['explain', /\b(explain|explanation|why|reason|meaning|explica|explique|pourquoi|mengapa|jelaskan)\b|解释|为什么/],
+    ['source', /\b(source|sources|from|proof|where|fuente|fuentes|origen|sumber|dari)\b|来源|出处/],
+    ['moon', /\b(moon|cm|clean|clear|explode|explodes|world|luna|lune|bulan)\b|月球|爆炸/],
+    ['chapter', /\b(chapter|chapters|topic|topics|capitulo|capitulos|chapitre|bab)\b|章节/],
+    ['modes', /\b(mode|modes|classic|challenge|marathon|timer|timed|seconds|points|streak|bonus|modo|modos|temps)\b|模式|计时|连胜/],
+    ['score', /\b(score|scores|leaderboard|board|save|saved|best|puntuacion|classement|skor|papan)\b|分数|排行|保存/],
+    ['flash', /\b(flashcard|flashcards|flash|card|cards|tarjeta|tarjetas|fiche|fiches|kartu)\b|闪卡|卡片/],
+    ['lifeline', /\b(lifeline|50|5050|joker)\b/],
+    ['sound', /\b(sound|mute|aloud|speak|voice|audio|silencio|muet|suara)\b|静音|朗读/],
+    ['sdg', /\b(sdg|sdg4|goal|goals|target|targets|meta|objetivo|objectif|tujuan)\b|目标|指标/],
+    ['help', /\b(hi|hello|hey|help|hola|bonjour|halo|aide|ayuda|bantuan|what can you)\b|你好|帮助/]
+  ];
+  const HELP_STOP = ['what', 'when', 'where', 'which', 'with', 'about', 'from', 'that', 'this', 'does', 'have', 'tell', 'mean', 'please', 'there', 'their', 'they', 'would', 'could', 'should', 'your', 'show', 'give', 'answer', 'question', 'explain', 'anything', 'something', 'know', 'some', 'more'];
+  const helperNorm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const helperOn = () => store.get(HELPER_KEY, true) !== false;
+  // Whole words, with a plain plural ending removed, so that 'targets' matches 'target'.
+  const helperWords = (s) => helperNorm(s).split(/[^a-z0-9]+/).filter((w) => w.length >= 4).map((w) => w.replace(/s$/, ''));
+
+  function applyHelper(on) {
+    const layout = $('#quizLayout');
+    const panel = $('#qhelp');
+    if (!layout || !panel) return;
+    layout.classList.toggle('has-helper', on);
+    panel.hidden = !on;
+    $('#qhelpToggle').setAttribute('aria-checked', String(on));
+    $('#qhelpToggleText').textContent = on ? 'Helper: on' : 'Helper: off';
+  }
+
+  function setHelper(on) {
+    applyHelper(on);
+    store.set(HELPER_KEY, on);
+  }
+
+  function helperSay(text, who) {
+    const log = $('#qhelpLog');
+    if (!log) return;
+    log.appendChild(h('p', 'qh-msg' + (who === 'me' ? ' is-me' : ''), text));
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function renderHelperChips() {
+    const box = $('#qhelpChips');
+    if (!box) return;
+    box.textContent = '';
+    (quiz.state === 'play' ? HELP_CHIPS_PLAY : HELP_CHIPS_REST).forEach((c) => {
+      const b = h('button', 'qh-chip', c.label);
+      b.type = 'button';
+      b.addEventListener('click', () => { Sound.play('tap'); helperAsk(c.label, c.intent); });
+      box.appendChild(b);
+    });
+  }
+
+  // The quiz explanations the helper may quote. During a quiz only questions already answered, so nothing is spoiled.
+  function helperSearch(text) {
+    const words = helperWords(text).filter((w) => HELP_STOP.indexOf(w) < 0);
+    if (!words.length) return null;
+    const pool = quiz.state === 'play' ? quiz.answers.map((a) => a.qi) : QUIZ.map((q, i) => i);
+    let best = null;
+    let bestScore = 0;
+    pool.forEach((qi) => {
+      const q = QUIZ[qi];
+      const hay = new Set(helperWords(q.q + ' ' + q.explain));
+      const score = words.filter((w) => hay.has(w)).length;
+      if (score > bestScore) { best = q; bestScore = score; }
+    });
+    return best;
+  }
+
+  function helperReply(intent, raw) {
+    const playing = quiz.state === 'play' && quiz.order.length > 0;
+    const q = playing ? QUIZ[quiz.order[quiz.i]] : null;
+    const answered = playing && quiz.locked;
+    const open = playing && !quiz.locked;
+    let id = intent;
+    if (!id) {
+      const rule = HELP_RULES.find((r) => r[1].test(helperNorm(raw)));
+      id = rule ? rule[0] : 'search';
+    }
+    if (id === 'refuse') {
+      if (open) return 'I can\'t give the answer before you choose, but I\'m here to help! Try the hint, or read the options again slowly.';
+      if (!playing) return 'Pick a mode first, and then I\'ll be right here to help! I can\'t give answers before you choose.';
+      id = 'explain';
+    }
+    if (id === 'hint') {
+      if (!playing) return 'Hints are for quiz questions! Start a mode and I\'ll give you a hint on each one.';
+      if (answered) id = 'explain';
+      else {
+        const timed = modeInfo(quiz.mode).timed;
+        return fill('Good thinking! This question is in the {0} chapter. Read each option and drop the ones that don\'t fit the topic.', q.cat) + (timed ? ' ' + 'The timer keeps running while I help, so be quick!' : '');
+      }
+    }
+    if (id === 'explain') {
+      if (!playing) return 'Pick a mode and answer a question first. I\'ll explain it once you\'ve chosen.';
+      if (open) return 'Answer first, and then I\'ll explain it! That keeps the quiz fair for everyone.';
+      return q.explain + ' ' + fill('Source: {0}', q.src);
+    }
+    if (id === 'source') {
+      if (open) return fill('This question is in the {0} chapter. I\'ll show you its source once you\'ve answered.', q.cat);
+      if (answered) return fill('This question is in the {0} chapter. Source: {1}.', q.cat, q.src);
+      return fill('Each answer shows its source under the explanation. For example: {0}.', [...new Set(QUIZ.map((x) => x.src))].slice(0, 3).join(', '));
+    }
+    if (id === 'moon') return 'Here\'s how it works! Each correct answer cleans 5 cm of the moon, and wrong answers clean nothing. To clean all of it, every question in the quiz must be right. If the moon isn\'t fully clean when the quiz ends, the world explodes, so good luck!';
+    if (id === 'chapter') return fill('Each chapter is one topic, with all of its questions together. The chapters are: {0}.', CHAPTER_ORDER.join(', '));
+    if (id === 'modes') return 'Classic has 10 random questions and no clock. Challenge has 15 questions with 20 seconds each, streak bonuses and one 50:50. Marathon goes through the whole question bank. Pick whichever you like!';
+    if (id === 'score') return 'Finish a quiz and save your score to the leaderboard with your name. Scores stay in this browser, so the board shows people who played on this device.';
+    if (id === 'flash') return 'Flashcards go through every question one card at a time. Tap a card to flip it and see the answer. Happy studying!';
+    if (id === 'lifeline') return 'In Challenge you get one 50:50. It removes two wrong answers, which makes the choice easier. You can use it once per quiz.';
+    if (id === 'sound') return 'Press M to turn the sound on or off. Read aloud reads the question and its answers.';
+    if (id === 'sdg') return 'SDG 4 is Quality Education! It asks the world to make sure everyone gets inclusive, fair, quality education and chances to keep learning all their life. It is one of 17 goals agreed in 2015 for the year 2030, and it has ten targets.';
+    if (id === 'help') return 'I can give you hints, explain answers after you choose, show where facts come from, and explain the moon, chapters, modes, scores and flashcards. Ask me anything or tap a button!';
+    const best = helperSearch(raw);
+    if (best) return fill('Here\'s something that might help: {0}', best.explain);
+    return 'Hmm, I didn\'t find that one. Try asking about the moon, the chapters, the modes or SDG 4, or tap Hint on the question. You\'ve got this!';
+  }
+
+  function helperAsk(text, intent) {
+    const clean = String(text || '').trim().slice(0, 200);
+    if (!clean && !intent) return;
+    helperSay(clean, 'me');
+    helperSay(helperReply(intent || null, clean), 'bot');
+  }
+
+  function initHelper() {
+    if (!$('#qhelp')) return;
+    applyHelper(helperOn());
+    $('#qhelpToggle').addEventListener('click', () => { Sound.play('tap'); setHelper(!helperOn()); });
+    $('#qhelpHide').addEventListener('click', () => { Sound.play('tap'); setHelper(false); $('#qhelpToggle').focus(); });
+    $('#qhelpForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#qhelpInput');
+      helperAsk(input.value, null);
+      input.value = '';
+    });
+    helperSay(HELP_GREETING, 'bot');
+    renderHelperChips();
   }
 
   /* Chapters and the leaderboard. Everything is kept in this browser. */
@@ -1503,6 +1837,10 @@
 
   function setupSaveForm() {
     quiz.saved = false;
+    if (quizGrade !== 'all') {
+      $('#saveScore').hidden = true;
+      return;
+    }
     const input = $('#ssName');
     $('#saveScore').hidden = false;
     input.value = store.get('sdg4.quiz.name', '') || '';
@@ -1644,8 +1982,60 @@
     window.scrollTo(0, 0);
   }
 
+  // When the quiz ends with the moon not fully clean, the world explodes (full screen), then the result shows.
+  function explodeWorld(done) {
+    if (document.querySelector('.boom')) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const box = h('div', 'boom');
+    const stage = h('div', 'boom-stage');
+    stage.append(h('div', 'boom-flash'), h('div', 'boom-ring'), h('div', 'boom-world'));
+    const frags = h('div', 'boom-frags');
+    for (let i = 0; i < 28; i += 1) {
+      const a = (i / 28) * Math.PI * 2 + Math.random() * 0.35;
+      const dist = 260 + Math.random() * 320;
+      const piece = h('span', 'boom-frag');
+      piece.style.setProperty('--dx', Math.round(Math.cos(a) * dist) + 'px');
+      piece.style.setProperty('--dy', Math.round(Math.sin(a) * dist) + 'px');
+      piece.style.setProperty('--rot', Math.round(Math.random() * 720 - 360) + 'deg');
+      piece.style.setProperty('--sz', Math.round(18 + Math.random() * 34) + 'px');
+      frags.append(piece);
+    }
+    stage.append(frags);
+    const text = h('div', 'boom-text');
+    const next = h('button', 'btn-primary boom-next', 'See my score');
+    text.append(
+      h('h2', null, 'The world exploded.'),
+      h('p', null, 'The moon was not fully clean. Every question had to be answered correctly.'),
+      next
+    );
+    box.append(stage, text);
+    document.body.append(box);
+    Sound.play('wrong');
+    let timer1 = 0;
+    let timer2 = 0;
+    let ended = false;
+    const end = () => {
+      if (ended) return;
+      ended = true;
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      box.remove();
+      done();
+    };
+    timer1 = setTimeout(() => {
+      text.classList.add('is-in');
+      next.focus({ preventScroll: true });
+    }, reduce ? 300 : 2600);
+    timer2 = setTimeout(end, reduce ? 2400 : 6000);
+    next.addEventListener('click', end);
+    box.addEventListener('click', () => { if (text.classList.contains('is-in')) end(); });
+  }
   function finishQuiz() {
     stopQTimer();
+    if (quiz.correct < quiz.order.length) explodeWorld(showQuizResult);
+    else showQuizResult();
+  }
+  function showQuizResult() {
     quizScreen('result');
     const M = modeInfo(quiz.mode);
     const total = quiz.order.length;
@@ -1687,7 +2077,7 @@
     }
     $('#rsTopics').textContent = topics;
 
-    const bestKey = quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode;
+    const bestKey = (quizGrade !== 'all' ? 'grade' + quizGrade + ':' : '') + (quiz.mode === 'chapter' ? 'chapter:' + quiz.chapter : quiz.mode);
     const bests = store.get('sdg4.quiz.bests', {}) || {};
     const metric = M.timed ? quiz.points : quiz.correct;
     const isNew = metric > 0 && !(typeof bests[bestKey] === 'number' && bests[bestKey] >= metric);
@@ -2176,6 +2566,8 @@
   }
 
   function initQuiz() {
+    setGrade(store.get(GRADE_KEY, 'all'));
+    initHelper();
     const saved = readBoard();
     if (saved.length) boardGroup = saved[saved.length - 1].group;
     renderModes();
@@ -2219,6 +2611,7 @@
       Sound.play('tap');
     });
     pageKeys = (e, key, onControl) => {
+      if ((key === 'h' || key === 'H') && !onControl) { e.preventDefault(); Sound.play('tap'); setHelper(!helperOn()); return; }
       if (fcState.open) {
         if (key === 'ArrowRight' || key === 'ArrowLeft') {
           e.preventDefault();
@@ -2794,7 +3187,7 @@
         return CHAPTER_ORDER.every((cat) => bests['chapter:' + cat] === chapterTotal(cat));
       }
     },
-    { name: 'Flashcard finisher', text: 'Turn over all 52 flashcards.', earned: () => fcSeen().length >= QUIZ.length },
+    { name: 'Flashcard finisher', text: 'Turn over all 96 flashcards.', earned: () => fcSeen().length >= QUIZ.length },
     { name: 'Target reader', text: 'Open all ten targets.', earned: () => (store.get('sdg4.seen.targets', []) || []).length >= TARGETS.length },
     { name: 'Note taker', text: 'Write notes on three targets.', earned: () => Object.keys(store.get('sdg4.notes', {}) || {}).length >= 3 },
     { name: 'Question of the day', text: 'Answer the question of the day.', earned: () => !!store.get('sdg4.qotd', null) },
@@ -2888,7 +3281,9 @@
     BADGES.forEach((b) => {
       const got = b.earned();
       const card = h('div', 'badge' + (got ? ' is-earned' : ''));
-      card.append(h('span', 'badge-state', got ? 'Earned' : 'Not yet'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
+      const medal = h('span', 'badge-medal', got ? '★' : '');
+      medal.setAttribute('aria-hidden', 'true');
+      card.append(medal, h('span', 'badge-state', got ? 'Earned' : 'Not yet'), h('p', 'badge-name', b.name), h('p', 'badge-text', b.text));
       grid.appendChild(card);
     });
   }
@@ -3309,7 +3704,7 @@
       due: /^\d{4}-\d{2}-\d{2}$/.test(String(f.due || '')) ? String(f.due) : '',
       mode: f.mode === 'custom' ? 'custom' : 'chapters',
       chapters: clampList(f.chapters, 12).filter((c) => CHAPTER_ORDER.indexOf(c) >= 0),
-      count: Math.min(52, Math.max(1, Number(f.count) || 10)),
+      count: Math.min(QUIZ.length, Math.max(1, Number(f.count) || 10)),
       questions: clampList(f.questions, 60).map(cleanQuestion).filter(Boolean),
       created: String(f.created || '')
     };
@@ -3987,8 +4382,8 @@
         return;
       }
       const count = Math.round(Number($('#asgCount').value));
-      if (!(count >= 1 && count <= 52)) {
-        msg.textContent = 'Choose between 1 and 52 questions.';
+      if (!(count >= 1 && count <= QUIZ.length)) {
+        msg.textContent = fill('Choose between 1 and {0} questions.', QUIZ.length);
         $('#asgCount').focus();
         return;
       }
